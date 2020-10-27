@@ -1,1 +1,1 @@
-research is een rot vak volgens wilma 
+wilma heeft gelijk
