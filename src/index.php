@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 
 $routes = array(
   'home' => array(
-    'controller' => 'MovieNight',
+    'controller' => 'Todos',
     'action' => 'index'
   )
 );
