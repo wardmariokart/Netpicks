@@ -28,7 +28,7 @@ class DAO {
 	}
 
   // Methods
-  protected function SelectById($id)
+  protected function selectById($id)
   {
     $sql = "SELECT * FROM `" . $this->tableName . "` WHERE `id` = :id";
     $stmt = $this->pdo->prepare($sql);
