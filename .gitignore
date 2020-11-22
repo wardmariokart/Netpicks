@@ -25,3 +25,6 @@ node_modules/
 .env
 
 .vscode/
+
+# work in progress images and questions
+WIP&Vragen/
