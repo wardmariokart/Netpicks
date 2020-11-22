@@ -28,14 +28,21 @@ class DAO {
 	}
 
   // Methods
-  protected function selectById($id)
+  public function selectById($id)
   {
     $sql = "SELECT * FROM `" . $this->tableName . "` WHERE `id` = :id";
     $stmt = $this->pdo->prepare($sql);
-
     $stmt->bindValue(':id', $id);
     $stmt->execute();
     return $stmt->fetch(PDO::FETCH_ASSOC);
+  }
+
+  public function selectAll()
+  {
+    $sql = "SELECT * FROM `" . $this->tableName . "`";
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 }
  ?>
