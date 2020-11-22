@@ -12,8 +12,17 @@
       <option value="<?php echo $moveOption['value'];?>"><?php echo $moveOption['displayName'] ?></opton>
     <? endforeach; ?>
   </select>
-
-
   <input type="submit" value="Plan my movie night!!">
 </form>
 
+
+<?php if(!isset($_SESSION['user'])): ?>
+  <span>
+    <a href="index.php?page=signIn">Sign In</a>
+    /
+    <a href="index.php?page=signUp">Sign Up</a>
+  </span>
+<?php else: ?>
+  <span>Signed in as: <?php echo $_SESSION['user']['email'];?></span>
+  <a href="index.php?page=signOut">Sign out</a>
+<?php endif; ?>

@@ -7,6 +7,23 @@ $routes = array(
   'home' => array(
     'controller' => 'Home',
     'action' => 'home'
+  ),
+  'extraQuestions' => array(
+    'controller' => 'Home',
+    'action' => 'extraQuestions'
+  ),
+
+  'signIn' => array(
+    'controller' => 'Users',
+    'action' => 'signIn'
+  ),
+  'signUp' => array(
+    'controller' => 'Users',
+    'action' => 'signUp'
+  ),
+  'signOut' => array(
+    'controller' => 'Users',
+    'action' => 'signOut'
   )
 );
 
