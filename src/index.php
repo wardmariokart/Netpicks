@@ -12,6 +12,10 @@ $routes = array(
     'controller' => 'Home',
     'action' => 'extraQuestions'
   ),
+  'detail' => array(
+    'controller' => 'Home',
+    'action' => 'detail'
+  ),
 
   'signIn' => array(
     'controller' => 'Users',
@@ -31,6 +35,7 @@ if(empty($_GET['page'])) {
   $_GET['page'] = 'home';
 }
 if(empty($routes[$_GET['page']])) {
+  $_SESSION['error'] = '\'' . $_GET['page'] . '\'invalid page';
   header('Location: index.php');
   exit();
 }

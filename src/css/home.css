@@ -1,0 +1,58 @@
+
+/* ________________________________________________________________________________________ PLAN ONE */
+
+.plan-one {
+  width: 60rem;
+  margin: 0 auto;
+  border: 1px solid white;
+  border-radius: 1rem;
+  padding: 2rem;
+}
+
+.plan-one span {
+  font-size: 1.5rem;
+}
+
+.plan-one__block {
+  display: block;
+  margin-bottom: .2rem;
+}
+
+.plan-one__questions {
+  margin-bottom: 2rem;
+}
+
+.plan-one__drop-down {
+  background: none;
+  border: none;
+  border-bottom: 1px solid white;
+  color: white;
+  font-size: 1.5rem;
+}
+
+.plan-one__submit-wrapper {
+  text-align: center;
+}
+
+.plan-one__submit {
+  background: transparent;
+  border: 1px solid white;
+  border-radius: 1rem;
+
+  color: white;
+  padding: 1rem 2rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+
+  cursor: pointer;
+  transition: background-color .25s ease-in-out, color .25s ease-in-out;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, .27);
+  }
+
+  &:active {
+    background-color: rgba(255, 255, 255, .8);
+    color: #0078ff;
+  }
+}
