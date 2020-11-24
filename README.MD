@@ -31,3 +31,4 @@ De gebruiker kan hier aangeven of de film al gezien is en een nieuwe wilt, nog a
 
 # Concult 2 vragen (24 November)
 - [ ] Closes #.. Wilt nog steeds niet werken
+- [x] Hoe stoppen we emojis in database? Emojis zijn zichtbaar in phpMyAdmin maar worden "?" eens de DAO ze ophaalt. [fixed -> DAO.php -> SET CHARACTER SET utf8mb4]
