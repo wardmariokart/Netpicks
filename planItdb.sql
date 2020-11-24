@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mysql
--- Generation Time: Nov 22, 2020 at 11:21 AM
+-- Generation Time: Nov 24, 2020 at 11:06 AM
 -- Server version: 5.7.32
 -- PHP Version: 7.4.11
 
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `NightTypes` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `displayName` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -37,11 +37,32 @@ CREATE TABLE `NightTypes` (
 -- Dumping data for table `NightTypes`
 --
 
-INSERT INTO `NightTypes` (`id`, `name`, `displayName`) VALUES
-(1, 'solo', 'me, myself and I'),
-(2, 'boysNight', 'boys night 🍻'),
-(3, 'dateNight', 'date night 🌹'),
-(4, 'girlsNight', 'girls night 🍷');
+INSERT INTO `NightTypes` (`id`, `value`, `displayName`) VALUES
+(1, 'solo', 'me, myself and I 🙋‍♂️'),
+(2, 'dateNight', 'me and my date 🌹'),
+(3, 'girlsNight', 'me and the girls 🍷'),
+(4, 'boysNight', 'me and the boys 🍻'),
+(5, 'familyNight', 'me and my family 👪');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `PlannedMovieNights`
+--
+
+CREATE TABLE `PlannedMovieNights` (
+  `id` int(11) NOT NULL,
+  `userId` int(11) NOT NULL,
+  `movieId` int(11) NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `PlannedMovieNights`
+--
+
+INSERT INTO `PlannedMovieNights` (`id`, `userId`, `movieId`, `name`) VALUES
+(1, 1, 24, 'Scary movie night :S');
 
 -- --------------------------------------------------------
 
@@ -51,7 +72,7 @@ INSERT INTO `NightTypes` (`id`, `name`, `displayName`) VALUES
 
 CREATE TABLE `StepOneMovieOptions` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'How option is identified in code',
+  `value` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'How option is identified in code',
   `displayName` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'How option is displayed to user'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -59,10 +80,29 @@ CREATE TABLE `StepOneMovieOptions` (
 -- Dumping data for table `StepOneMovieOptions`
 --
 
-INSERT INTO `StepOneMovieOptions` (`id`, `name`, `displayName`) VALUES
-(1, 'cry', 'wenen in een hoekje'),
-(2, 'action', 'vol adrenaline zitten'),
-(3, 'scary', 'me verstoppen onder mijn deken');
+INSERT INTO `StepOneMovieOptions` (`id`, `value`, `displayName`) VALUES
+(1, 'cry', 'crying in a corner'),
+(2, 'action', 'pumping with adrenaline'),
+(3, 'scary', 'hiding under a blanket');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `email`, `password`) VALUES
+(1, 'ward.van.bever@gmail.com', '$2y$10$WDwuRM6tIFZyLQmJIEgs0.oibW1uW7wAMbLS7b6r2/rAWa/eBKE3m');
 
 --
 -- Indexes for dumped tables
@@ -75,9 +115,21 @@ ALTER TABLE `NightTypes`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `PlannedMovieNights`
+--
+ALTER TABLE `PlannedMovieNights`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `StepOneMovieOptions`
 --
 ALTER TABLE `StepOneMovieOptions`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -88,13 +140,25 @@ ALTER TABLE `StepOneMovieOptions`
 -- AUTO_INCREMENT for table `NightTypes`
 --
 ALTER TABLE `NightTypes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `PlannedMovieNights`
+--
+ALTER TABLE `PlannedMovieNights`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `StepOneMovieOptions`
 --
 ALTER TABLE `StepOneMovieOptions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
