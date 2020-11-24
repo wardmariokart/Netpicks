@@ -3,15 +3,18 @@
 require_once __DIR__ . '/Controller.php';
 require_once __DIR__ . '/../dao/NightTypesDAO.php';
 require_once __DIR__ . '/../dao/StepOneMovieOptionsDAO.php';
+require_once __DIR__ . '/../dao/MovieNightsDAO.php';
 
 class HomeController extends Controller {
 
   private $nightTypesDAO;
   private $stepOneMovieOptionsDAO;
+  private $movieNightsDAO;
 
   function __construct() {
     $this->nightTypesDAO = new NightTypesDAO();
     $this->stepOneMovieOptionsDAO = new StepOneMovieOptionsDAO();
+    $this->movieNightsDAO = new MovieNightsDAO();
   }
 
   public function home() {
@@ -20,7 +23,6 @@ class HomeController extends Controller {
     // required data: DateNights, KindsOfMovies
     $this->set('nightTypes', $this->nightTypesDAO->selectAll());
     $this->set('stepOneOptions', $this->stepOneMovieOptionsDAO->selectAll());
-
 
     if (!empty($_GET['action']))
     {
@@ -34,7 +36,10 @@ class HomeController extends Controller {
       }
     }
 
-
+    if (!empty($_SESSION['user']))
+    {
+      $this->set('myMovieNights', $this->movieNightsDAO->selectAll());
+    }
   }
 
   public function extraQuestions() {
@@ -53,6 +58,8 @@ class HomeController extends Controller {
 
   public function detail() {
     $this->set('title', 'Detail - Your Movie Night');
+
+
   }
 
 }

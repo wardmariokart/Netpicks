@@ -10,7 +10,9 @@
 }
 
 .plan-one span {
-  font-size: 1.5rem;
+  display: inline-block;
+  margin-bottom: .9rem;
+  font-size: 1.9rem;
 }
 
 .plan-one__block {
@@ -55,4 +57,17 @@
     background-color: rgba(255, 255, 255, .8);
     color: #0078ff;
   }
+}
+
+/* ________________________________________________________________________________________ MOVIE NIGHT OVERVIEW */
+.movie-nights__item {
+  display: block;
+  background-color: var(--white);
+  color: var(--deepBlue);
+  border-radius: .5rem;
+  padding: 1.5rem;
+  padding-top: .5rem;
+  width: 100%;
+
+  text-decoration: none;
 }

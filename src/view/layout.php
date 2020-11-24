@@ -17,9 +17,11 @@
           <a href="index.php?page=signUp">Sign Up</a>
         </span>
       <?php else: ?>
-        <span>Signed in as: <?php echo $_SESSION['user']['email'];?></span>
-        <a href="index.php?page=signOut">Sign out</a>
-      <?php endif; ?>
+        <div>
+          <span>Signed in as: <?php echo $_SESSION['user']['email'];?></span>
+          <a href="index.php?page=signOut">Sign out</a>
+          <?php endif; ?>
+        </div>
     </nav>
     <main>
       <?php

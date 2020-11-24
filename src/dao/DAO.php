@@ -19,7 +19,7 @@ class DAO {
 
 		if(empty(self::$sharedPDO)) {
 			self::$sharedPDO = new PDO('mysql:host=' . self::$dbHost . ';dbname=' . self::$dbName, self::$dbUser, self::$dbPass);
-			self::$sharedPDO->exec('SET CHARACTER SET utf8');
+			self::$sharedPDO->exec('SET CHARACTER SET utf8mb4');
 			self::$sharedPDO->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			self::$sharedPDO->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
     }
@@ -39,7 +39,7 @@ class DAO {
 
   public function selectAll()
   {
-    $sql = "SELECT * FROM `" . $this->tableName . "`";
+    $sql = "SELECT * FROM `" . $this->tableName . "` ORDER BY `id` ASC";
     $stmt = $this->pdo->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);

@@ -16,7 +16,7 @@
 
 <section class="question-card center-align-margin">
   <h2>Question Card</h2>
-  <span>Does supernatural movies scare you?</span>
+  <span>Does the supernatural scare you?</span>
   <form class="question__form" method="POST">
     <input type="hidden" name="action" value="setupFinish">
     <input class="question__radio" type="radio" name="horrorOne" value="notSupernatural" id="not-supernatural" required>
