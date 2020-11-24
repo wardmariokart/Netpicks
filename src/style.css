@@ -3,9 +3,11 @@
 @import './css/stepTwo.css';
 @import './css/home.css';
 
+/* stylelint-disable */
 *, *::before, *::after{
   box-sizing: border-box;
 }
+/* stylelint-enable */
 
 html {
   box-sizing: inherit;

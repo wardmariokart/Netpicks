@@ -95,7 +95,6 @@
   padding: 0;
   height: min-content;
 
-
   &:hover {
     transform: translateX(1rem);
   }
