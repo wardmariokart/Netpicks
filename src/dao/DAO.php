@@ -3,10 +3,10 @@
 class DAO {
 
   // Properties
-  private static $dbHost = 'mysql';
-	private static $dbName = 'planItdb';
-	private static $dbUser = 'planIt';
-	private static $dbPass = 'wilmaisstinkyfish:(';
+  private static $dbHost = 'ID321519_planitdb.db.webhosting.be';
+	private static $dbName = 'ID321519_planitdb';
+	private static $dbUser = 'ID321519_planitdb';
+	private static $dbPass = 'devine4life';
 	private static $sharedPDO;
   protected $pdo;
 
