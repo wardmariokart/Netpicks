@@ -5,7 +5,7 @@ class UsersDAO extends DAO {
 
   function __construct()
   {
-    parent::__construct('users');
+    parent::__construct('netpicks_users');
   }
 
   public function insert($data) {

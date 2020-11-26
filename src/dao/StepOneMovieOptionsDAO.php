@@ -6,7 +6,7 @@ class StepOneMovieOptionsDAO extends DAO {
 
   function __construct()
   {
-    parent::__construct('StepOneMovieOptions');
+    parent::__construct('movie_options');
   }
 
 }
