@@ -6,7 +6,7 @@ class NightTypesDAO extends DAO {
 
   function __construct()
   {
-    parent::__construct('NightTypes');
+    parent::__construct('nights');
   }
 
   public function validate( $data ){
