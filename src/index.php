@@ -28,6 +28,11 @@ $routes = array(
   'signOut' => array(
     'controller' => 'Users',
     'action' => 'signOut'
+  ),
+
+  'devTools' => array(
+    'controller' => 'Developer',
+    'action' => 'devTools'
   )
 );
 

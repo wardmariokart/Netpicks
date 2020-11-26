@@ -15,7 +15,7 @@ class Controller {
 
   public function render() {
     // set js variable according to environment (development / production)
-    $this->set('js', '<script src="http://localhost:9000/script.js"></script>'); // webpack dev server
+    $this->set('js', '<script src="http://localhost:8900/script.js"></script>'); // webpack dev server
     // NEW : CSS
     $this->set('css', ''); // webpack dev server: css is injected by the script
     if ($this->env == 'production') {

@@ -12,7 +12,7 @@ module.exports = (env, {mode}) => {
 		devServer: {
 			overlay: true,
       hot: true,
-      port: 9000
+      port: 8900
 		},
 		module: {
 			rules: [
