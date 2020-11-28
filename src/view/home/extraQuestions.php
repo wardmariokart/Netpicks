@@ -30,3 +30,5 @@
 
 
 </section>
+
+<span>(this is temp) Total 'gore' and 'supernatural' movies in genre 'horror': <b><?php echo $nbMoviesFound; ?></b></span>

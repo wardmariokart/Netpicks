@@ -34,6 +34,15 @@ class FilterCategoryKeywordsDAO extends DAO {
     return $stmt->fetch(PDO::FETCH_ASSOC);
   }
 
+  public function selectKeywordIdsbyCategoryId($filterCategoryId)
+  {
+    $sql = "SELECT DISTINCT `keyword_id` FROM `filter_category_keywords` WHERE `category_id` = :categoryId";
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->bindValue(':categoryId', $filterCategoryId);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+  }
+
   public function getErrors($insertData)
   {
     $errors = array();
