@@ -76,6 +76,15 @@ pre {
 
 a {
   background-color: transparent;
+  text-decoration: none;
+  color: inherit;
+  font-weight: bold;
+  
+  &:visited {
+    text-decoration: none;
+    color: inherit;
+  }
+
 }
 
 /**

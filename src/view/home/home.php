@@ -1,4 +1,3 @@
-
 <section class="plan-one">
   <h2 class="hidden">Movie night step one</h2>
 
@@ -26,7 +25,7 @@
       </div>
 
 
-      <div class="plan-one__block">
+      <div class="plan-one__block divider">
         <span>but </span>
         <select name="movieOptionTwo" id="movieOptionTwo" class="plan-one__drop-down">
           <?php foreach($stepOneOptions as $moveOption): ?>
@@ -36,9 +35,7 @@
         <span> is something we can't do without.</span>
       </div>
     </div>
-    <div class="plan-one__submit-wrapper">
-      <input class="plan-one__submit" type="submit" value="Plan my movie night!!">
-    </div>
+      <input class="plan-one__submit divider" type="submit" value="start planning">
   </form>
 </section>
 

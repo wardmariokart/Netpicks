@@ -1,61 +1,68 @@
 .filtered {
-  width: min-content;
 }
 
 .filtered__overview {
-  width: min-content;
   display: grid;
-  grid-template: repeat(3, 1fr) / repeat(10, 1fr);
-
-  border: 1px solid var(--white);
-  padding: 1.5rem;
-  border-radius: 1.25rem;
-  gap: 1rem;
+  grid-template: repeat(4, 1fr) / repeat(14, 1fr);
+  gap: .45rem;
 }
 
 .filtered__movie {
-  background-color: var(--white);
-  border-radius: .35rem;
+  background-color: var(--color-primary-lighter);
   width: 3rem;
   height: 4rem;
 
   display: flex;
   justify-content: center;
   align-items: center;
+}
 
-  /* &:after {
-    content: 'emoji';
-    border: 1px solid black;
-  } */
+.questions-wrapper {
+  display: table;
+  margin: 0 auto;
 }
 
 .question-card {
   margin-top: 3rem;
   width: 30rem;
 
-  background-color: var(--white);
-  color: var(--paleBlue);
-
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
   padding: 1.5rem;
-  border-radius: 1rem;
+  box-shadow: 6px 6px 19px 0 rgba(0, 0, 0, .1);
 }
 
 .question__form {
-  display: grid;
-  grid-template-columns: min-content min-content auto;
-  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .8rem;
+}
 
-  align-items: flex-end;
+.question__title {
+  text-transform: uppercase;
+  color: var(--color-primary);
+  font-size: 2.5rem;
+  margin: 0;
+  margin-bottom: 1rem;
+  line-height: 2.4rem;
+}
 
+.question__label {
+  display: inline-block;
+  font-size: 1.3rem;
+  padding: .8rem 1.6rem;
+  text-align: center;
+  min-width: min-content;
+  width: 15rem;
 }
 
 .question__radio + .question__label {
   white-space: nowrap;
-  border: 1px solid var(--paleBlue);
+  border: 1px solid var(--color-primary);
   background-color: transparent;
-  color: var(--paleBlue);
-  padding: .5rem 1rem;
-  border-radius: .2rem;
+  color: var(--color-primary);
   display: inline-block;
   margin-top: 1rem;
   cursor: pointer;
@@ -63,17 +70,17 @@
   transition: border .15s ease-in-out, color .15s ease-in-out, background-color .15s ease-in-out;
 
   &:hover {
-    background-color: var(--paleBlue);
-    border: 1px solid var(--deepBlue);
+    background-color: var(--color-primary-lighter);
+    border: 1px solid var(--color-primary);
     color: var(--white);
   }
 
 }
 
 .question__radio:checked + .question__label {
-  background-color: var(--deepBlue);
+  background-color: var(--color-primary);
   color: var(--white);
-  border-color: var(--deepBlue);
+  border-color: var(--color-primary);
 }
 
 .question__radio {
@@ -98,4 +105,26 @@
   &:hover {
     transform: translateX(1rem);
   }
+}
+
+/* ___________________________________________________________________________________________________ Step two version two*/
+
+.question__step-wrapper {
+  margin-top: 4rem;
+  display: flex;
+  justify-content: center;
+}
+
+.step-icon {
+  display: inline-block;
+  height: var(--step-icon-size);
+  width: var(--step-icon-size);
+  border-radius: 50%;
+  border: 1px solid var(--color-primary);
+  background-color: transparent;
+  margin: 0 .25rem;
+}
+
+.step-icon--filled {
+  background-color: var(--color-primary);
 }

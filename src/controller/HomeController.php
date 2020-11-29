@@ -50,13 +50,50 @@ class HomeController extends Controller {
   public function extraQuestions() {
     $this->set('title', 'Setup - Step Two');
 
-    $horrorMovieIds = $this->imdbMoviesDAO->selectByGenre('horror', true, 5000);
+    $horrorMovieIds = $this->imdbMoviesDAO->selectByGenres(['horror'], true, 5000); // DOESNT WORK TODO !!!!
     $filteredMovies = $this->filterMoviesByCategoryKeywords($horrorMovieIds, 2);
     $filteredMovieIds = array_column($filteredMovies, 'movie_id');
     $filteredMovies = $this->filterMoviesByCategoryKeywords($filteredMovieIds, 1);
     $filteredMovieIds = array_column($filteredMovies, 'movie_id');
 
-    //$this->imdbMoviesDAO->selectById(array_rand())
+
+    if (isset($_GET['action']) && $_GET['action'] == 'filter')
+    {
+      if (!isset($_SESSION['filteredMovieIds']))
+      {
+        // Get movies by genre
+        //$_SESSION['filteredMoviesIds'] = $this->imdbMoviesDAO->selectByGenre('horror')
+      }
+
+
+      $filterCategoriesDAO = new FilterCategoriesDAO();
+      switch ($_GET['filter']) {
+        case 'supernatural':
+          $filterId = $filterCategoriesDAO->selectIdByName('supernatural');
+
+          break;
+        case 'psychological':
+          break;
+        case 'gore':
+
+
+          break;
+
+        default:
+          # code...
+          break;
+      }
+
+
+    }
+
+
+    // To do next:
+    // 1. creat dummy question cards (forms)
+
+    // 2. Handle them here. Keep filter results per step with session
+    // 3. make a detail page as finished. (show movie, the options you chose and a button to remove)
+
 
     $this->set('nbMoviesFound', count($filteredMovies));
     return;
@@ -99,18 +136,6 @@ class HomeController extends Controller {
       }
     }
     return $outMovies;
-  }
-
-  public function handleSupernaturalAnswer($inputMovies)
-  {
-    // start from all horror movies
-
-    $horrorMovies = $this->selectByGenre('horror');
-    $x = 10;
-
-    // what was the answer?
-    // Yes:
-
   }
 
   public function detail() {

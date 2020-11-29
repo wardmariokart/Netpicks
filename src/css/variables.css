@@ -2,4 +2,11 @@
   --deepBlue: #0078ff;
   --white: white;
   --paleBlue: #479dff;
+  --color-primary: #1e1e1e;
+  --color-primary-lighter: #818181;
+  --color-secondary: #f7f6ef;
+  --divider-padding: .9rem;
+
+  /* step two */
+  --step-icon-size: .7rem;
 }

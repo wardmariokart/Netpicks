@@ -2,11 +2,8 @@
 /* ________________________________________________________________________________________ PLAN ONE */
 
 .plan-one {
-  width: 60rem;
   margin: 0 auto;
-  border: 1px solid white;
-  border-radius: 1rem;
-  padding: 2rem;
+
 }
 
 .plan-one span {
@@ -27,35 +24,31 @@
 .plan-one__drop-down {
   background: none;
   border: none;
-  border-bottom: 1px solid white;
-  color: white;
+  border-bottom: 1px solid var(--color-primary);
+  font-family: serif;
   font-size: 1.5rem;
-}
-
-.plan-one__submit-wrapper {
-  text-align: center;
 }
 
 .plan-one__submit {
-  background: transparent;
-  border: 1px solid white;
-  border-radius: 1rem;
-
-  color: white;
-  padding: 1rem 2rem;
-  font-size: 1.5rem;
+  display: block;
+  border: none;
+  text-align: center;
+  width: 100%;
+  font-size: 2.5rem;
+  text-transform: uppercase;
+  background-color: var(--color-secondary);
   font-weight: bold;
 
+
   cursor: pointer;
-  transition: background-color .25s ease-in-out, color .25s ease-in-out;
+  transition: color .12s ease-in-out;
 
   &:hover {
-    background-color: rgba(255, 255, 255, .27);
+    color: var(--color-primary-lighter);
   }
 
   &:active {
-    background-color: rgba(255, 255, 255, .8);
-    color: #0078ff;
+    color: var(--color-primary);
   }
 }
 
