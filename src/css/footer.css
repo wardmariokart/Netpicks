@@ -1,0 +1,27 @@
+footer {
+  margin-top: auto;
+  background-color: var(--color-primary);
+  color: var(--color-secondary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: .5rem 1rem;
+}
+
+.footer__netpicks-icon {
+  object-fit: cover;
+  height: 1.7rem;
+  width: 1.7rem;
+  filter: invert(1);
+}
+
+.footer__copyright {
+  font-family: serif;
+  font-size: 1.2rem;
+  text-transform: capitalize;
+
+  &::before {
+    content: '\00A9';
+    padding-right: .2rem;
+  }
+}
