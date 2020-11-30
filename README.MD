@@ -27,8 +27,3 @@ Mood 2 | Vol adrenaline zitten | Action | Superhero, superman, explosion, guns, 
 ### Stap 3
 Je krijgt een overview van de film die wij voor jou uitkozen met snack en accessoires.
 De gebruiker kan hier aangeven of de film al gezien is en een nieuwe wilt, nog aanpassingen doen, een datum & locatie toevoegen en sharen met vrienden.
-
-
-# Concult 2 vragen (24 November)
-- [ ] Closes #.. Wilt nog steeds niet werken
-- [x] Hoe stoppen we emojis in database? Emojis zijn zichtbaar in phpMyAdmin maar worden "?" eens de DAO ze ophaalt. [fixed -> DAO.php -> SET CHARACTER SET utf8mb4]
