@@ -14,7 +14,7 @@ class ImdbMoviesDAO extends DAO {
     $selectColumns = '';
     if ($bOnlyMovieIds)
     {
-      $selectColumns = '`' . $this->tableName . '`.`id`';
+      $selectColumns = 'DISTINCT `' . $this->tableName . '`.`id`';
     }
     else
     {

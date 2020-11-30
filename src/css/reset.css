@@ -79,7 +79,7 @@ a {
   text-decoration: none;
   color: inherit;
   font-weight: bold;
-  
+
   &:visited {
     text-decoration: none;
     color: inherit;
@@ -356,5 +356,9 @@ template {
 
 [hidden] {
   display: none;
+}
+
+ol, ul {
+  list-style-type: none;
 }
 /* stylelint-enable */

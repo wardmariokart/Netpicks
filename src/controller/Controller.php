@@ -11,6 +11,19 @@ class Controller {
       $this->env = 'production';
     }
     call_user_func(array($this, $this->route['action']));
+
+    if (isset($_SESSION['filteredMovieIds']))
+    {
+      if($this->route['action'] != 'extraQuestions')
+      {
+        unset($_SESSION['filteredMovieIds']);
+        //$_SESSION['info'] = 'filteredMovies has been cleared';
+      }
+      else
+      {
+        //$_SESSION['info'] = 'filteredMovies has ' . count($_SESSION['filteredMovieIds']) . ' elements.';
+      }
+    }
   }
 
   public function render() {

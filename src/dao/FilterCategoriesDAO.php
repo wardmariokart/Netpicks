@@ -11,7 +11,7 @@ class FilterCategoriesDAO extends DAO {
   {
     $sql = "SELECT `id` from `filter_categories` WHERE `category_name` = :categoryName";
     $stmt = $this->pdo->prepare($sql);
-    $stmt->bindValue($categoryName);
+    $stmt->bindValue(':categoryName', $categoryName);
     $stmt->execute();
     return $stmt->fetch(PDO::FETCH_COLUMN, 0);
   }

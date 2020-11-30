@@ -11,7 +11,7 @@ class UsersDAO extends DAO {
   public function insert($data) {
     $errors = $this->getValidationErrors($data);
     if (empty($errors)) {
-      $sql = "INSERT INTO `users` (`email`, `password`) VALUES (:email, :password)";
+      $sql = "INSERT INTO `netpicks_users` (`email`, `password`) VALUES (:email, :password)";
       $stmt = $this->pdo->prepare($sql);
       $stmt->bindValue(':email', $data['email']);
       $stmt->bindValue(':password', $data['password']);
@@ -24,7 +24,7 @@ class UsersDAO extends DAO {
   }
 
   public function selectByEmail($email) {
-    $sql = "SELECT * FROM `users` WHERE `email` = :email";
+    $sql = "SELECT * FROM `netpicks_users` WHERE `email` = :email";
     $stmt = $this->pdo->prepare($sql);
     $stmt->bindValue(':email', $email);
     $stmt->execute();
