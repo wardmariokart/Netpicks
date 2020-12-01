@@ -4,7 +4,7 @@
 @import './css/home.css';
 @import './css/nav.css';
 @import './css/footer.css';
-
+@import './css/cards.css';
 /* stylelint-disable */
 *, *::before, *::after{
   box-sizing: border-box;

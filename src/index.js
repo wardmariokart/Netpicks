@@ -1,6 +1,8 @@
 /* const { EnvironmentPlugin } = require('webpack');
  */
 require('./style.css');
+import {extraQuestionsInit} from './js/extraQuestions.js';
+
 {
 
   const formDataToJson = $form =>
@@ -135,8 +137,7 @@ require('./style.css');
 
   const init = () => {
     setupQuestionListener();
-
-
+    extraQuestionsInit();
   };
 
   init();

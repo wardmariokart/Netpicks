@@ -1,0 +1,48 @@
+.card-stack {
+  margin-top: 2rem;
+  display: grid;
+  grid-template: 1fr/1fr;
+  perspective: 100px;
+  perspective-origin: 50% 10%;
+
+  & .card {
+    grid-row: 1;
+    grid-column: 1;
+    margin: 0 auto;
+    touch-action: none;
+    pointer-events: auto;
+
+    height: 20rem;
+  }
+}
+
+/* TODO: make these nested in .card-stack */
+/*
+.card:nth-child(2) {
+  content: '2';
+  transform: translate3d(0, calc(1 * var(--stack-offset-y)), calc(1 * var(--stack-offset-z)));
+}
+
+.card:nth-child(3) {
+  content: '3';
+  transform: translate3d(0, calc(2 * var(--stack-offset-y)), calc(2 * var(--stack-offset-z)));
+}
+
+.card:nth-child(4) {
+  content: '4';
+  transform: translate3d(0, calc(3 * var(--stack-offset-y)), calc(3 * var(--stack-offset-z)));
+}
+
+.card:nth-child(5) {
+  content: '5';
+  transform: translate3d(0, calc(4 * var(--stack-offset-y)), calc(4 * var(--stack-offset-z)));
+} */
+
+.top-deck {
+  background-color: yellow;
+}
+
+.grabbed {
+  transform: scale(1.05);
+  background-color: rgb(200, 200, 255);
+}
