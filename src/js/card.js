@@ -141,7 +141,13 @@ export class Card {
     const $cardForm = this.$element.querySelector('form');
     if ($cardForm)
     {
-      $cardForm.querySelectorAll('input').forEach($input => {if ($input.getAttribute('name') === 'answer') $input.setAttribute('value', answers['side']);});
+      const setValueByName = ($form, $name, $value) =>
+      {
+        $form.querySelectorAll('input').forEach($input => {if ($input.getAttribute('name') === $name) $input.setAttribute('value', $value);});
+      };
+
+      setValueByName($cardForm, 'answer', answers[side]);
+      setValueByName($cardForm, 'nbQuestionsLeft', this.$element.parentElement.querySelectorAll('.card').length - 1); // -1 because don't count yourself
       $cardForm.requestSubmit();
     }
 

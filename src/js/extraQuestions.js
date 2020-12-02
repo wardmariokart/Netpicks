@@ -22,11 +22,6 @@ const onCardDestroyed = inCard =>
 {
   const id = cards.findIndex(card => card.$element === inCard.$element);
   cards.splice(id, 1);
-  console.log(`Card removed from array. ${cards.length} left.`);
-  if (cards.length === 0)
-  {
-    createNewCard(null);
-  }
 };
 
 const handleCardAnswer = async (event, card) =>
@@ -39,20 +34,21 @@ const handleCardAnswer = async (event, card) =>
   const formData = formDataToJson(event.currentTarget);
   //console.log({formData});
   const phpResponse = await postToPHP(formData, url);
-  console.log({phpResponse});
+  console.log(phpResponse);
 
-
-
-  return;
-  if (phpResponse['type'] === 'confirm pick')
+  if ('updateMoviesLeft' in phpResponse)
   {
-    console.log('hit');
-    Array.from(document.querySelectorAll('.question-card')).forEach($card => $card.parentElement.removeChild($card));
-    insertPickedCardElement(url, phpResponse['data']['pickData']);
-    updateMoviesLeft(phpResponse['data']['nbMoviesLeft']);
+    console.log('update movies left');
+    const $moviesLeft = document.querySelector('.filtered__movies-left');
+    $moviesLeft.textContent = phpResponse['updateMoviesLeft'];
   }
 
-
+  if ('proposeMovie' in phpResponse)
+  {
+    console.log(`This movie was proposed: ${phpResponse['proposeMovie']['title']}`);
+    // Create new movie pick card
+    createNewCard(null);
+  }
 };
 
 export const extraQuestionsInit = () =>

@@ -12,11 +12,11 @@ class Controller {
     }
     call_user_func(array($this, $this->route['action']));
 
-    if (isset($_SESSION['filteredMovieIds']))
+    if (isset($_SESSION['step2']))
     {
       if($this->route['action'] != 'extraQuestions')
       {
-        unset($_SESSION['filteredMovieIds']);
+        unset($_SESSION['step2']);
         //$_SESSION['info'] = 'filteredMovies has been cleared';
       }
       else

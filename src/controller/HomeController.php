@@ -72,39 +72,39 @@ class HomeController extends Controller {
       header('location:index.php');
       exit();
     }
-    $this->set('stepOne', $stepOne);
-    $this->setupQuestionCards($stepOne);
 
-
-    if (!isset($_SESSION['filteredMovieIds']))
+    $bJavascriptCall = isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] === 'application/json';
+    if(!$bJavascriptCall)
     {
-      // Get movies by genre
-      $_SESSION['filteredMovieIds'] = $this->imdbMoviesDAO->selectByGenres(['horror'], true, 5000);
+      // Reset all $_SESSION variables
+      $_SESSION['step2']['filteredMovieIds'] = array();
+      $_SESSION['step2']['answers'] = array();
+
+      $this->set('stepOne', $stepOne);
+      $this->setupQuestionCards($stepOne);
+      $this->setupFilteredMovieIds($stepOne);
     }
 
-
-
-
-
-
-    //$horrorMovieIds = $this->imdbMoviesDAO->selectByGenres(['horror'], true, 5000); // DOESNT WORK TODO !!!!
-    //$filteredMovies = $this->filterMoviesByCategoryKeywords($horrorMovieIds, 'supernatural', 'filter');
-    //$filteredMovieIds = array_column($filteredMovies, 'movie_id');
-    //$filteredMovies = $this->filterMoviesByCategoryKeywords($filteredMovieIds, 'gore', 'filter');
-    //$filteredMovieIds = array_column($filteredMovies, 'movie_id');
-
-
     // Javascript action
-    if (isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] === 'application/json')
+    if ($bJavascriptCall)
     {
       $content = trim(file_get_contents('php://input'));
       $data = json_decode($content, true);
 
       if ($data['action'] === 'filter')
       {
+        $jsAnswer = array();
+        $this->saveAnswer($data['questionId'], $data['answer']);
         $this->handleFilterActionJs($data);
-        $result = $this->pickFromFilteredMovies();
-        echo json_encode($result);
+        $jsAnswer['updateMoviesLeft'] = count($_SESSION['step2']['filteredMovieIds']);
+
+
+        if (intval($data['nbQuestionsLeft']) === 0)
+        {
+          // Pick & propose a movie
+          $jsAnswer['proposeMovie'] = $this->pickFromFilteredMovies();
+        }
+        echo json_encode($jsAnswer);
         exit();
       }
       else if ($data['action'] === 'pickOtherMovie')
@@ -160,12 +160,12 @@ class HomeController extends Controller {
             case 'supernatural':
               if($_POST['filterSupernatural'] == 'true')
               {
-                $_SESSION['filteredMovieIds'] = $this->filterMoviesByCategoryKeywords($_SESSION['filteredMovieIds'], $_POST['filterType'], 'include');
+                $_SESSION['step2']['filteredMovieIds'] = $this->filterMoviesByCategoryKeywords($_SESSION['step2']['filteredMovieIds'], $_POST['filterType'], 'include');
               }
               else if ($_POST['filterSupernatural'] == 'false')
               {
-                $result =  $this->filterMoviesByCategoryKeywords($_SESSION['filteredMovieIds'], $_POST['filterType'], 'exclude');
-                $_SESSION['filteredMovieIds'] = $result;
+                $result =  $this->filterMoviesByCategoryKeywords($_SESSION['step2']['filteredMovieIds'], $_POST['filterType'], 'exclude');
+                $_SESSION['step2']['filteredMovieIds'] = $result;
               }
               else if ($_POST['filterSupernatural'] == 'skip')
               {
@@ -180,7 +180,7 @@ class HomeController extends Controller {
             break;
 
             default:
-            unset($_SESSION['filteredMovieIds']);
+            unset($_SESSION['step2']['filteredMovieIds']);
             $_SESSION['error'] = $_POST['filterType'] . 'Is invalid filter type';
             header('location: index.php');
             exit();
@@ -191,7 +191,27 @@ class HomeController extends Controller {
     }
 
 
-    $this->set('nbMoviesFound', count($_SESSION['filteredMovieIds']));
+    $this->set('nbMoviesFound', count($_SESSION['step2']['filteredMovieIds']));
+
+  }
+
+  // $answerStr can be 'included', 'excluded' or 'skipped'
+  private function saveAnswer($questionId, $answerStr)
+  {
+    if (!isset($_SESSION['step2']['answers']))
+    {
+      $_SESSION['step2']['answers'] = array();
+    }
+
+    array_push($_SESSION['step2']['answers'], array('question_id' => $questionId, 'answer' => $answerStr));
+  }
+
+  private function setupFilteredMovieIds($stepOneInputs)
+  {
+    $genres = array();
+    if(isset($stepOneInputs['movieOptionOne'])) array_push($genres, $stepOneInputs['movieOptionOne']['imdb_genre_id']);
+    if(isset($stepOneInputs['movieOptionTwo'])) array_push($genres, $stepOneInputs['movieOptionTwo']['imdb_genre_id']);
+    $_SESSION['step2']['filteredMovieIds'] = $this->imdbMoviesDAO->selectByGenreIds($genres, true);
 
   }
 
@@ -207,7 +227,7 @@ class HomeController extends Controller {
 
   private function handleConfirmPick($userId, $pickId)  // TODO
   {
-    unset($_SESSION['filteredMovieIds']);
+    unset($_SESSION['step2']['filteredMovieIds']);
   }
 
   private function handleFilterActionJs($data)
@@ -216,8 +236,11 @@ class HomeController extends Controller {
     {
 
       // take current movieIds and apply a filter or reject to it.
-
-      $_SESSION['filteredMovieIds'] = $this->filterMoviesByCategoryKeywords($_SESSION['filteredMovieIds'], $data['filterType'], );
+      $answer = $data['answer'];
+      if ($answer === 'include' || $answer === 'exclude')
+      {
+        $_SESSION['step2']['filteredMovieIds'] = $this->filterMoviesByCategoryKeywords($_SESSION['step2']['filteredMovieIds'], $data['filterType'], $answer);
+      }
       return;
 
       switch ($data['filterType'])
@@ -237,12 +260,12 @@ class HomeController extends Controller {
             if($data['filterSupernatural'] == 'true')
             {
 
-              $_SESSION['filteredMovieIds'] = array_column($this->filterMoviesByCategoryKeywords($_SESSION['filteredMovieIds'], $data['filterType'], 'include'), 'movie_id');
+              $_SESSION['step2']['filteredMovieIds'] = array_column($this->filterMoviesByCategoryKeywords($_SESSION['step2']['filteredMovieIds'], $data['filterType'], 'include'), 'movie_id');
             }
             else if ($data['filterSupernatural'] == 'false')
             {
-              $result =  $this->filterMoviesByCategoryKeywords($_SESSION['filteredMovieIds'], $data['filterType'], 'exclude');
-              $_SESSION['filteredMovieIds'] = $result;
+              $result =  $this->filterMoviesByCategoryKeywords($_SESSION['step2']['filteredMovieIds'], $data['filterType'], 'exclude');
+              $_SESSION['step2']['filteredMovieIds'] = $result;
             }
             else if ($_POST['filterSupernatural'] == 'skip')
             {
@@ -250,7 +273,7 @@ class HomeController extends Controller {
             }
           break;
           default:
-          unset($_SESSION['filteredMovieIds']);
+          unset($_SESSION['step2']['filteredMovieIds']);
           $_SESSION['error'] = $_POST['filterType'] . 'Is invalid filter type';
           header('location: index.php');
           exit();
@@ -261,14 +284,9 @@ class HomeController extends Controller {
 
   private function pickFromFilteredMovies ()
   {
-    $movieIdPick = $_SESSION['filteredMovieIds'][array_rand($_SESSION['filteredMovieIds'])];
-    $pickedMovie = $this->imdbMoviesDAO->selectById($movieIdPick);
-
-    $result = array();
-    $result['type'] = 'confirm pick';
-    $result['data'] = array('nbMoviesLeft' => count($_SESSION['filteredMovieIds']), 'pickData' => $pickedMovie);
-
-    return $result;
+    $filteredId = $_SESSION['step2']['filteredMovieIds'][array_rand($_SESSION['step2']['filteredMovieIds'])];
+    $pickedMovie = $this->imdbMoviesDAO->selectById($filteredId);
+    return $pickedMovie;
   }
 
   private function safeKeySelector($array, $key, $alternative = false)
@@ -276,7 +294,7 @@ class HomeController extends Controller {
     return isset($array[$key]) ? $array[$key] : $alternative;
   }
 
-  private function filterMoviesByCategoryKeywords($inMovieIds, $categoryFilterId, $filterOrReject)
+  private function filterMoviesByCategoryKeywords($inMovieIds, $categoryFilterId, $includeOrExclude)
   {
     if(!is_numeric($categoryFilterId))
     {
@@ -294,11 +312,11 @@ class HomeController extends Controller {
     if ($bSqlMethod)
     {
 
-      if ($filterOrReject == 'include')
+      if ($includeOrExclude == 'include')
       {
-        $outMovies = $imdbMoviesKeywordsDOA->filterMovieIdsWithKeywordIds($inMovieIds, $filterKeywordIds);
+        $outMovies = array_column($imdbMoviesKeywordsDOA->filterMovieIdsWithKeywordIds($inMovieIds, $filterKeywordIds), 'movie_id');
       }
-      else if ($filterOrReject == 'exclude')
+      else if ($includeOrExclude == 'exclude')
       {
         $outMovies = $imdbMoviesKeywordsDOA->rejectMovieIdsWithKeywordIds($inMovieIds, $filterKeywordIds);
       }

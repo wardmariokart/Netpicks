@@ -34,6 +34,8 @@
           <input type="hidden" name="filterType" value="<?php echo $question['filter_category_id']; ?>">
           <input type="hidden" name="answer" value="you didnt update this in js...">
           <input type="hidden" name="questionNumber" value="<?php echo $index; ?>">
+          <input type="hidden" name="questionId" value="<?php echo $question['id']?>">
+          <input type="hidden" name="nbQuestionsLeft" value="you didnt update this in js...">
         </form>
       </article>
     <?php endforeach; ?>

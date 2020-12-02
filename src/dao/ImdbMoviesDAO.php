@@ -7,7 +7,7 @@ class ImdbMoviesDAO extends DAO {
     parent::__construct('imdb_movies');
   }
 
-  public function selectByGenres($genreNames, $bOnlyMovieIds = false, $limit = 1000)
+  public function selectByGenreIds($genreIds, $bOnlyMovieIds = false, $limit = 50000)
   {
 
 
@@ -21,20 +21,20 @@ class ImdbMoviesDAO extends DAO {
       $selectColumns = '`' . $this->tableName . '`.*';
     }
 
-    if (!is_array($genreNames))
+    if (!is_array($genreIds))
     {
-      $genreNames = array($genreNames);
+      $genreIds = array($genreIds);
     }
 
-    $genreQueryString = implode(',', array_fill(0, count($genreNames), '?'));
+    //$genreQueryString = implode(',', array_fill(0, count($genreIds), '?'));
     $formattedGenres = array();
-    foreach($genreNames as $genreName)
+    foreach($genreIds as $genreId)
     {
-      array_push($formattedGenres, '`imdb_genres`.`genre` = \'' . $genreName . '\'');
+      array_push($formattedGenres, '`imdb_movies_genres`.`genre_id` = \'' . $genreId . '\'');
     }
-    $genreQueryString = implode(' AND ', $formattedGenres);
+    $genreQueryString = implode(' OR ', $formattedGenres);
 
-    $sql = "SELECT " . $selectColumns .  " FROM `" . $this->tableName . "` INNER JOIN `imdb_movies_genres` ON `imdb_movies_genres`.`movie_id` = `" . $this->tableName . "`.`id` WHERE `imdb_movies_genres`.`genre_id` = (SELECT `imdb_genres`.`id` FROM `imdb_genres` WHERE " . $genreQueryString. ") LIMIT :limit";
+    $sql = "SELECT " . $selectColumns .  " FROM `" . $this->tableName . "` INNER JOIN `imdb_movies_genres` ON `imdb_movies_genres`.`movie_id` = `" . $this->tableName . "`.`id` WHERE " . $genreQueryString . " LIMIT :limit";
     $stmt = $this->pdo->prepare($sql);
     $stmt->bindValue(':limit', $limit);
     $stmt->execute();
