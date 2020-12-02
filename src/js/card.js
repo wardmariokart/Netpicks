@@ -1,38 +1,236 @@
 import anime from './lib/anime.es.js';
+import {map} from './helpers.js';
+
+const overDropOffClass = 'card--over-drop-off';
+const markForDestroyClass = 'marked-for-destroy';
 
 export class Card {
 
   constructor()
   {
-    this.stackOffsetPx = {y: 10, z: - 2};
+    this.bDestroyed = false;
+    this.stackOffsetPx = {y: 30, z: - 5};
     this.origin = {x: 0, y: 0, z: 0, scale: 0, rotation: 0};
     this.grabbedBy = null;
+    this.onDestroyedCallbacks = [];
+    this.onThrowOutCallbacks = [];
     this.createElement(document.querySelector('.card-stack'));
+
+    this.dropOffTreshold = 200;
+  }
+
+  get isOverDropOffTreshold()
+  {
+    return Math.abs(this.location.x) > this.dropOffTreshold;
+  }
+
+  get location()
+  {
+    const x = parseInt(this.getTransformProperty('translateX'));
+    const y = parseInt(this.getTransformProperty('translateY'));
+    const z = parseInt(this.getTransformProperty('translateZ'));
+
+    return {x, y, z};
+  }
+
+  get bTopDeck()
+  {
+    if (this.bDestroyed)
+    {
+      return false;
+    }
+    else
+    {
+      const siblings = Array.from(this.$element.parentElement.children).filter($element => !$element.classList.contains(markForDestroyClass));
+      const i = siblings.indexOf(this.$element);
+      return i === siblings.length - 1;
+    }
+  }
+
+
+  // returns false if failed to grab or this if successful grab
+  // grabber must be of type Mouse
+  grab(grabber)
+  {
+    this.stopCurrentAnime();
+    let bSuccess = false;
+    const bGrabbable = this.bTopDeck;
+    if (bGrabbable && this.grabbedBy == null)
+    {
+
+
+      bSuccess = true;
+      this.grabbedBy = grabber;
+      this.$element.classList.add('grabbed');
+
+    }
+    return bSuccess;
+  }
+
+  stopCurrentAnime()
+  {
+    anime.running.forEach(runner => {
+      runner.remove(this.$element);
+    });
+  }
+
+  drop()
+  {
+    if (this.grabbedBy)
+    {
+      this.$element.classList.remove('grabbed');
+      this.grabbedBy = null;
+
+      if (this.isOverDropOffTreshold)
+      {
+        this.throwOut();
+      }
+      else
+      {
+        // Return to origin
+        const target = {x: this.origin.x, y: this.origin.y};
+        anime({
+          targets: this.$element,
+          duration: 400,
+          translateX: target.x,
+          translateY: target.y,
+          rotate: 0,
+          easing: 'easeOutCirc'
+        });
+      }
+    }
+  }
+
+  drag(offset)
+  {
+
+
+    offset = {x: - offset.x, y: - offset.y};
+    this.translate(offset);
+
+    // Rotate here
+    if (this.isOverDropOffTreshold)
+    {
+      this.$element.classList.add(overDropOffClass);
+    }
+    else
+    {
+      this.$element.classList.remove(overDropOffClass);
+    }
+  }
+
+  // internal use only
+  throwOut()
+  {
+    this.bGrabbable = false;
+
+    // 1. Which side?
+    const side = this.location.x > 0 ? 'right' : 'left';
+
+    // 2. Call ThrowOut callbacks
+    const answers = [];
+    answers['right'] = 'include';
+    answers['left'] = 'exclude';
+    this.onThrowOutCallbacks.forEach(func => func(this, answers[side]));
+
+    // 3. Animate card flying to the side
+    const targets = [];
+    targets['right'] = {x: 1000, y: 0};
+    targets['left'] = {x: - 1000, y: 0};
+    const target = targets[side];
+    const thisCard = this;
+    anime({
+      targets: this.$element,
+      duration: 150,
+      translateX: target.x,
+      translateY: target.y,
+      easing: 'linear',
+      complete: function(anim) {
+        thisCard.destroy();
+      }
+    });
+  }
+
+  // signature: func(card, answerString)
+  addOnThrowOutCallback (func)
+  {
+    this.onThrowOutCallbacks.push(func);
+  }
+
+  // func(card)
+  addOnDetroyedCallback (func)
+  {
+    this.onDestroyedCallbacks.push(func);
+  }
+
+  destroy()
+  {
+    this.$element.classList.add(markForDestroyClass);
+    this.bDestroyed = true;
+    this.onDestroyedCallbacks.forEach(func => func(this));
+    this.$element.parentElement.removeChild(this.$element);
   }
 
   createElement($parent)
   {
     this.$element = document.createElement('div');
-    $parent.addEventListener('DOMNodeInserted', e => this.updateOrigin(e));
-    this.$element.style.transform = 'translateX(0px) translateY(0px) translateZ(0px) scale(1) rotate(0deg)';
+    $parent.addEventListener('DOMNodeInserted', e => this.onSiblingsUpdate(e));
+    $parent.addEventListener('DOMNodeRemoved', e => this.onSiblingsUpdate(e));
+
+    this.$element.style.transform = 'translateX(0px) translateY(0px) translateZ(0px) scale(1) rotate(0deg)';  // making sure this.setTransformProperty will always work
 
     this.$element.classList.add('card', 'question-card');
     $parent.appendChild(this.$element);
 
   }
 
+  onSiblingsUpdate(event)
+  {
+    if (this.bTopDeck)
+    {
+      this.$element.classList.add('card--top-deck');
+    }
+    else
+    {
+      this.$element.classList.remove('card--top-deck');
+    }
+
+    this.updateOrigin(event);
+  }
+
   updateOrigin(event)
   {
+    if (this.bDestroyed)
+    {
+      return;
+    }
 
-    const siblings = this.$element.parentNode.children;
-    const i = siblings.length - Array.prototype.indexOf.call(siblings, this.$element);
-
+    let siblings = this.$element.parentNode.children;
+    siblings = Array.from(siblings).filter($element => !$element.classList.contains(markForDestroyClass)); // filter out elements marked for destroy
+    const i = siblings.length - 1 - siblings.indexOf(this.$element);
 
     this.origin.y = i * this.stackOffsetPx.y;
     this.origin.z = i * this.stackOffsetPx.z;
-    this.setTransformStyle(false, `${this.origin.y}px`, `${this.origin.z}px`);
 
-    /* this.$element.style.transform += `translateY(${this.origin.y}rem) translateZ(${this.origin.z})`; */
+    console.log(i)
+    anime({
+      targets: this.$element,
+      translateX: this.origin.x,
+      translateY: this.origin.y,
+      translateZ: this.origin.z,
+      duration: 1000,
+      easing: 'spring(0.5, 50, 2, 20)'
+    });
+  }
+
+  translate(offset)
+  {
+    const location = this.location;
+    this.setTransformStyle(`${location.x + offset.x}px`, `${location.y + offset.y}px`, false);
+
+    const sign = Math.sign(location.x);
+    const newAngle = sign * map(0, 300, 0, 30, Math.abs(location.x), true);
+    this.setTransformProperty('rotate', `${newAngle}deg`);
   }
 
   setTransformStyle(x = false, y = false, z = false)
@@ -75,11 +273,6 @@ export class Card {
     this.$element.style.transform = style;
   }
 
-  get bTopDeck()
-  {
-    return this.$element.parentElement.lastChild === this.$element;
-  }
-
   getTransformProperty(property)
   {
     const origin = this.$element.style.transform.indexOf(property);
@@ -90,62 +283,5 @@ export class Card {
   }
 
 
-  get location()
-  {
-    const x = parseInt(this.getTransformProperty('translateX'));
-    const y = parseInt(this.getTransformProperty('translateY'));
-    const z = parseInt(this.getTransformProperty('translateZ'));
 
-    return {x, y, z};
-  }
-
-  // returns false if failed to grab or this if successful grab
-  // grabber must be of type Mouse
-  grab(grabber)
-  {
-    let bSuccess = false;
-    const bGrabbable = this.bTopDeck;
-    if (bGrabbable && this.grabbedBy == null)
-    {
-      bSuccess = true;
-      this.grabbedBy = grabber;
-      this.$element.classList.add('grabbed');
-
-    }
-    return bSuccess;
-  }
-
-  drop()
-  {
-    if (this.grabbedBy)
-    {
-      this.$element.classList.remove('grabbed');
-      this.grabbedBy = null;
-
-      const target = {x: this.origin.x, y: this.origin.y};
-      anime({
-        targets: this.$element,
-        duration: 400,
-        translateX: target.x,
-        translateY: target.y,
-        rotate: 0,
-        easing: 'easeOutCirc'
-      });
-    }
-  }
-
-  translate(offset)
-  {
-    const location = this.location;
-    this.setTransformStyle(`${location.x + offset.x}px`, `${location.y + offset.y}px`, false);
-  }
-
-  drag(offset)
-  {
-
-
-    offset = {x: - offset.x, y: - offset.y};
-    this.translate(offset);
-    // Rotate here
-  }
 }

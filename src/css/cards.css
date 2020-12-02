@@ -12,37 +12,21 @@
     touch-action: none;
     pointer-events: auto;
 
-    height: 20rem;
+    width: 35rem;
+    height: 40rem;
+    transition: background-color 0.15s ease-out;
   }
 }
 
-/* TODO: make these nested in .card-stack */
-/*
-.card:nth-child(2) {
-  content: '2';
-  transform: translate3d(0, calc(1 * var(--stack-offset-y)), calc(1 * var(--stack-offset-z)));
-}
-
-.card:nth-child(3) {
-  content: '3';
-  transform: translate3d(0, calc(2 * var(--stack-offset-y)), calc(2 * var(--stack-offset-z)));
-}
-
-.card:nth-child(4) {
-  content: '4';
-  transform: translate3d(0, calc(3 * var(--stack-offset-y)), calc(3 * var(--stack-offset-z)));
-}
-
-.card:nth-child(5) {
-  content: '5';
-  transform: translate3d(0, calc(4 * var(--stack-offset-y)), calc(4 * var(--stack-offset-z)));
-} */
-
-.top-deck {
+.card--top-deck {
   background-color: yellow;
 }
 
 .grabbed {
   transform: scale(1.05);
   background-color: rgb(200, 200, 255);
+}
+
+.card--over-drop-off {
+  background-color: rgb(173, 173, 255);
 }

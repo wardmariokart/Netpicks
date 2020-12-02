@@ -75,6 +75,8 @@ class HomeController extends Controller {
     $this->set('stepOne', $stepOne);
 
 
+    $this->setupQuestionCards($stepOne);
+
     if (!isset($_SESSION['filteredMovieIds']))
     {
       // Get movies by genre
@@ -191,6 +193,13 @@ class HomeController extends Controller {
 
 
     $this->set('nbMoviesFound', count($_SESSION['filteredMovieIds']));
+
+  }
+
+  private function setupQuestionCards($stepOneInputs)
+  {
+    // 1. select cards for movie option one
+   /*  $this-> */
 
   }
 
