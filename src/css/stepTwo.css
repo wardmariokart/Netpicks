@@ -23,26 +23,6 @@
   align-items: center;
 }
 
-.cards-wrapper {
-  display: table;
-  margin: 0 auto;
-}
-
-.question-card {
-  margin-top: 3rem;
-  width: 30rem;
-
-  background-color: var(--color-secondary);
-  color: var(--color-primary);
-  border: 1px solid var(--color-primary);
-  padding: 1.5rem;
-  box-shadow: 6px 6px 19px 0 rgba(0, 0, 0, .1);
-}
-
-.question-card--inactive {
-  display: none;
-}
-
 .question__form {
   display: flex;
   flex-direction: column;

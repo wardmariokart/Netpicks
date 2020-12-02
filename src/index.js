@@ -5,41 +5,6 @@ import {extraQuestionsInit} from './js/extraQuestions.js';
 
 {
 
-  const formDataToJson = $form =>
-  {
-    const data = new FormData($form);
-    const obj = {};
-    data.forEach((value, key) =>
-    {
-      obj[key] = value;
-    });
-    return obj;
-  };
-
-  const handleAnswerQuestion = async event =>
-  {
-    event.preventDefault();
-    // Get form inputs
-    // filterType, answer
-
-    // Send request to php
-    const $form = event.currentTarget;
-    const url = $form.getAttribute('action');
-    const formData = formDataToJson(event.currentTarget);
-    const phpResponse = await postToPHP(formData, url);
-    console.log({phpResponse});
-
-
-
-    if (phpResponse['type'] === 'confirm pick')
-    {
-      console.log('hit');
-      Array.from(document.querySelectorAll('.question-card')).forEach($card => $card.parentElement.removeChild($card));
-      insertPickedCardElement(url, phpResponse['data']['pickData']);
-
-      updateMoviesLeft(phpResponse['data']['nbMoviesLeft']);
-    }
-  };
 
   const updateMoviesLeft = nbMoviesLeft =>
   {
@@ -47,19 +12,7 @@ import {extraQuestionsInit} from './js/extraQuestions.js';
   };
 
 
-  const postToPHP = async (formData, url) =>
-  {
-    const fetchResult = await fetch(url, {
-      method: 'POST',
-      headers: new Headers({
-        'Content-Type': 'application/json'
-      }),
-      body: JSON.stringify(formData)
-    });
 
-    const jsonResult = await fetchResult.json();
-    return jsonResult;
-  };
 
   const insertPickedCardElement = (url, pickData) =>
   {
@@ -124,19 +77,9 @@ import {extraQuestionsInit} from './js/extraQuestions.js';
   // TODO create movie night
   // TOmorrow morning:
 
-  const setupQuestionListener = () =>
-  {
-    const questions = document.querySelectorAll('.question-card');
-    const activeQuestions = Array.from(questions).filter($card => !$card.classList.contains('question__form--inactive'));
-    if (activeQuestions.length > 0)
-    {
-      const $questionForm = activeQuestions[0].querySelector('.question__form');
-      $questionForm.addEventListener('submit', handleAnswerQuestion);
-    }
-  };
+
 
   const init = () => {
-    setupQuestionListener();
     extraQuestionsInit();
   };
 

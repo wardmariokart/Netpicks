@@ -1,60 +1,64 @@
-
 import {Card} from './card.js';
 import Mouse from './mouse.js';
+import {formDataToJson, postToPHP} from './helpers.js';
 
 const cards = [];
 let mouse = null;
 
-
-export const extraQuestionsInit = () =>
+const createCardForExisitingElements = () =>
 {
-  const nbCards = 5;
-  mouse = new Mouse(cards);
+  const $elements = document.querySelectorAll('.card');
+  $elements.forEach($element => createNewCard($element));
+};
 
+const createNewCard = ($element) =>
+{
+  const card = new Card($element);
+  card.addOnDetroyedCallback(onCardDestroyed);
+  cards.push(card);
+};
 
-  const createNewCard = () =>
+const onCardDestroyed = inCard =>
+{
+  const id = cards.findIndex(card => card.$element === inCard.$element);
+  cards.splice(id, 1);
+  console.log(`Card removed from array. ${cards.length} left.`);
+  if (cards.length === 0)
   {
-    const card = new Card();
-    card.addOnDetroyedCallback(onCardDestroyed);
-    cards.push(card);
-  };
-
-  const onCardDestroyed = inCard =>
-  {
-    const id = cards.findIndex(card => card.$element === inCard.$element);
-    cards.splice(id, 1);
-    console.log(`Card removed from array. ${cards.length} left.`);
-
-    if (cards.length === 0)
-    {
-      createNewCard();
-    }
-  };
-
-  const handleCardAnswer = (card, answerString) =>
-  {
-    if (answerString === 'include')
-    {
-      
-    }
-    else if (answerString === 'exclude')
-    {
-
-    }
-
-  };
-
-
-  for (let i = 0;i < nbCards;i++)
-  {
-    createNewCard();
+    createNewCard(null);
   }
+};
+
+const handleCardAnswer = async (event, card) =>
+{
+  event.preventDefault();
+
+  // Send request to php
+  const $form = event.currentTarget;
+  const url = $form.getAttribute('action');
+  const formData = formDataToJson(event.currentTarget);
+  //console.log({formData});
+  const phpResponse = await postToPHP(formData, url);
+  console.log({phpResponse});
 
 
-  //cards[nbCards - 1].$element.style.transform += `translateZ(${4 * 0.5}rem)`;
-  //cards[nbCards - 1].$element.style.transform += `translateY(${4 * 0.5}rem)`;
 
+  return;
+  if (phpResponse['type'] === 'confirm pick')
+  {
+    console.log('hit');
+    Array.from(document.querySelectorAll('.question-card')).forEach($card => $card.parentElement.removeChild($card));
+    insertPickedCardElement(url, phpResponse['data']['pickData']);
+    updateMoviesLeft(phpResponse['data']['nbMoviesLeft']);
+  }
 
 
 };
 
+export const extraQuestionsInit = () =>
+{
+  mouse = new Mouse(cards);
+  createCardForExisitingElements();
+
+  cards.forEach(card => card.addSubmitListener(event => handleCardAnswer(event, card)));
+};

@@ -8,7 +8,7 @@ require_once __DIR__ . '/../dao/ImdbMoviesDAO.php';
 require_once __DIR__ . '/../dao/ImdbMoviesKeywordsDAO.php';
 require_once __DIR__ . '/../dao/FilterCategoryKeywordsDAO.php';
 require_once __DIR__ . '/../dao/FilterCategoriesDAO.php';
-
+require_once __DIR__ . '/../dao/NetpicksQuestionsDAO.php';
 
 class HomeController extends Controller {
 
@@ -73,9 +73,8 @@ class HomeController extends Controller {
       exit();
     }
     $this->set('stepOne', $stepOne);
-
-
     $this->setupQuestionCards($stepOne);
+
 
     if (!isset($_SESSION['filteredMovieIds']))
     {
@@ -161,11 +160,11 @@ class HomeController extends Controller {
             case 'supernatural':
               if($_POST['filterSupernatural'] == 'true')
               {
-                $_SESSION['filteredMovieIds'] = $this->filterMoviesByCategoryKeywords($_SESSION['filteredMovieIds'], $_POST['filterType'], 'filter');
+                $_SESSION['filteredMovieIds'] = $this->filterMoviesByCategoryKeywords($_SESSION['filteredMovieIds'], $_POST['filterType'], 'include');
               }
               else if ($_POST['filterSupernatural'] == 'false')
               {
-                $result =  $this->filterMoviesByCategoryKeywords($_SESSION['filteredMovieIds'], $_POST['filterType'], 'reject');
+                $result =  $this->filterMoviesByCategoryKeywords($_SESSION['filteredMovieIds'], $_POST['filterType'], 'exclude');
                 $_SESSION['filteredMovieIds'] = $result;
               }
               else if ($_POST['filterSupernatural'] == 'skip')
@@ -198,9 +197,12 @@ class HomeController extends Controller {
 
   private function setupQuestionCards($stepOneInputs)
   {
-    // 1. select cards for movie option one
-   /*  $this-> */
+    // select cards for movie option one
+    $netpicksQuestionsDAO = new NetpickQuestionsDAO();
+    $optionOneQuestions = $netpicksQuestionsDAO->selectAllByMovieOption($stepOneInputs['movieOptionOne']['id']);
+    $optionTwoQuestions = $netpicksQuestionsDAO->selectAllByMovieOption($stepOneInputs['movieOptionTwo']['id']);
 
+    $this->set('questions', array_merge($optionOneQuestions, $optionTwoQuestions));
   }
 
   private function handleConfirmPick($userId, $pickId)  // TODO
@@ -210,19 +212,36 @@ class HomeController extends Controller {
 
   private function handleFilterActionJs($data)
   {
-    if ($this->safeKeySelector($data, 'filterType'))
+    if (isset($data['filterType']))
     {
+
+      // take current movieIds and apply a filter or reject to it.
+
+      $_SESSION['filteredMovieIds'] = $this->filterMoviesByCategoryKeywords($_SESSION['filteredMovieIds'], $data['filterType'], );
+      return;
+
       switch ($data['filterType'])
       {
+
+
+        // Flow of this page
+        // first time entering => Create and display 4 questions. First movie selection based on step one answers. Movie options are linked with genres. Select multiple genres and their movie ids (give option if move must have both or either)
+        // Send off card  => Receive fetch request (action = filter, filterId = question.filterId, answer = include, exclude or skip, nbQuestionLeft: 2). 1. Do filtering using the existing function. 2. if 0 questions left. Respond with 'Present movie'  3. Respond with number of possible movies left
+        // send off another card
+        // Send off last card
+        // Show picked movie for you => in JS we receive respons['pickedMovie'] is set. Display the picked movie on top of screen. with little spinning animation behind it and black out background.
+        // Reject that movie (throw left) => In php we receive action = 'RejectPropsedMovie'. In JS we receive the same as above.
+        // Accept that movie (throw right) => From js we send fetch to 'acceptProposedMovie' and we create a new post with all the information needed (id, nightType, movieOption1 & 2, movieNightName, AND question and answer are stored in a new table (id, question_id, 'included','excluded','skipped'))
+
           case 'supernatural':
             if($data['filterSupernatural'] == 'true')
             {
 
-              $_SESSION['filteredMovieIds'] = array_column($this->filterMoviesByCategoryKeywords($_SESSION['filteredMovieIds'], $data['filterType'], 'filter'), 'movie_id');
+              $_SESSION['filteredMovieIds'] = array_column($this->filterMoviesByCategoryKeywords($_SESSION['filteredMovieIds'], $data['filterType'], 'include'), 'movie_id');
             }
             else if ($data['filterSupernatural'] == 'false')
             {
-              $result =  $this->filterMoviesByCategoryKeywords($_SESSION['filteredMovieIds'], $data['filterType'], 'reject');
+              $result =  $this->filterMoviesByCategoryKeywords($_SESSION['filteredMovieIds'], $data['filterType'], 'exclude');
               $_SESSION['filteredMovieIds'] = $result;
             }
             else if ($_POST['filterSupernatural'] == 'skip')
@@ -257,12 +276,17 @@ class HomeController extends Controller {
     return isset($array[$key]) ? $array[$key] : $alternative;
   }
 
-  private function filterMoviesByCategoryKeywords($inMovieIds, $inCategoryFilter, $filterOrReject)
+  private function filterMoviesByCategoryKeywords($inMovieIds, $categoryFilterId, $filterOrReject)
   {
-    $categoryFilterId = $this->filterCategoriesDAO->selectIdByName($inCategoryFilter);
+    if(!is_numeric($categoryFilterId))
+    {
+      $_SESSION['error'] = 'Your php code is still using a string for the filter category while it should be an id. (from HomeController::filterMoviesByCategoryKeywords)';
+      exit();
+
+    }
+
     $filterKeywordsDAO = new FilterCategoryKeywordsDAO();
     $filterKeywordIds = $filterKeywordsDAO->selectKeywordIdsbyCategoryId($categoryFilterId);
-
 
     $outMovies = array();
     $imdbMoviesKeywordsDOA = new ImdbMoviesKeywordsDAO();
@@ -270,11 +294,11 @@ class HomeController extends Controller {
     if ($bSqlMethod)
     {
 
-      if ($filterOrReject == 'filter')
+      if ($filterOrReject == 'include')
       {
         $outMovies = $imdbMoviesKeywordsDOA->filterMovieIdsWithKeywordIds($inMovieIds, $filterKeywordIds);
       }
-      else if ($filterOrReject == 'reject')
+      else if ($filterOrReject == 'exclude')
       {
         $outMovies = $imdbMoviesKeywordsDOA->rejectMovieIdsWithKeywordIds($inMovieIds, $filterKeywordIds);
       }

@@ -6,17 +6,25 @@ const markForDestroyClass = 'marked-for-destroy';
 
 export class Card {
 
-  constructor()
+  constructor($element)
   {
-    this.bDestroyed = false;
-    this.stackOffsetPx = {y: 30, z: - 5};
-    this.origin = {x: 0, y: 0, z: 0, scale: 0, rotation: 0};
     this.grabbedBy = null;
+    this.origin = {x: 0, y: 0, z: 0, scale: 0, rotation: 0};
+    this.stackOffsetPx = {y: 30, z: - 5};
+    this.dropOffTreshold = 200;
+    this.bDestroyed = false;
     this.onDestroyedCallbacks = [];
     this.onThrowOutCallbacks = [];
-    this.createElement(document.querySelector('.card-stack'));
 
-    this.dropOffTreshold = 200;
+    // Setting up the element
+    if ($element !== null)
+    {
+      this.setupElement($element);
+    }
+    else
+    {
+      this.createElement();
+    }
   }
 
   get isOverDropOffTreshold()
@@ -57,8 +65,6 @@ export class Card {
     const bGrabbable = this.bTopDeck;
     if (bGrabbable && this.grabbedBy == null)
     {
-
-
       bSuccess = true;
       this.grabbedBy = grabber;
       this.$element.classList.add('grabbed');
@@ -95,7 +101,7 @@ export class Card {
           translateX: target.x,
           translateY: target.y,
           rotate: 0,
-          easing: 'easeOutCirc'
+          easing: 'spring(0.5, 100, 5, 15)'
         });
       }
     }
@@ -127,11 +133,20 @@ export class Card {
     // 1. Which side?
     const side = this.location.x > 0 ? 'right' : 'left';
 
-    // 2. Call ThrowOut callbacks
+    // 2. Submit form with answer (as <input>)
     const answers = [];
     answers['right'] = 'include';
+    answers['up'] = 'skip';
     answers['left'] = 'exclude';
-    this.onThrowOutCallbacks.forEach(func => func(this, answers[side]));
+    const $cardForm = this.$element.querySelector('form');
+    if ($cardForm)
+    {
+      $cardForm.querySelectorAll('input').forEach($input => {if ($input.getAttribute('name') === 'answer') $input.setAttribute('value', answers['side']);});
+      $cardForm.requestSubmit();
+    }
+
+
+    //this.onThrowOutCallbacks.forEach(func => func(this, answers[side]));
 
     // 3. Animate card flying to the side
     const targets = [];
@@ -149,6 +164,20 @@ export class Card {
         thisCard.destroy();
       }
     });
+  }
+
+  addSubmitListener(func)
+  {
+    const $form = this.$element.querySelector('form');
+    if ($form)
+    {
+      $form.addEventListener('submit', func);
+    }
+    else
+    {
+      console.log('Warning: no add event listener added for the card marked red');
+      this.$element.style.backgroundColor = 'red';
+    }
   }
 
   // signature: func(card, answerString)
@@ -171,17 +200,38 @@ export class Card {
     this.$element.parentElement.removeChild(this.$element);
   }
 
-  createElement($parent)
+  createElement()
   {
-    this.$element = document.createElement('div');
-    $parent.addEventListener('DOMNodeInserted', e => this.onSiblingsUpdate(e));
-    $parent.addEventListener('DOMNodeRemoved', e => this.onSiblingsUpdate(e));
+    const $element = document.createElement('div');
+    const $futureParent = document.querySelector('.card-stack');
+    // TODO add form element to this.$element
+    //this.$element.innerHTML = `<form action="index`
 
-    this.$element.style.transform = 'translateX(0px) translateY(0px) translateZ(0px) scale(1) rotate(0deg)';  // making sure this.setTransformProperty will always work
+    $element.classList.add('card', 'question-card');
+    $futureParent.appendChild($element);
+    this.setupElement($element, $futureParent);
 
-    this.$element.classList.add('card', 'question-card');
-    $parent.appendChild(this.$element);
+  }
 
+  setupElement($element, $futureParent = null)
+  {
+    this.$element = $element;
+    const $parent = $futureParent === null ? $element.parentElement : $futureParent;
+    $parent.addEventListener('DOMNodeInserted', e => this.onSiblingsUpdate());
+    $parent.addEventListener('DOMNodeRemoved', e => this.onSiblingsUpdate());
+
+    const $form = this.$element.querySelector('form');
+    if ($form)
+    {
+      $form.addEventListener('submit', (e) =>
+      {
+        e.preventDefault();
+        return false;
+      });
+    }
+
+    this.$element.style.transform = 'translateX(0px) translateY(0px) translateZ(0px) scale(1) rotate(0deg)'; // making sure this.setTransformProperty will always work
+    this.updateOrigin();
   }
 
   onSiblingsUpdate(event)
@@ -198,7 +248,7 @@ export class Card {
     this.updateOrigin(event);
   }
 
-  updateOrigin(event)
+  updateOrigin()
   {
     if (this.bDestroyed)
     {
@@ -212,7 +262,6 @@ export class Card {
     this.origin.y = i * this.stackOffsetPx.y;
     this.origin.z = i * this.stackOffsetPx.z;
 
-    console.log(i)
     anime({
       targets: this.$element,
       translateX: this.origin.x,

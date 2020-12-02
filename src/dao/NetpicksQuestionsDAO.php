@@ -13,6 +13,6 @@ class NetpickQuestionsDAO extends DAO {
     $stmt = $this->pdo->prepare($sql);
     $stmt->bindValue(':movieOptionId', $movieOptionId);
     $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOCq);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 }

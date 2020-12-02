@@ -12,15 +12,32 @@
     <div class="filtered__movie"></div>
     <?php endfor;?>
   </div>
-  <span><b class="filtered__movies-left"><?php echo $nbMoviesFound; ?></b> Possible movies left!</span>
+  <span><b class="filtered__movies-left"><?php echo isset($nbMoviesFound) ? $nbMoviesFound : '0'; ?></b> Possible movies left!</span>
   <span>Answer below to specify your pick</span>
 </section>
 
 
 
-<section class="card-stack">
-
-
+<section>
+  <h2 class="hidden">Questions</h2>
+  <div class="card-stack">
+    <?php
+    // reverse $questions because the first question should be inserted last in html
+    $questions = array_reverse($questions);
+    foreach($questions as $index => $question):
+    ?>
+    <?php $index = count($questions) - $index;?>
+      <article class="card">
+        <h3><?php echo $index . '. ' . $question['display_question']?></h3>
+        <form action="index.php?page=extraQuestions<?php echo '&nightType=' . $_GET['nightType'] . '&movieOptionOne=' . $_GET['movieOptionOne'] . '&movieOptionTwo=' . $_GET['movieOptionTwo']?>" method="post">
+          <input type="hidden" name="action" value="filter">
+          <input type="hidden" name="filterType" value="<?php echo $question['filter_category_id']; ?>">
+          <input type="hidden" name="answer" value="you didnt update this in js...">
+          <input type="hidden" name="questionNumber" value="<?php echo $index; ?>">
+        </form>
+      </article>
+    <?php endforeach; ?>
+  </div>
 </section>
 <!--
 <section>
