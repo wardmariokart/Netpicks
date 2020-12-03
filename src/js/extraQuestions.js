@@ -1,4 +1,6 @@
-import {Card} from './card.js';
+//import {Card} from './card.js';
+import {QuestionCard} from './questionCard.js';
+import {ProposedMovieCard} from './proposedMovieCard.js';
 import Mouse from './mouse.js';
 import {formDataToJson, postToPHP} from './helpers.js';
 
@@ -8,12 +10,29 @@ let mouse = null;
 const createCardForExisitingElements = () =>
 {
   const $elements = document.querySelectorAll('.card');
-  $elements.forEach($element => createNewCard($element));
+
+
+  $elements.forEach($element =>
+  {
+    const cardClassToType = [{className: 'card--question', type: 'question'}, {className: 'card--movie', type: 'proposedMovie'}];
+    let cardType = '';
+    cardClassToType.forEach(obj => {if ($element.classList.contains(obj.className)) cardType = obj.type;});
+    createNewCard($element, cardType);
+  });
 };
 
-const createNewCard = ($element) =>
+const createNewCard = ($element, cardType) =>
 {
-  const card = new Card($element);
+  let card = null;
+  if (cardType === 'question')
+  {
+    card = new QuestionCard($element);
+  }
+  else if (cardType === 'proposedMovie')
+  {
+    card = new ProposedMovieCard($element);
+  }
+
   card.addOnDetroyedCallback(onCardDestroyed);
   cards.push(card);
 };
@@ -47,7 +66,7 @@ const handleCardAnswer = async (event, card) =>
   {
     console.log(`This movie was proposed: ${phpResponse['proposeMovie']['title']}`);
     // Create new movie pick card
-    createNewCard(null);
+    createNewCard(null, 'proposedMovie');
   }
 };
 

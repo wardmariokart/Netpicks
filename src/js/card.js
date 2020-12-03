@@ -6,7 +6,7 @@ const markForDestroyClass = 'marked-for-destroy';
 
 export class Card {
 
-  constructor($element)
+  constructor()
   {
     this.grabbedBy = null;
     this.origin = {x: 0, y: 0, z: 0, scale: 0, rotation: 0};
@@ -15,7 +15,12 @@ export class Card {
     this.bDestroyed = false;
     this.onDestroyedCallbacks = [];
     this.onThrowOutCallbacks = [];
+    this.answers = [];
+    this.$element = null;
+  }
 
+  linkWithElement($element)
+  {
     // Setting up the element
     if ($element !== null)
     {
@@ -26,10 +31,19 @@ export class Card {
       this.createElement();
     }
   }
-
-  get isOverDropOffTreshold()
+  evaluateAnswerTriggers()
   {
-    return Math.abs(this.location.x) > this.dropOffTreshold;
+    let answerToTrigger = null;
+    this.answers.forEach(answerObj =>
+    {
+      if (answerObj.evaluateFunc())
+      {
+        answerToTrigger = answerObj;
+      }
+    });
+
+    return answerToTrigger;
+    //return Math.abs(this.location.x) > this.dropOffTreshold;
   }
 
   get location()
@@ -87,9 +101,10 @@ export class Card {
       this.$element.classList.remove('grabbed');
       this.grabbedBy = null;
 
-      if (this.isOverDropOffTreshold)
+      const triggeredAnswer = this.evaluateAnswerTriggers();
+      if (triggeredAnswer !== null)
       {
-        this.throwOut();
+        this.throwOut(triggeredAnswer);
       }
       else
       {
@@ -126,10 +141,12 @@ export class Card {
   }
 
   // internal use only
-  throwOut()
+  throwOut(triggeredAnswer)
   {
     this.bGrabbable = false;
 
+
+    /*
     // 1. Which side?
     const side = this.location.x > 0 ? 'right' : 'left';
 
@@ -137,7 +154,7 @@ export class Card {
     const answers = [];
     answers['right'] = 'include';
     answers['up'] = 'skip';
-    answers['left'] = 'exclude';
+    answers['left'] = 'exclude'; */
     const $cardForm = this.$element.querySelector('form');
     if ($cardForm)
     {
@@ -146,28 +163,20 @@ export class Card {
         $form.querySelectorAll('input').forEach($input => {if ($input.getAttribute('name') === $name) $input.setAttribute('value', $value);});
       };
 
-      setValueByName($cardForm, 'answer', answers[side]);
+      setValueByName($cardForm, 'answer', triggeredAnswer.answer);
       setValueByName($cardForm, 'nbQuestionsLeft', this.$element.parentElement.querySelectorAll('.card').length - 1); // -1 because don't count yourself
       $cardForm.requestSubmit();
     }
 
-
-    //this.onThrowOutCallbacks.forEach(func => func(this, answers[side]));
-
-    // 3. Animate card flying to the side
-    const targets = [];
-    targets['right'] = {x: 1000, y: 0};
-    targets['left'] = {x: - 1000, y: 0};
-    const target = targets[side];
     const thisCard = this;
     anime({
       targets: this.$element,
       duration: 150,
-      translateX: target.x,
-      translateY: target.y,
+      translateX: triggeredAnswer.throwTarget.x,
+      translateY: triggeredAnswer.throwTarget.y,
       easing: 'linear',
       complete: function(anim) {
-        thisCard.destroy();
+        thisCard.destroy(); // "this" is contextual to from what it is called. The passed function is called inside some anime.js class, so i have to store "this" in "thisCard"
       }
     });
   }
@@ -226,6 +235,7 @@ export class Card {
     $parent.addEventListener('DOMNodeInserted', e => this.onSiblingsUpdate());
     $parent.addEventListener('DOMNodeRemoved', e => this.onSiblingsUpdate());
 
+
     const $form = this.$element.querySelector('form');
     if ($form)
     {
@@ -237,6 +247,9 @@ export class Card {
     }
 
     this.$element.style.transform = 'translateX(0px) translateY(0px) translateZ(0px) scale(1) rotate(0deg)'; // making sure this.setTransformProperty will always work
+
+    // start position
+    this.translate({x: -1200, y: 200});
     this.updateOrigin();
   }
 
@@ -261,6 +274,7 @@ export class Card {
       return;
     }
 
+    console.log(this.$element);
     let siblings = this.$element.parentNode.children;
     siblings = Array.from(siblings).filter($element => !$element.classList.contains(markForDestroyClass)); // filter out elements marked for destroy
     const i = siblings.length - 1 - siblings.indexOf(this.$element);
@@ -268,13 +282,15 @@ export class Card {
     this.origin.y = i * this.stackOffsetPx.y;
     this.origin.z = i * this.stackOffsetPx.z;
 
+    const delayPerCard = 150;
+
     anime({
       targets: this.$element,
       translateX: this.origin.x,
       translateY: this.origin.y,
       translateZ: this.origin.z,
-      duration: 1000,
-      easing: 'spring(0.5, 50, 2, 20)'
+      delay: i * delayPerCard,
+      easing: 'spring(2, 150, 20, 5)'
     });
   }
 

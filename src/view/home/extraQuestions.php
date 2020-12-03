@@ -27,8 +27,9 @@
     foreach($questions as $index => $question):
     ?>
     <?php $index = count($questions) - $index;?>
-      <article class="card">
-        <h3><?php echo $index . '. ' . $question['display_question']?></h3>
+      <article class="card card--question">
+        <span class="card__subtitle">Question <b><?php echo $question['id'];?></b></span>
+        <h3><?php echo $question['display_question']?></h3>
         <form action="index.php?page=extraQuestions<?php echo '&nightType=' . $_GET['nightType'] . '&movieOptionOne=' . $_GET['movieOptionOne'] . '&movieOptionTwo=' . $_GET['movieOptionTwo']?>" method="post">
           <input type="hidden" name="action" value="filter">
           <input type="hidden" name="filterType" value="<?php echo $question['filter_category_id']; ?>">
