@@ -9,6 +9,8 @@ require_once __DIR__ . '/../dao/ImdbMoviesKeywordsDAO.php';
 require_once __DIR__ . '/../dao/FilterCategoryKeywordsDAO.php';
 require_once __DIR__ . '/../dao/FilterCategoriesDAO.php';
 require_once __DIR__ . '/../dao/NetpicksQuestionsDAO.php';
+require_once __DIR__ . '/../dao/MovieNightAnswersDAO.php';
+
 
 class HomeController extends Controller {
 
@@ -79,6 +81,7 @@ class HomeController extends Controller {
       // Reset all $_SESSION variables
       $_SESSION['step2']['filteredMovieIds'] = array();
       $_SESSION['step2']['answers'] = array();
+      unset($_SESSION['step2']['pickedMovieId']);
 
       $this->set('stepOne', $stepOne);
       $this->setupQuestionCards($stepOne);
@@ -102,15 +105,38 @@ class HomeController extends Controller {
         if (intval($data['nbQuestionsLeft']) === 0)
         {
           // Pick & propose a movie
-          $jsAnswer['proposeMovie'] = $this->pickFromFilteredMovies();
+          $jsAnswer['proposeMovie'] = $this->proposeMovie();
         }
         echo json_encode($jsAnswer);
         exit();
       }
-      else if ($data['action'] === 'pickOtherMovie')
+      else if ($data['action'] === 'proposeResponse')
       {
-        $result = $this->pickFromFilteredMovies();
-        echo json_encode($result);
+
+        $jsAnswer = array();
+
+        if ($data['answer'] === 'reject')
+        {
+          $jsAnswer['proposeMovie'] = $this->proposeMovie();
+        }
+        else if ($data['answer'] === 'accept')
+        {
+          $userId = isset($_SESSION['user']) ? $_SESSION['user']['id'] : false;
+          $result = $this->createMovieNight($stepOne, $userId, $_SESSION['step2']['pickedMovieId'], $_SESSION['step2']['answers']);
+
+          if($result !== false)
+          {
+            if ($result['bOwnerless'])
+            {
+              $_SESSION['ownerlessMovieNightId'] = $result['movieNight']['id'];
+            }
+          }
+          // insert new post and go to that post
+          $jsAnswer['redirect'] = array('url' => '?page=detail&id=' . $result['movieNight']['id']);
+
+        }
+
+        echo json_encode($jsAnswer);
         exit();
       }
       else if ($data['action'] === 'confirmPick')
@@ -149,45 +175,6 @@ class HomeController extends Controller {
           exit();
         }
       }
-
-      if ($_POST['action'] === 'filter')
-      {
-
-        if (!empty($_POST['filterType']))
-        {
-          switch ($_POST['filterType'])
-          {
-            case 'supernatural':
-              if($_POST['filterSupernatural'] == 'true')
-              {
-                $_SESSION['step2']['filteredMovieIds'] = $this->filterMoviesByCategoryKeywords($_SESSION['step2']['filteredMovieIds'], $_POST['filterType'], 'include');
-              }
-              else if ($_POST['filterSupernatural'] == 'false')
-              {
-                $result =  $this->filterMoviesByCategoryKeywords($_SESSION['step2']['filteredMovieIds'], $_POST['filterType'], 'exclude');
-                $_SESSION['step2']['filteredMovieIds'] = $result;
-              }
-              else if ($_POST['filterSupernatural'] == 'skip')
-              {
-
-              }
-
-            break;
-            case 'gorePsychological':
-
-
-
-            break;
-
-            default:
-            unset($_SESSION['step2']['filteredMovieIds']);
-            $_SESSION['error'] = $_POST['filterType'] . 'Is invalid filter type';
-            header('location: index.php');
-            exit();
-          break;
-          }
-        }
-      }
     }
 
 
@@ -198,12 +185,7 @@ class HomeController extends Controller {
   // $answerStr can be 'included', 'excluded' or 'skipped'
   private function saveAnswer($questionId, $answerStr)
   {
-    if (!isset($_SESSION['step2']['answers']))
-    {
-      $_SESSION['step2']['answers'] = array();
-    }
-
-    array_push($_SESSION['step2']['answers'], array('question_id' => $questionId, 'answer' => $answerStr));
+    array_push($_SESSION['step2']['answers'], array('questionId' => $questionId, 'answer' => $answerStr));
   }
 
   private function setupFilteredMovieIds($stepOneInputs)
@@ -282,10 +264,11 @@ class HomeController extends Controller {
     }
   }
 
-  private function pickFromFilteredMovies ()
+  private function proposeMovie ()
   {
     $filteredId = $_SESSION['step2']['filteredMovieIds'][array_rand($_SESSION['step2']['filteredMovieIds'])];
     $pickedMovie = $this->imdbMoviesDAO->selectById($filteredId);
+    $_SESSION['step2']['pickedMovieId'] = $filteredId; // saved so user cannot mess with this value (if he wanted to)
     return $pickedMovie;
   }
 
@@ -339,7 +322,50 @@ class HomeController extends Controller {
     return $outMovies;
   }
 
+  private function createMovieNight($stepOne, $userId, $pickedMovieId, $answers)
+  {
+
+      // signed in
+      $insertData = array();
+      $insertData['userId'] = $userId === false ? -1 : $userId;
+      $insertData['movieId'] = $_SESSION['step2']['pickedMovieId'];
+      $insertData['movieOptionOneId'] = $stepOne['movieOptionOne']['id'];
+      $insertData['movieOptionTwoId'] = $stepOne['movieOptionTwo']['id'];
+      $insertData['nightTypeId'] = $stepOne['nightType']['id'];
+      $insertData['name'] = 'Temporary movie night name';
+
+      $insertedMovieNight = $this->movieNightsDAO->insert($insertData);
+      if($insertedMovieNight !== false)
+      {
+        $_SESSION['info'] = 'Movie night has been created';
+        // Now add the given answers
+
+        $movieNightAnswersDAO = new MovieNightAnswersDAO();
+        foreach($_SESSION['step2']['answers'] as $answer)
+        {
+          $insertData = array();  // length should be 0 at this point
+          $insertData['questionId'] = $answer['questionId'];
+          $insertData['answer'] = $answer['answer'];
+          $insertData['movieNightId'] = $insertedMovieNight['id'];
+          $movieNightAnswersDAO->insert($insertData);
+        }
+
+        $out = array('movieNight' => $insertedMovieNight, 'bOwnerless' => $userId === false);
+        return $out;
+      }
+      return false;
+      // 2. add answer rows (id, question_id, movie_night_id, answer)
+
+      // CMD enter should: 1. put ';' at end of line + go to new next line
+
+  }
+
   public function detail() {
+
+    $bOwnerless = isset($_SESSION['ownerlessMovieNightId']);
+    // if ownerless, there should be a button to claim it by signing in or signing up.
+    // if
+
     $movieNightId = $this->safeKeySelector($_GET, 'id', '1');
     $movieNightRow = $this->movieNightsDAO->selectById($movieNightId);
     $this->set('title', $movieNightRow['name']);

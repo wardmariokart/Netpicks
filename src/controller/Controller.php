@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../dao/MovieNightsDAO.php';
 
 class Controller {
 
@@ -14,15 +15,17 @@ class Controller {
 
     if (isset($_SESSION['step2']))
     {
-      if($this->route['action'] != 'extraQuestions')
+      if($this->route['action'] !== 'extraQuestions')
       {
         unset($_SESSION['step2']);
-        //$_SESSION['info'] = 'filteredMovies has been cleared';
       }
-      else
-      {
-        //$_SESSION['info'] = 'filteredMovies has ' . count($_SESSION['filteredMovieIds']) . ' elements.';
-      }
+    }
+
+    if(isset($_SESSION['ownerlessMovieNightId']) && $this->route['action'] !== 'detail')
+    {
+      $movieNightsDAO = new MovieNightsDAO();
+      $movieNightsDAO->deleteById($_SESSION['ownerlessMovieNightId']);
+      unset($_SESSION['ownerlessMovieNightId']);
     }
   }
 

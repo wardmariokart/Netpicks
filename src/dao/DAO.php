@@ -44,5 +44,21 @@ class DAO {
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
+
+  protected function checkHasKey($array, $key, &$errorsRef)
+  {
+    if (!isset($array[$key]))
+    {
+      $errorsRef[$key] = $key . ' Is missing. Did not create movie night';
+    }
+  }
+
+  public function deleteById($id)
+  {
+    $sql = "DELETE FROM " . $this->tableName . " WHERE `id` = :id";
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->bindValue(':id', $id);
+    $stmt->execute();
+  }
 }
  ?>

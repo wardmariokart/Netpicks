@@ -33,6 +33,7 @@ const createNewCard = ($element, cardType) =>
     card = new ProposedMovieCard($element);
   }
 
+  card.addSubmitListener(event => handleCardAnswer(event, card));
   card.addOnDetroyedCallback(onCardDestroyed);
   cards.push(card);
 };
@@ -68,12 +69,21 @@ const handleCardAnswer = async (event, card) =>
     // Create new movie pick card
     createNewCard(null, 'proposedMovie');
   }
+
+  if ('redirect' in phpResponse)
+  {
+    const currentUrl = window.location.href;
+    const noQueryString = currentUrl.slice(0, currentUrl.indexOf('?'));
+    const url = `${noQueryString}${phpResponse['redirect']['url']}`;
+    window.location.replace(url);
+
+
+
+  }
 };
 
 export const extraQuestionsInit = () =>
 {
   mouse = new Mouse(cards);
   createCardForExisitingElements();
-
-  cards.forEach(card => card.addSubmitListener(event => handleCardAnswer(event, card)));
 };
