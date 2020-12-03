@@ -10,7 +10,7 @@
         <span>I'm planning a movie night for </span>
         <select name="nightType" id="nightType" class="plan-one__drop-down">
           <?php foreach($nightTypes as $night): ?>
-            <option value="<?php echo $night['value'];?>"><?php echo $night['displayName'] ?></opton>
+            <option value="<?php echo $night['value'];?>"><?php echo $night['display'] ?></opton>
           <? endforeach; ?>
         </select><span>.</span>
       </div>
@@ -19,7 +19,7 @@
         <span>During the movie we want to be </span>
         <select name="movieOptionOne" id="movieOptionOne" class="plan-one__drop-down">
           <?php foreach($stepOneOptions as $moveOption): ?>
-            <option value="<?php echo $moveOption['value'];?>"><?php echo $moveOption['displayName'] ?></opton>
+            <option value="<?php echo $moveOption['value'];?>"><?php echo $moveOption['display'] ?></opton>
           <? endforeach; ?>
         </select>
         <span>,</span>
@@ -30,7 +30,7 @@
         <span>but </span>
         <select name="movieOptionTwo" id="movieOptionTwo" class="plan-one__drop-down">
           <?php foreach($stepOneOptions as $moveOption): ?>
-            <option value="<?php echo $moveOption['value'];?>"><?php echo $moveOption['displayName'] ?></opton>
+            <option value="<?php echo $moveOption['value'];?>"><?php echo $moveOption['display'] ?></opton>
           <? endforeach; ?>
         </select>
         <span> is something we can't do without.</span>

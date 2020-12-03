@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../dao/MovieNightsDAO.php';
 
 class Controller {
 
@@ -11,6 +12,21 @@ class Controller {
       $this->env = 'production';
     }
     call_user_func(array($this, $this->route['action']));
+
+    if (isset($_SESSION['step2']))
+    {
+      if($this->route['action'] !== 'extraQuestions')
+      {
+        unset($_SESSION['step2']);
+      }
+    }
+
+    if(isset($_SESSION['ownerlessMovieNightId']) && $this->route['action'] !== 'detail')
+    {
+      $movieNightsDAO = new MovieNightsDAO();
+      $movieNightsDAO->deleteById($_SESSION['ownerlessMovieNightId']);
+      unset($_SESSION['ownerlessMovieNightId']);
+    }
   }
 
   public function render() {

@@ -3,6 +3,14 @@ session_start();
 ini_set('display_errors', true);
 error_reporting(E_ALL);
 
+// basic .env file parsing
+if (file_exists("../.env")) {
+  $variables = parse_ini_file("../.env", true);
+  foreach ($variables as $key => $value) {
+     putenv("$key=$value");
+  }
+}
+
 $routes = array(
   'home' => array(
     'controller' => 'Home',

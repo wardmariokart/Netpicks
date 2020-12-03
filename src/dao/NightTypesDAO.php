@@ -9,15 +9,13 @@ class NightTypesDAO extends DAO {
     parent::__construct('nights');
   }
 
-  public function validate( $data ){
-    $errors = [];
-    if (!isset($data['created'])) {
-      $errors['created'] = 'Gelieve created in te vullen';
-    }
-    if (!isset($data['modified'])) {
-      $errors['modified'] = 'Gelieve modified in te vullen';
-    }
-    return $errors;
+  public function selectByValue ($value)
+  {
+    $sql = "SELECT * FROM `nights` WHERE `value` = :value";
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->bindValue(':value', $value);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
   }
 
 }

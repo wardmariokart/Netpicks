@@ -88,6 +88,7 @@ class UsersController extends Controller
         ));
         if (!empty($inserteduser)) {
           $_SESSION['info'] = 'Registration Successful!';
+          $_SESSION['user'] = $inserteduser;
           header('location:index.php');
           exit();
         }

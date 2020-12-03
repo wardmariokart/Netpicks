@@ -9,4 +9,8 @@
 
   /* step two */
   --step-icon-size: .7rem;
+
+  /* cards */
+  --stack-offset-y: .5rem;
+  --stack-offset-z: .5rem;
 }

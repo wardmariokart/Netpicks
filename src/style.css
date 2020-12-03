@@ -5,6 +5,7 @@
 @import './css/nav.css';
 @import './css/footer.css';
 @import './css/detail.css';
+@import './css/cards.css';
 
 @font-face{
     font-family: "SuisseIntl-Bold";
@@ -27,6 +28,8 @@
     font-weight: 400;
     font-style: normal;
   }
+
+
 
 /* stylelint-disable */
 *, *::before, *::after{
@@ -69,9 +72,3 @@ body {
   padding-bottom: var(--divider-padding);
   padding-top: var(--divider-padding);
 }
-
-/* .col3 {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-column-gap: 1.3rem;
-} */
