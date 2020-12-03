@@ -13,3 +13,12 @@ nav {
   font-weight: bold;
   color: var(--color-primary);
 }
+
+.nav__title-logo{
+  object-fit: cover;
+  height: 3.2rem;
+  width: 27.5rem;
+}
+
+
+

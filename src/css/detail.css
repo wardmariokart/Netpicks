@@ -1,0 +1,55 @@
+.movie__poster{
+  object-fit: cover;
+  height: 22.1rem;
+  width: 100%;
+}
+
+.chosen__movie{
+    font-size: 1.5rem;
+}
+
+.col3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-column-gap: 1.3rem;
+}
+
+.detail__movie-title{
+    font-size: 4rem;
+    grid-column: 2/ span 2;
+    grid-row: 1;
+    align-self: start;
+    margin: 0%;
+}
+
+.movie__poster{
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.movie__crew{
+    grid-column: 2/ span 3;
+    grid-row: 1;
+    font-size: 1.5rem;
+}
+
+.bold{
+    font-weight: bold;
+}
+
+.movie__summary{
+    grid-column: 1/ span 3;
+    grid-row: 2;
+    font-size: 1.5rem;
+}
+
+.movie__path{
+    grid-row: 3;
+    grid-column: 1/ span 3;
+    display: flex;
+    flex-flow: row;
+    justify-content: space-around;
+    font-family: serif;
+    font-size: 1.3rem;
+}
+
