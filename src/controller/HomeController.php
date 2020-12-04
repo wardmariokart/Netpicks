@@ -364,7 +364,7 @@ class HomeController extends Controller {
 
     $bOwnerless = isset($_SESSION['ownerlessMovieNightId']);
     // if ownerless, there should be a button to claim it by signing in or signing up.
-    // if
+    $this->set('bOwnerless', $bOwnerless);
 
     $movieNightId = $this->safeKeySelector($_GET, 'id', '1');
     $movieNightRow = $this->movieNightsDAO->selectById($movieNightId);
@@ -372,6 +372,9 @@ class HomeController extends Controller {
     $imdbMovieRow = $this->imdbMoviesDAO->selectById($movieNightRow['movie_id']);
     $details = array('movie' => $imdbMovieRow);
     $this->set('details', $details);
+
+
+
   }
 
 }

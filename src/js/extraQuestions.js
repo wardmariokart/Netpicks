@@ -17,22 +17,14 @@ const createCardForExisitingElements = () =>
     const cardClassToType = [{className: 'card--question', type: 'question'}, {className: 'card--movie', type: 'proposedMovie'}];
     let cardType = '';
     cardClassToType.forEach(obj => {if ($element.classList.contains(obj.className)) cardType = obj.type;});
-    createNewCard($element, cardType);
+
+    const card = new QuestionCard($element);
+    addCard(card);
   });
 };
 
-const createNewCard = ($element, cardType) =>
+const addCard = card =>
 {
-  let card = null;
-  if (cardType === 'question')
-  {
-    card = new QuestionCard($element);
-  }
-  else if (cardType === 'proposedMovie')
-  {
-    card = new ProposedMovieCard($element);
-  }
-
   card.addSubmitListener(event => handleCardAnswer(event, card));
   card.addOnDetroyedCallback(onCardDestroyed);
   cards.push(card);
@@ -66,8 +58,8 @@ const handleCardAnswer = async (event, card) =>
   if ('proposeMovie' in phpResponse)
   {
     console.log(`This movie was proposed: ${phpResponse['proposeMovie']['title']}`);
-    // Create new movie pick card
-    createNewCard(null, 'proposedMovie');
+    const movieCard = new ProposedMovieCard(phpResponse['proposeMovie']);
+    addCard(movieCard);
   }
 
   if ('redirect' in phpResponse)
@@ -76,9 +68,6 @@ const handleCardAnswer = async (event, card) =>
     const noQueryString = currentUrl.slice(0, currentUrl.indexOf('?'));
     const url = `${noQueryString}${phpResponse['redirect']['url']}`;
     window.location.replace(url);
-
-
-
   }
 };
 
