@@ -354,10 +354,6 @@ class HomeController extends Controller {
         return $out;
       }
       return false;
-      // 2. add answer rows (id, question_id, movie_night_id, answer)
-
-      // CMD enter should: 1. put ';' at end of line + go to new next line
-
   }
 
   public function detail() {
@@ -372,9 +368,6 @@ class HomeController extends Controller {
     $imdbMovieRow = $this->imdbMoviesDAO->selectById($movieNightRow['movie_id']);
     $details = array('movie' => $imdbMovieRow);
     $this->set('details', $details);
-
-
-
   }
 
 }

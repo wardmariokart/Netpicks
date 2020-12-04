@@ -6,6 +6,7 @@
 @import './css/footer.css';
 @import './css/detail.css';
 @import './css/cards.css';
+@import './css/dev.css';
 
 @font-face{
     font-family: "SuisseIntl-Bold";
@@ -29,8 +30,6 @@
     font-style: normal;
   }
 
-
-
 /* stylelint-disable */
 *, *::before, *::after{
   box-sizing: border-box;
@@ -44,12 +43,12 @@ html {
 }
 
 body {
-  width: 50rem;
+  width: 80rem;
   height: 100%;
   margin: 0 auto;
 
   display: grid;
-  grid-template: min-content auto min-content / 50rem;
+  grid-template: min-content auto min-content / 80rem;
 
   background-color: var(--color-secondary);
   font-family: sans-serif;

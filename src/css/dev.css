@@ -1,0 +1,55 @@
+.dev__update{
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, .15);
+
+  display: grid;
+  grid-template-columns: 30% 1fr 1fr;
+}
+
+.dev__update-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  border: 1px solid black;
+  border-radius: .2rem;
+  padding: .1rem .4rem;
+
+}
+
+.dev__poster {
+  font-weight: bold;
+}
+
+.dev__poster--from {
+  color: rgb(235, 101, 101);
+}
+.dev__poster--to {
+  color: rgb(40, 218, 108);
+}
+
+.dev__update-count{
+  display: block;
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-top: 4rem;
+  margin-bottom: 1rem;
+}
+
+.dev__label {
+  display: block;
+  margin-top: 1rem;
+  padding-bottom: .2rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.dev__update-button {
+  display: block;
+  font-size: 1.5rem;
+  border: 1px solid #ff4949;
+  background-color: transparent;
+  color: #ff4949;
+  border-radius: .2rem;
+  cursor: pointer;
+  padding: .6rem 1rem;
+  margin-top: 1rem;
+}

@@ -4,6 +4,8 @@ require_once __DIR__ . '/Controller.php';
 require_once __DIR__ . '/../dao/FilterCategoriesDAO.php';
 require_once __DIR__ . '/../dao/ImdbKeywordsDAO.php';
 require_once __DIR__ . '/../dao/FilterCategoryKeywordsDAO.php';
+require_once __DIR__ . '/../dao/ImdbMoviesDAO.php';
+
 
 
 class DeveloperController extends Controller {
@@ -11,6 +13,7 @@ class DeveloperController extends Controller {
   private $filterCategoriesDAO;
   private $imdbKeywordsDAO;
   private $filterCategoryKeywordsDAO;
+  private $apiKey = 'da5442d98535330c1b4e09193cbcd4a9';
 
   function __construct() {
     $this->filterCategoriesDAO = new FilterCategoriesDAO();
@@ -21,6 +24,11 @@ class DeveloperController extends Controller {
   public function devTools() {
     $this->set('title', 'Developer Tools');
 
+    if(isset($_SESSION['updatedMoviePaths']))
+    {
+      $this->set('updatedMoviePaths', $_SESSION['updatedMoviePaths']);
+      unset($_SESSION['updatedMoviePaths']);
+    }
 
     // 1. Get filter categories
     $this->set('filterCategories', $this->filterCategoriesDAO->selectAll());
@@ -91,8 +99,93 @@ class DeveloperController extends Controller {
         header('location:index.php?page=devTools');
         exit();
       }
+
+      if ($_POST['action'] === 'updateMoviePosters')
+      {
+        $this->updateMoviePaths(intval($_POST['updateFrom']), intval($_POST['updateTo']));
+      }
+    }
+  }
+
+  private function updateMoviePaths($from, $to, $bAbortOnTitleDifference = false)
+  {
+    // 1. Get all movieIds
+    $imdbMoviesDAO = new ImdbMoviesDAO();
+    $outdatedMovieInfos = $imdbMoviesDAO->selectAllIdsTitlesPosters($from, $to);
+    //$this->set('updateTemp', $outdatedMovieInfos);
+    $requiredUpdates = array();
+    foreach($outdatedMovieInfos as $outdatedMovieInfo)
+    {
+      // check if url is outdated
+      $apiUrl = 'https://api.themoviedb.org/3/movie/' . $outdatedMovieInfo['id'] . '?api_key=' . $this->apiKey . '&language=en-US';
+      $apiResponse = $this->callAPI('GET', $apiUrl, false);
+      $apiMovieInfo = json_decode($apiResponse);
+
+      if($bAbortOnTitleDifference && $apiMovieInfo->title !== $outdatedMovieInfo['title'])
+      {
+        if(strtolower($apiMovieInfo->title) !== strtolower($outdatedMovieInfo['title']))
+        {
+          // should never happen
+          echo 'The id "' . $outdatedMovieInfo['id'] . '" did not correspond to the same movie title! Combell title: "' . $outdatedMovieInfo['title'] . '". TMDB title: ' . $apiMovieInfo->title . '". Nothing has been updated.';
+          die;
+        }
+      }
+
+      if (property_exists($apiMovieInfo, "poster_path") && $apiMovieInfo->poster_path !== $outdatedMovieInfo['poster'])
+      {
+        array_push($requiredUpdates, array('movieId' => $apiMovieInfo->id, 'title' => $apiMovieInfo->title, 'outdatedPoster' => $outdatedMovieInfo['poster'], 'updatedPoster' => $apiMovieInfo->poster_path), );
+      }
     }
 
+    foreach($requiredUpdates as $requiredUpdate)
+    {
+      $result = $imdbMoviesDAO->updatePosterById($requiredUpdate['movieId'], $requiredUpdate['updatedPoster']);
+      if ($result === false)
+      {
+        echo 'failed to update a movie';
+        die;
+      }
+    }
+
+    $_SESSION['updatedMoviePaths'] = $requiredUpdates;
+    $_SESSION['info'] = count($requiredUpdates) . ' Out of ' . count($outdatedMovieInfos) . ' movies had an outdated poster url and have been updated using TMDB API';
+    header('location:index.php?page=devTools');
+    exit();
+
   }
+
+  // Did api calls using fetch in js
+  // In php cUrl is used. I used code found online to handle this. (source: https://weichie.com/blog/curl-api-calls-with-php/)
+  private function callAPI($method, $url, $data){
+    $curl = curl_init();
+    switch ($method){
+       case "POST":
+          curl_setopt($curl, CURLOPT_POST, 1);
+          if ($data)
+             curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+          break;
+       case "PUT":
+          curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
+          if ($data)
+             curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+          break;
+       default:
+          if ($data)
+             $url = sprintf("%s?%s", $url, http_build_query($data));
+    }
+    // OPTIONS:
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+       'APIKEY: 111111111111111111111',
+       'Content-Type: application/json',
+    ));
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+    // EXECUTE:
+    $result = curl_exec($curl);
+    if(!$result){die("Connection Failure");}
+    curl_close($curl);
+    return $result;
+ }
 
 }
