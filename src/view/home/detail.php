@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <section class="chosen__movie, col3">
     <h2 class="detail__movie-title">Chronicle</h2>
     <div class="movie__details">
@@ -31,7 +30,7 @@
     <div><a href="index.php">Book movie night</a></div>
     <div><a href="index.php">Plan another night</a></div>
 </section>
-=======
+
 <div class="divider">
   <h2><?php echo $details['movie']['title']?></h2>
   <img src="http://image.tmdb.org/t/p/w342/<?php echo $details['movie']['poster']?>" alt="<?php echo $details['movie']['title'] . ' poster.'?>">
