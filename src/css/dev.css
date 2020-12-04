@@ -1,4 +1,4 @@
-.dev__update{
+.dev__update {
   padding: 1rem 0;
   border-bottom: 1px solid rgba(0, 0, 0, .15);
 
@@ -22,11 +22,12 @@
 .dev__poster--from {
   color: rgb(235, 101, 101);
 }
+
 .dev__poster--to {
   color: rgb(40, 218, 108);
 }
 
-.dev__update-count{
+.dev__update-count {
   display: block;
   font-weight: bold;
   font-size: 1.5rem;

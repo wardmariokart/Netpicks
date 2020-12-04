@@ -1,3 +1,4 @@
+@import './css/fonts.css';
 @import './css/variables.css';
 @import './css/reset.css';
 @import './css/stepTwo.css';
@@ -7,28 +8,6 @@
 @import './css/detail.css';
 @import './css/cards.css';
 @import './css/dev.css';
-
-@font-face{
-    font-family: "SuisseIntl-Bold";
-    src: url('assets/fonts/SuisseIntl-Bold-WebTrial.woff2') format('woff2'),
-         url('assets/fonts/SuisseIntl-Bold-WebTrial.woff') format('woff');
-    font-weight: 400;
-    font-style: normal;
-  }
-@font-face{
-    font-family: "SuisseIntl-Regular";
-    src: url('assets/fonts/SuisseIntl-Regular-WebTrial.woff2') format('woff2'),
-         url('assets/fonts/SuisseIntl-Regular-WebTrial.woff') format('woff');
-    font-weight: 400;
-    font-style: normal;
-  }
-@font-face{
-    font-family: "SuisseWorks";
-    src: url('assets/fonts/SuisseWorksTrial-Regular.woff2') format('woff2'),
-         url('assets/fonts/SuisseWorks-Regular-WebTrial.woff') format('woff');
-    font-weight: 400;
-    font-style: normal;
-  }
 
 /* stylelint-disable */
 *, *::before, *::after{
@@ -43,12 +22,12 @@ html {
 }
 
 body {
-  width: 80rem;
+  width: 50rem;
   height: 100%;
   margin: 0 auto;
 
   display: grid;
-  grid-template: min-content auto min-content / 80rem;
+  grid-template: min-content auto min-content / 50rem;
 
   background-color: var(--color-secondary);
   font-family: sans-serif;
