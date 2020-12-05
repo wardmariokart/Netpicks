@@ -7,6 +7,9 @@
   <title><?php echo $title; ?></title>
   <?php /* NEW */ ?>
   <?php echo $css; ?>
+  <link rel="stylesheet" href="https://use.typekit.net/sha2dsc.css">
+  <link rel="stylesheet" href="https://use.typekit.net/sha2dsc.css">
+  <link rel="stylesheet" href="https://use.typekit.net/sha2dsc.css">
 </head>
 
 <body>

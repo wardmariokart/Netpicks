@@ -14,21 +14,24 @@
   grid-column-gap: 1.3rem;
 }
 
-.detail__movie-title{
-    font-size: 4rem;
-    grid-column: 2/ span 2;
-    grid-row: 1;
-    align-self: start;
-    margin: 0%;
-}
-
 .movie__poster{
     grid-column: 1;
     grid-row: 1;
 }
 
+.movie__details{
+    grid-column: 2/ span 2;
+}
+
+.detail__movie-title{
+    font-size: 5rem;
+    font-family: aktiv-grotesk,sans-serif;
+    font-weight: 700;
+    margin-top: 0rem;
+}
+
 .movie__crew{
-    grid-column: 2/ span 3;
+    grid-column: 4/ span 3;
     grid-row: 1;
     font-size: 1.5rem;
 }
@@ -44,12 +47,93 @@
 }
 
 .movie__path{
-    grid-row: 3;
-    grid-column: 1/ span 3;
     display: flex;
     flex-flow: row;
-    justify-content: space-around;
-    font-family: serif;
+    justify-content: center;
+    font-family: nimbus-roman,serif;
     font-size: 1.3rem;
 }
 
+.movie__path-item{
+    margin: 1rem;
+}
+
+.movie__extras{
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+}
+
+.extras{
+    width: 100%;
+    height: 25rem;
+    text-align: center;
+    position: relative;
+
+}
+.extra__list{
+    width: 25rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    display: flex;
+    justify-content: flex-start; 
+    flex-wrap: wrap;
+    position: absolute;
+    bottom: 0;
+}
+.extras__title{
+    width: 100%;
+    text-transform: uppercase;
+    font-family: aktiv-grotesk,sans-serif;
+    font-weight: 400;
+    font-size: 2.5rem;
+    text-align: left;
+    padding-left: 1rem;
+}
+.extra{
+    list-style-type: none;
+    width: 6rem;
+    height: 6rem;
+    border-radius: 50%;
+    padding: 0.5rem;
+    margin-right: 1rem;
+    border: 1px solid var(--color-primary-lighter);
+    float: left;
+}
+
+
+.extra__icon{ 
+    padding: 0.5rem;
+    width: 4.5rem;
+    height: 4.5rem;
+}
+.accessoires{
+    text-align: center;
+    width: 100%;
+}
+
+.divider-horizontal {
+  /* height: 100%; */
+  border-right: 1px solid var(--color-primary-lighter);
+}
+
+.book__movie{
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 1.5rem; 
+}
+
+.book-this{
+   font-size: 3rem;
+    font-family: aktiv-grotesk,sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.book-other{
+    font-family: nimbus-roman,serif;
+    font-weight: 400;
+    font-size: 1.3rem;
+}

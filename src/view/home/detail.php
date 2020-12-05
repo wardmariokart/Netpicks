@@ -1,41 +1,47 @@
-<section class="chosen__movie, col3">
-    <h2 class="detail__movie-title">Chronicle</h2>
-    <div class="movie__details">
-        <img class="movie__poster" src="./assets/temporary/chronicle.jpg" alt="movie poster">
-        <div class="movie__crew">
-            <p><span class="bold">Director:</span> Josh Trank</p>
-            <p><span class="bold">Cast:</span> Dane DeHaan, Alex Russell, Michael B. Jordan </p>
+<section class="chosen__movie">
+    <div class="col3">
+        <img class="movie__poster" src="http://image.tmdb.org/t/p/w342/<?php echo $details['movie']['poster'] ?>" alt="<?php echo $details['movie']['title'] . ' poster.' ?>">
+        <div class="movie__details">
+            <h2 class="detail__movie-title"><?php echo $details['movie']['title'] ?></h2>
+            <div class="movie__crew">
+                <p><span class="bold">Director: </span><?php echo $details['movie']['title'] ?></p>
+                <p><span class="bold">Cast:</span> Dane DeHaan, Alex Russell, Michael B. Jordan </p>
+            </div>
         </div>
     </div>
-    <p class="movie__summary">Three high school friends gain superpowers after making an incredible discovery underground. Soon they find their lives spinning out of control and their bond tested as they embrace their darker sides.</p>
-    <div class="movie__path, divider">
-        <p>Gore</p>
+    <p class="movie__summary"><?php echo $details['movie']['description'] ?></p>
+    <div class="movie__path">
+        <p class="movie__path-item">Gore</p>
         <p>></p>
-        <p>Supernatural</p>
+        <p class="movie__path-item">Supernatural</p>
         <p>></p>
-        <p>80% guns & explosions</p>
+        <p class="movie__path-item">80% guns & explosions</p>
         <p>></p>
-        <p>Superhero's</p>
+        <p class="movie__path-item">Superhero's</p>
     </div>
+    <div class="divider"></div>
 </section>
-<section class="movie__accessoires">
-    <article>
-        <h3>Suggested snacks:</h3>
+<section class="movie__extras">
+    <article class="extras">
+        <h3 class="extras__title">Suggested snacks:</h3>
+        <ul class="extra__list">
+            <ol class="extra"><img class="extra__icon" src="./assets/temporary/noun_chips_3614132.png" alt="snack"></ol>
+            <ol class="extra"><img class="extra__icon" src="./assets/temporary/noun_Popcorn_3614154.png" alt="snack"></ol>
+            <ol class="extra"><img class="extra__icon" src="./assets/temporary/noun_Milkshake_3614128.png" alt="snack"></ol>
+        </ul>
     </article>
-    <article>
-        <h3>Suggested asseccoires:</h3>
+    <div class="divider-horizontal"></div>
+    <article class="extras">
+        <h3 class="extras__title">Suggested asseccoires:</h3>
+        <ul class="extra__list">
+            <ol class="extra"><img class="extra__icon" src="./assets/temporary/noun_chips_3614132.png" alt="asseccoires"></ol>
+            <ol class="extra"><img class="extra__icon" src="./assets/temporary/noun_chips_3614132.png" alt="asseccoires"></ol>
+            <ol class="extra"><img class="extra__icon" src="./assets/temporary/noun_chips_3614132.png" alt="asseccoires"></ol>
+        </ul>
     </article>
 </section>
+<div class="divider"></div>
 <section class="book__movie">
-    <div><a href="index.php">Book movie night</a></div>
-    <div><a href="index.php">Plan another night</a></div>
+    <div class="book-this"><a href="index.php">Book movie night</a></div>
+    <div class="book-other"><a href="index.php">Plan another night</a></div>
 </section>
-
-<div class="divider">
-  <h2><?php echo $details['movie']['title']?></h2>
-  <img src="http://image.tmdb.org/t/p/w342/<?php echo $details['movie']['poster']?>" alt="<?php echo $details['movie']['title'] . ' poster.'?>">
-</div>
-<span>With <b>the boys</b></span>
-<span>Next Tuesday</span>
-<div><a href="index.php">Plan another night</a></div>
->>>>>>> 3ef76c4768572edb934f1b03571e2cdfba742395

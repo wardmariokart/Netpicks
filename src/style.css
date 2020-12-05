@@ -9,6 +9,8 @@
 @import './css/cards.css';
 @import './css/dev.css';
 
+
+
 /* stylelint-disable */
 *, *::before, *::after{
   box-sizing: border-box;
@@ -30,7 +32,8 @@ body {
   grid-template: min-content auto min-content / 50rem;
 
   background-color: var(--color-secondary);
-  font-family: sans-serif;
+  font-family: aktiv-grotesk,sans-serif;
+  font-weight: 400;
   color: var(--color-primary);
 }
 
