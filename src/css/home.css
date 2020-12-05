@@ -76,11 +76,13 @@
 
 .movie-nights__item {
   display: block;
-  background-color: var(--white);
-  color: var(--deepBlue);
+  background-color: var(--color-secondary);
+  font-family: aktiv-grotesk,sans-serif;
+  font-weight: 400;
+  color: var(--color-primary);
   border-radius: .5rem;
-  padding: 1.5rem;
-  padding-top: .5rem;
+  /* padding: 1.5rem;
+  padding-top: .5rem; */
   width: 100%;
   text-decoration: none;
 }
@@ -94,6 +96,29 @@
 }
 
 .movie-night{
+display: flex;
+flex-flow: row;
+}
 
+.movie-night__info{
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.movie-night__adress{
+  font-family: nimbus-roman,serif;
+  font-weight: 400;
+}
+
+
+.movie-night__title{
+  font-size: 3.5rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.movie-night__poster{
+  width: 33%;
 }
 

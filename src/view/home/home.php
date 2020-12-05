@@ -47,15 +47,20 @@
 
 <?php if (!empty($_SESSION['user'])): ?>
   <section class="movie-nights">
-    <h2 class="movie-nights__title">Planned Movie Nights</h2>
+    <h2 class="movie-nights__title divider">Planned<br>Movie Nights</h2>
     <?php if (!empty($myMovieNights)): ?>
       <?php foreach($myMovieNights as $movieNight): ?>
         <a class="movie-nights__item" href="index.php?page=detail&id=<?php echo $movieNight['id'];?>">
           <article class="movie-night">
-            <h3><?php echo $movieNight['name']?></h3>
-            <span>Next <b>tuesday</b> your are wachting <b>IT</b> with <b>the boys 🍻</b></span>
+            <div class="movie-night__info">
+              <h3 class="movie-night__title"><?php echo $movieNight['name']?></h3>
+              <p class="movie-night__adress">@ Wardje Bever’s  Houz</p>
+              <p>14.12.20</p>
+            </div>
+            <img class="movie-night__poster" src="./assets/temporary/chronicle.jpg">
           </article>
         </a>
+        <div class="divider"></div>
       <?php endforeach;?>
     <?php else: echo '<span>No movie nights planned yet</span>'; ?>
     <?php endif; ?>
