@@ -1,6 +1,10 @@
 
 /* ________________________________________________________________________________________ PLAN ONE */
 
+.movie__still{
+  width: 50rem;
+}
+
 .plan-one {
   margin: 0 auto;
 
@@ -21,12 +25,25 @@
   margin-bottom: 2rem;
 }
 
+.plan-one__title {
+  
+  text-align: center;
+  margin-top: 0rem;
+  font-size: 6rem;
+  font-family: aktiv-grotesk,sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-align: center;
+}
+
 .plan-one__drop-down {
   background: none;
   border: none;
-  border-bottom: 1px solid var(--color-primary);
+  border: 1px solid var(--color-primary);
   font-family: serif;
-  font-size: 1.5rem;
+  font-size: 1.9rem;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
 }
 
 .plan-one__submit {
@@ -53,6 +70,10 @@
 
 /* ________________________________________________________________________________________ MOVIE NIGHT OVERVIEW */
 
+.movie-nights{
+  margin-top: 15rem;
+}
+
 .movie-nights__item {
   display: block;
   background-color: var(--white);
@@ -61,6 +82,18 @@
   padding: 1.5rem;
   padding-top: .5rem;
   width: 100%;
-
   text-decoration: none;
 }
+
+.movie-nights__title{
+  width: 90%;
+  font-size: 6rem;
+  font-family: aktiv-grotesk,sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.movie-night{
+
+}
+

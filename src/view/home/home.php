@@ -6,23 +6,24 @@
     <input type="hidden" name="action" value="planMovieNight">
 
     <div class="plan-one__questions">
+      <img class="movie__still" src="./assets/images/isleOfDogs.jpg" alt="movie still from isle of dogs">
+      <h2 class="plan-one__title divider-topAndBottom">Plan my night</h2>
       <div class="plan-one__block">
-        <span>I'm planning a movie night for </span>
+        <span>I'm planning a movie night for</span>
         <select name="nightType" id="nightType" class="plan-one__drop-down">
           <?php foreach($nightTypes as $night): ?>
             <option value="<?php echo $night['value'];?>"><?php echo $night['display'] ?></opton>
           <? endforeach; ?>
-        </select><span>.</span>
+        </select>
       </div>
 
       <div class="plan-one__block">
-        <span>During the movie we want to be </span>
+        <span>During the movie we want to be</span>
         <select name="movieOptionOne" id="movieOptionOne" class="plan-one__drop-down">
           <?php foreach($stepOneOptions as $moveOption): ?>
             <option value="<?php echo $moveOption['value'];?>"><?php echo $moveOption['display'] ?></opton>
           <? endforeach; ?>
         </select>
-        <span>,</span>
       </div>
 
 
@@ -33,11 +34,12 @@
             <option value="<?php echo $moveOption['value'];?>"><?php echo $moveOption['display'] ?></opton>
           <? endforeach; ?>
         </select>
-        <span> is something we can't do without.</span>
+        <span>is something we can't</span> 
+        <span>do without.</span>
       </div>
     </div>
-    <div class="plan-one__submit-wrapper">
-      <input class="plan-one__submit" type="submit" value="Plan my movie night!!">
+    <div class="plan-one__submit-wrapper divider-topAndBottom">
+      <input class="plan-one__submit" type="submit" value="Start planning">
     </div>
   </form>
 </section>
@@ -45,11 +47,11 @@
 
 <?php if (!empty($_SESSION['user'])): ?>
   <section class="movie-nights">
-    <h2>My movie nights</h2>
+    <h2 class="movie-nights__title">Planned Movie Nights</h2>
     <?php if (!empty($myMovieNights)): ?>
       <?php foreach($myMovieNights as $movieNight): ?>
         <a class="movie-nights__item" href="index.php?page=detail&id=<?php echo $movieNight['id'];?>">
-          <article>
+          <article class="movie-night">
             <h3><?php echo $movieNight['name']?></h3>
             <span>Next <b>tuesday</b> your are wachting <b>IT</b> with <b>the boys 🍻</b></span>
           </article>

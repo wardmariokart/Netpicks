@@ -53,3 +53,19 @@ body {
   padding-bottom: var(--divider-padding);
   padding-top: var(--divider-padding);
 }
+
+.divider-topAndBottom {
+  width: 100%;
+  content: '';
+  border-top: 1px solid var(--color-primary-lighter);
+  border-bottom: 1px solid var(--color-primary-lighter);
+  padding-bottom: var(--divider-padding);
+  padding-top: var(--divider-padding);
+  /* **************************************************************************** */
+  /* font-size: 6rem;
+  font-family: aktiv-grotesk,sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-align: center; */
+  /* **************************************************************************** */
+}
