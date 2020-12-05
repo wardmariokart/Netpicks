@@ -10,7 +10,7 @@ require_once __DIR__ . '/../dao/FilterCategoryKeywordsDAO.php';
 require_once __DIR__ . '/../dao/FilterCategoriesDAO.php';
 require_once __DIR__ . '/../dao/NetpicksQuestionsDAO.php';
 require_once __DIR__ . '/../dao/MovieNightAnswersDAO.php';
-
+require_once __DIR__ . '/../dao/ImdbMoviesGenresDAO.php';
 
 class HomeController extends Controller {
 
@@ -190,11 +190,11 @@ class HomeController extends Controller {
 
   private function setupFilteredMovieIds($stepOneInputs)
   {
-    $genres = array();
-    if(isset($stepOneInputs['movieOptionOne'])) array_push($genres, $stepOneInputs['movieOptionOne']['imdb_genre_id']);
-    if(isset($stepOneInputs['movieOptionTwo'])) array_push($genres, $stepOneInputs['movieOptionTwo']['imdb_genre_id']);
-    $_SESSION['step2']['filteredMovieIds'] = $this->imdbMoviesDAO->selectByGenreIds($genres, true);
-
+    $imdbMoviesGenresDAO = new ImdbMoviesGenresDAO();
+    $genresIds = array();
+    if(isset($stepOneInputs['movieOptionOne'])) array_push($genresIds, $stepOneInputs['movieOptionOne']['imdb_genre_id']);
+    if(isset($stepOneInputs['movieOptionTwo'])) array_push($genresIds, $stepOneInputs['movieOptionTwo']['imdb_genre_id']);
+    $_SESSION['step2']['filteredMovieIds'] = $imdbMoviesGenresDAO->selectMovieIdsWithGenresId($genresIds);
   }
 
   private function setupQuestionCards($stepOneInputs)
