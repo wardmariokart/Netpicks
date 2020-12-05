@@ -33,12 +33,21 @@ class MovieNightsDAO extends DAO {
 
   public function selectByUserId($userId)
   {
-    $sql = "SELECT * FROM `movie_nights` WHERE `user_id` = :userId";
+    $sql = "SELECT movie_nights.name as name, movie_nights.user_id as id, imdb_movies.poster as poster FROM movie_nights LEFT JOIN imdb_movies ON movie_nights.movie_id=imdb_movies.id WHERE user_id = :userId";
     $stmt = $this->pdo->prepare($sql);
     $stmt->bindValue(':userId', $userId);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
+
+  // public function selectByUserId($userId)
+  // {
+  //   $sql = "SELECT * FROM `movie_nights` WHERE `user_id` = :userId";
+  //   $stmt = $this->pdo->prepare($sql);
+  //   $stmt->bindValue(':userId', $userId);
+  //   $stmt->execute();
+  //   return $stmt->fetchAll(PDO::FETCH_ASSOC);
+  // }
 
   public function validateInsertData($insertData)
   {

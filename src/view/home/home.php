@@ -57,7 +57,7 @@
               <p class="movie-night__adress">@ Wardje Bever’s  Houz</p>
               <p>14.12.20</p>
             </div>
-            <img class="movie-night__poster" src="./assets/temporary/chronicle.jpg">
+            <img class="movie-night__poster" src="http://image.tmdb.org/t/p/w342/<?php echo $movieNight['poster'] ?>">
           </article>
         </a>
         <div class="divider"></div>
