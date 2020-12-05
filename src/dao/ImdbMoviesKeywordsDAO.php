@@ -21,31 +21,39 @@ class ImdbMoviesKeywordsDAO extends DAO {
     return $this->selectMovieIdsByKeywordIds($movieIds, $keywordIds, false);
   }
 
-  public function rejectMovieIdsWithKeywordIds($movieIds, $keywordIds)
+  public function filterMovieIdsByKeywordCategoryId($startMovieIds, $filterCategoryId)
   {
-    $movieIdQuery = implode(',', array_fill(0, count($movieIds), '?'));
-    $keywordIdQuery = implode(',', array_fill(0, count($keywordIds), '?'));
-    $filteredSql = "SELECT DISTINCT `imdb_movies_keywords`.`movie_id` as 'nbMatchingKeywords' FROM `imdb_movies_keywords` WHERE `movie_id` IN (" . $movieIdQuery . ") AND `keyword_id` IN (" . $keywordIdQuery . ")";
-    $sql = "SELECT DISTINCT `imdb_movies_keywords`.`movie_id` FROM `imdb_movies_keywords` WHERE `imdb_movies_keywords`.`movie_id` NOT IN (" . $filteredSql . ") AND `imdb_movies_keywords`.`movie_id` IN (". $movieIdQuery . ")";
+
+    $movieIdQuery = implode(',', array_fill(0, count($startMovieIds), '?'));
+    $subQuery = "SELECT `imdb_movies_keywords`.`movie_id` FROM `imdb_movies_keywords` INNER JOIN `filter_category_keywords` ON `imdb_movies_keywords`.`keyword_id` = `filter_category_keywords`.`keyword_id` WHERE `filter_category_keywords`.`category_id` = ?";
+    $sql = "SELECT `subTable`.* FROM (" . $subQuery . ") AS subTable WHERE `subTable`.`movie_id` IN (" . $movieIdQuery . ")";
     $stmt = $this->pdo->prepare($sql);
-    $stmt->execute(array_merge($movieIds, $keywordIds, $movieIds));  // Replaces all '?' with a value by order
-    return $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+    $executeArray =array_merge([$filterCategoryId], $startMovieIds);
+    $stmt->execute($executeArray);
+    return $stmt->fetchAll(PDO::FETCH_COLUMN,0); // movies with multipe matching keywords will appear multiple times. This is intended to give these movies a higher chance of getting picked.
   }
 
-  private function selectMovieIdsByKeywordIds($movieIds, $keywordIds, $bRejectKeywords)
+  public function rejectMovieIdsByFilterCategoryId($startMovieIds, $filterCategoryId)
   {
-    /* Need to format the sql query insted of binding values because you cannot bind an array to a single placeholder */
-    /*  ... IN (:movieIds)... ; bindValue(':movieId', $movieIds); IS NOT VALID */
-    $movieIdQuery = implode(',', array_fill(0, count($movieIds), '?'));
-    $keywordIdQuery = implode(',', array_fill(0, count($keywordIds), '?'));
+    if(count($startMovieIds) > 0)
+    {
+      $startTabelQuery = '(SELECT ' . $startMovieIds[0] . ' AS movie_id UNION SELECT ';
+      $startMovieIdsCopy = $startMovieIds;
+      array_shift($startMovieIdsCopy);
+      $startTabelQuery .= implode(' UNION SELECT ', $startMovieIdsCopy);
+      $startTabelQuery .= ')';
 
-    // $bRejectKeywords = true  ---> select movieIds WITHOUT keywords
-    // $bRejectKeywords = false ---> select movieIds WITH keywords
-    $rejectQuery = $bRejectKeywords ? 'NOT ' : '';
+      $movieIdQuery = implode(',', array_fill(0, count($startMovieIds), '?'));
+      $subQuery = "SELECT `imdb_movies_keywords`.`movie_id` FROM `imdb_movies_keywords` INNER JOIN `filter_category_keywords` ON `imdb_movies_keywords`.`keyword_id` = `filter_category_keywords`.`keyword_id` WHERE `filter_category_keywords`.`category_id` = ?";
+      $moviesInCategoryQuery = "SELECT `subTable`.* FROM (" . $subQuery . ") AS subTable WHERE `subTable`.`movie_id` IN (" . $movieIdQuery . ")";
 
-    $sql = "SELECT `imdb_movies_keywords`.`movie_id`, count(*) as 'nbMatchingKeywords' FROM `imdb_movies_keywords` WHERE `movie_id` IN (" . $movieIdQuery . ") AND `keyword_id` " . $rejectQuery . "IN (" . $keywordIdQuery . ") GROUP BY `movie_id`";
-    $stmt = $this->pdo->prepare($sql);
-    $stmt->execute(array_merge($movieIds, $keywordIds));  // Replaces all '?' with a value by order
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+      $sql = "SELECT * FROM " . $startTabelQuery . " AS subTable WHERE `subTable`.`movie_id` NOT IN (" . $moviesInCategoryQuery . ")";
+      $stmt = $this->pdo->prepare($sql);
+      $executeArray =array_merge([$filterCategoryId], $startMovieIds);
+      $stmt->execute($executeArray);
+
+      return $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+    }
+
   }
 }

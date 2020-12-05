@@ -194,7 +194,7 @@ class HomeController extends Controller {
     $genresIds = array();
     if(isset($stepOneInputs['movieOptionOne'])) array_push($genresIds, $stepOneInputs['movieOptionOne']['imdb_genre_id']);
     if(isset($stepOneInputs['movieOptionTwo'])) array_push($genresIds, $stepOneInputs['movieOptionTwo']['imdb_genre_id']);
-    $_SESSION['step2']['filteredMovieIds'] = $imdbMoviesGenresDAO->selectMovieIdsWithGenresId($genresIds);
+    $_SESSION['step2']['filteredMovieIds'] = array_column($imdbMoviesGenresDAO->selectMovieIdsWithGenresId($genresIds), 'movie_id');
   }
 
   private function setupQuestionCards($stepOneInputs)
@@ -283,7 +283,6 @@ class HomeController extends Controller {
     {
       $_SESSION['error'] = 'Your php code is still using a string for the filter category while it should be an id. (from HomeController::filterMoviesByCategoryKeywords)';
       exit();
-
     }
 
     $filterKeywordsDAO = new FilterCategoryKeywordsDAO();
@@ -291,34 +290,17 @@ class HomeController extends Controller {
 
     $outMovies = array();
     $imdbMoviesKeywordsDOA = new ImdbMoviesKeywordsDAO();
-    $bSqlMethod = true;
-    if ($bSqlMethod)
-    {
 
-      if ($includeOrExclude == 'include')
-      {
-        $outMovies = array_column($imdbMoviesKeywordsDOA->filterMovieIdsWithKeywordIds($inMovieIds, $filterKeywordIds), 'movie_id');
-      }
-      else if ($includeOrExclude == 'exclude')
-      {
-        $outMovies = $imdbMoviesKeywordsDOA->rejectMovieIdsWithKeywordIds($inMovieIds, $filterKeywordIds);
-      }
-      // Implementation 2: Much faster. Takes around a second to process 4600 movies
-    }
-    else
+    if ($includeOrExclude == 'include')
     {
-      // Implementation 1: took 4 minutes to process 4600 movies
-      foreach($inMovieIds as $movieId)
-      {
-        // Get all keywords for a movieId from table imdb_movies_keywords
-        $movieKeywordIds = $imdbMoviesKeywordsDOA->selectKeywordIdsbyMovieId($movieId);
-        $matchingKeywords = array_intersect($movieKeywordIds, $filterKeywordIds);
-        if (!empty($matchingKeywords))
-        {
-          array_push($outMovies, array('movie_id' => $movieId, 'nbMatchingKeywords' => ($matchingKeywords)));
-        }
-      }
+      $outMovies = $imdbMoviesKeywordsDOA->filterMovieIdsByKeywordCategoryId($inMovieIds, $categoryFilterId);
     }
+    else if ($includeOrExclude == 'exclude')
+    {
+      $outMovies = $imdbMoviesKeywordsDOA->rejectMovieIdsByFilterCategoryId($inMovieIds, $categoryFilterId);
+    }
+    // Implementation 2: Much faster. Takes around a second to process 4600 movies
+
     return $outMovies;
   }
 
@@ -371,3 +353,6 @@ class HomeController extends Controller {
   }
 
 }
+
+// FIX: On answer, check if unanswered cards would have any results, if not the cards should be removed from the stack.
+// => Therefore there should me way more questions
