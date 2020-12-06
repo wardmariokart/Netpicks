@@ -171,16 +171,35 @@
   flex-direction: column;
   align-items: center;
   cursor: pointer;
-  padding: 1rem 0;
   transition: background-color .12s ease-out;
 
   & span {
+    text-align: center;
+    width: 100%;
     pointer-events: none;
+    text-transform: capitalize;
+    padding: .5rem 0;
+    border-top: 1px solid var(--color-primary-lighter);
   }
 
   &:hover {
     background-color: var(--color-primary);
     color: var(--color-secondary);
+  }
+}
+
+.setting__title {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.setting__value {
+  font-size: 1.2rem;
+
+  &::after {
+    content: '🖊️';
+    margin-left: .4rem;
+    font-size: .8rem;
   }
 }
 

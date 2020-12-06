@@ -343,11 +343,12 @@ class HomeController extends Controller {
     $bOwnerless = isset($_SESSION['ownerlessMovieNightId']);
     // if ownerless, there should be a button to claim it by signing in or signing up.
     $this->set('bOwnerless', $bOwnerless);
-
-
     $this->set('title', 'Your movie night');  // Hidden
 
-    $movieNight['settings'] = $this->movieNightAnswersDAO->selectAllByMovieNight($movieNight['id']);
+
+    $settings = $this->movieNightAnswersDAO->selectAllByMovieNight($movieNight['id']);
+    $movieNight['settings'] = $this->transformAnswerOfSettings($settings);
+
     $movie = $this->imdbMoviesDAO->selectById($movieNight['movie_id']);
     $this->set('movieNight', $movieNight);
     $details = array('movie' => $movie);
@@ -379,6 +380,20 @@ class HomeController extends Controller {
       exit();
     }
 
+  }
+
+  private function transformAnswerOfSettings($settings)
+  {
+    $answerTransform = array();
+    $answerTransform['include'] = 'yes';
+    $answerTransform['exclude'] = 'no';
+    $answerTransform['skip'] = 'allowed';
+    foreach($settings as $index => $setting)
+    {
+      $newAnswer = $answerTransform[$setting['answer']];
+      $settings[$index]['answer'] = $newAnswer;
+    }
+    return $settings;
   }
 
   private function handleUpdateSettingRequestJs($jsPost, &$jsAnswerRef)
