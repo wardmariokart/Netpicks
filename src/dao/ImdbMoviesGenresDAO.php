@@ -15,6 +15,6 @@ class ImdbMoviesGenresDAO extends DAO {
     $sql = "SELECT `subTable`.`movie_id` FROM (SELECT `movie_id`, COUNT(*) AS 'nbMatchingGenres' FROM `imdb_movies_genres` WHERE `genre_id` IN (" . $genreIdQuery . ") GROUP BY `movie_id`) AS subTable WHERE nbMatchingGenres = ?";
     $stmt = $this->pdo->prepare($sql);
     $stmt->execute(array_merge($genreIds, array(count($genreIds))));
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
   }
 }

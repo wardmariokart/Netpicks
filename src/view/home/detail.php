@@ -1,47 +1,84 @@
-<section class="chosen__movie">
-    <div class="col3">
-        <img class="movie__poster" src="http://image.tmdb.org/t/p/w342/<?php echo $details['movie']['poster'] ?>" alt="<?php echo $details['movie']['title'] . ' poster.' ?>">
-        <div class="movie__details">
-            <h2 class="detail__movie-title"><?php echo $details['movie']['title'] ?></h2>
-            <div class="movie__crew">
-                <p><span class="bold">Director: </span><?php echo $details['movie']['title'] ?></p>
-                <p><span class="bold">Cast:</span> Dane DeHaan, Alex Russell, Michael B. Jordan </p>
-            </div>
-        </div>
+<section class="page--detail"> <!-- TODO REMOVE -->
+  <header>
+
+    <h2><?php echo $movieNight['name']?></h2>
+  </header>
+  <section class="chosen__movie">
+      <div class="col3">
+          <img class="movie__poster" src="http://image.tmdb.org/t/p/w342/<?php echo $details['movie']['poster'] ?>" alt="<?php echo $details['movie']['title'] . ' poster.' ?>">
+          <div class="movie__details">
+              <h2 class="detail__movie-title"><?php echo $details['movie']['title'] ?></h2>
+              <div class="movie__crew">
+                  <p><span class="bold">Director: </span><?php echo $details['movie']['title'] ?></p>
+                  <p><span class="bold">Cast:</span> Dane DeHaan, Alex Russell, Michael B. Jordan </p>
+              </div>
+          </div>
+      </div>
+      <p class="movie__summary"><?php echo $details['movie']['description'] ?></p>
+      <!-- <div class="movie__path">
+          <p class="movie__path-item">Gore</p>
+          <p>></p>
+          <p class="movie__path-item">Supernatural</p>
+          <p>></p>
+          <p class="movie__path-item">80% guns & explosions</p>
+          <p>></p>
+          <p class="movie__path-item">Superhero's</p>
+      </div> -->
+  </section>
+
+
+
+  <section class="movie-night__settings divider--no-padding divider--top">
+    <h3>This movie was pick based your answers: </h3>
+    <ul class="settings">
+      <?php foreach($movieNight['settings'] as $setting): ?>
+      <li>
+        <form class="setting" action="index.php?page=detail&id=<?php echo $_GET['id']?>" method="POST">
+          <input type="hidden" name="action" value="updateSettingsRequest">
+          <input type="hidden" name="questionId" value="<?php echo $setting['question_id']?>">
+          <input type="hidden" name="answerId" value="<?php echo $setting['answer_id']?>">
+          <span class="setting__title">
+            <?php echo $setting['filter'];?>
+          </span>
+          <span class="setting__value">
+            <?php echo $setting['answer'];?>
+          </span>
+        </form>
+      </li>
+      <?php endforeach; ?>
+    </ul>
+  </section>
+  <div class="update-overlay">
+    <div class="update-overlay__background">
     </div>
-    <p class="movie__summary"><?php echo $details['movie']['description'] ?></p>
-    <div class="movie__path">
-        <p class="movie__path-item">Gore</p>
-        <p>></p>
-        <p class="movie__path-item">Supernatural</p>
-        <p>></p>
-        <p class="movie__path-item">80% guns & explosions</p>
-        <p>></p>
-        <p class="movie__path-item">Superhero's</p>
+    <div class="card-stack-wrapper">
+      <div class="card-stack"></div>
     </div>
-    <div class="divider"></div>
-</section>
-<section class="movie__extras">
-    <article class="extras">
-        <h3 class="extras__title">Suggested snacks:</h3>
-        <ul class="extra__list">
-            <ol class="extra"><img class="extra__icon" src="./assets/temporary/noun_chips_3614132.png" alt="snack"></ol>
-            <ol class="extra"><img class="extra__icon" src="./assets/temporary/noun_Popcorn_3614154.png" alt="snack"></ol>
-            <ol class="extra"><img class="extra__icon" src="./assets/temporary/noun_Milkshake_3614128.png" alt="snack"></ol>
-        </ul>
-    </article>
-    <div class="divider-horizontal"></div>
-    <article class="extras">
-        <h3 class="extras__title">Suggested asseccoires:</h3>
-        <ul class="extra__list">
-            <ol class="extra"><img class="extra__icon" src="./assets/temporary/noun_chips_3614132.png" alt="asseccoires"></ol>
-            <ol class="extra"><img class="extra__icon" src="./assets/temporary/noun_chips_3614132.png" alt="asseccoires"></ol>
-            <ol class="extra"><img class="extra__icon" src="./assets/temporary/noun_chips_3614132.png" alt="asseccoires"></ol>
-        </ul>
-    </article>
-</section>
-<div class="divider"></div>
-<section class="book__movie">
-    <div class="book-this"><a href="index.php">Book movie night</a></div>
-    <div class="book-other"><a href="index.php">Plan another night</a></div>
+  </div>
+
+
+  <section class="movie__extras">
+      <article class="extras">
+          <h3 class="extras__title">Suggested snacks:</h3>
+          <ul class="extra__list">
+              <ol class="extra"><img class="extra__icon" src="./assets/temporary/noun_chips_3614132.png" alt="snack"></ol>
+              <ol class="extra"><img class="extra__icon" src="./assets/temporary/noun_Popcorn_3614154.png" alt="snack"></ol>
+              <ol class="extra"><img class="extra__icon" src="./assets/temporary/noun_Milkshake_3614128.png" alt="snack"></ol>
+          </ul>
+      </article>
+      <div class="divider-horizontal"></div>
+      <article class="extras">
+          <h3 class="extras__title">Suggested asseccoires:</h3>
+          <ul class="extra__list">
+              <ol class="extra"><img class="extra__icon" src="./assets/temporary/noun_chips_3614132.png" alt="asseccoires"></ol>
+              <ol class="extra"><img class="extra__icon" src="./assets/temporary/noun_chips_3614132.png" alt="asseccoires"></ol>
+              <ol class="extra"><img class="extra__icon" src="./assets/temporary/noun_chips_3614132.png" alt="asseccoires"></ol>
+          </ul>
+      </article>
+  </section>
+  <div class="divider"></div>
+  <section class="book__movie">
+      <div class="book-this"><a href="index.php">Book movie night</a></div>
+      <div class="book-other"><a href="index.php">Plan another night</a></div>
+  </section>
 </section>

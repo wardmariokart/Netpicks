@@ -9,7 +9,7 @@
 @import './css/cards.css';
 @import './css/dev.css';
 
-
+/* Documentation: https://preset-env.cssdb.org/features#media-query-ranges */
 
 /* stylelint-disable */
 *, *::before, *::after{
@@ -24,12 +24,12 @@ html {
 }
 
 body {
-  width: 50rem;
-  height: 100%;
+  max-width: 65rem;
+  min-height: 100%;
   margin: 0 auto;
 
   display: grid;
-  grid-template: min-content auto min-content / 50rem;
+  grid-template: min-content auto min-content / 1fr;
 
   background-color: var(--color-secondary);
   font-family: aktiv-grotesk,sans-serif;
@@ -46,26 +46,25 @@ body {
   margin-right: auto;
 }
 
-.divider {
+.divider, .divider--top-bottom, .divider--no-padding {
   width: 100%;
   content: '';
   border-bottom: 1px solid var(--color-primary-lighter);
   padding-bottom: var(--divider-padding);
   padding-top: var(--divider-padding);
+
+  /* TODO: THIS SHOULD WORK: https://sass-lang.com/documentation/at-rules/extend */
+ /*  &--no-padding {
+    @extend .divider;
+    padding-bottom: 0;
+    padding-top: 0;
+  } */
 }
 
-.divider-topAndBottom {
-  width: 100%;
-  content: '';
+.divider--top-bottom {
   border-top: 1px solid var(--color-primary-lighter);
-  border-bottom: 1px solid var(--color-primary-lighter);
-  padding-bottom: var(--divider-padding);
-  padding-top: var(--divider-padding);
-  /* **************************************************************************** */
-  /* font-size: 6rem;
-  font-family: aktiv-grotesk,sans-serif;
-  font-weight: 700;
-  text-transform: uppercase;
-  text-align: center; */
-  /* **************************************************************************** */
+}
+
+.divider--no-padding {
+  padding: 0;
 }

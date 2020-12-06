@@ -45,12 +45,17 @@ class DAO {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
-  protected function checkHasKey($array, $key, &$errorsRef)
+  protected function checkIfAllDataPresent($data, $keysToCheck)
   {
-    if (!isset($array[$key]))
+    $errors = array();
+    foreach($keysToCheck as $key)
     {
-      $errorsRef[$key] = $key . ' Is missing. Did not create movie night';
+      if (!isset($data[$key]))
+      {
+        $errors[$key] = $key . ' Is missing.';
+      }
     }
+    return $errors;
   }
 
   public function deleteById($id)

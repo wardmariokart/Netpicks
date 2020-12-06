@@ -31,7 +31,6 @@ export default class Mouse {
 
     const $target = event.target;
     const victim = this.victims.find(victim => victim.$element === $target);
-
     if (victim !== undefined && victim.grab(this))
     {
       this.grabbedCard = victim;

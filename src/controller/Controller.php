@@ -6,6 +6,12 @@ class Controller {
   public $route;
   protected $viewVars = array();
   protected $env = 'development';
+  private $sessionLifespans = array(
+    array('property' => 'step2',
+          'allowedPage' => 'extraQuestions'),
+    array('property' => 'detail',
+          'allowedPage' => 'detail')
+  );
 
   public function filter() {
     if (basename(dirname(dirname(__FILE__))) != 'src') {
@@ -13,11 +19,11 @@ class Controller {
     }
     call_user_func(array($this, $this->route['action']));
 
-    if (isset($_SESSION['step2']))
+    foreach($this->sessionLifespans as $lifespan)
     {
-      if($this->route['action'] !== 'extraQuestions')
+      if ($this->route['action'] !== $lifespan['allowedPage'] && isset($_SESSION[$lifespan['property']]))
       {
-        unset($_SESSION['step2']);
+        unset($_SESSION[$lifespan['property']]);
       }
     }
 

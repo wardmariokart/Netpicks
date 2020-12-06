@@ -4,6 +4,21 @@
   grid-template: 1fr/1fr;
   perspective: 100px;
   perspective-origin: 50% 10%;
+
+  /* should work but doesnt */
+  @nest div & {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+/* @nest should work but doesnt ^^^^ */
+
+.card-stack-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .card {
@@ -44,7 +59,7 @@
 .card--question {
   margin-top: 3rem;
   width: 30rem;
-
+  height: 20rem;
   padding: 1.5rem;
 }
 
@@ -56,4 +71,8 @@
     pointer-events: none;
     user-select: none;
   }
+}
+
+.test {
+  height: 200rem;
 }

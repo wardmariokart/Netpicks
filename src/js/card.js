@@ -217,7 +217,7 @@ export class Card {
 
   createElement()
   {
-    const $element = document.createElement('div');
+    const $element = document.createElement('article');
     const $futureParent = document.querySelector('.card-stack');
     // TODO add form element to this.$element
     //this.$element.innerHTML = `<form action="index`
@@ -274,7 +274,6 @@ export class Card {
       return;
     }
 
-    console.log(this.$element);
     let siblings = this.$element.parentNode.children;
     siblings = Array.from(siblings).filter($element => !$element.classList.contains(markForDestroyClass)); // filter out elements marked for destroy
     const i = siblings.length - 1 - siblings.indexOf(this.$element);

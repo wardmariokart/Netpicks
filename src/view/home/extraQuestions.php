@@ -1,4 +1,4 @@
-<section class="divider">
+<section class="divider page--extra-questions">
   <h2 class="hidden">First Step</h2>
   <span>I'm planning a movie night for <b><?php echo $stepOne['nightType']['display']?></b>.</span>
   <span>During that night we want to <b><?php echo $stepOne['movieOptionOne']['display']?></b></span>
@@ -18,8 +18,9 @@
 
 
 
-<section>
+<section class='test'>
   <h2 class="hidden">Questions</h2>
+
   <div class="card-stack">
     <?php
     // reverse $questions because the first question should be inserted last in html

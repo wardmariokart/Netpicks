@@ -4,10 +4,9 @@
 
   <form action="index.php" method="GET" class="plan-one__form">
     <input type="hidden" name="action" value="planMovieNight">
-
     <div class="plan-one__questions">
       <img class="movie__still" src="./assets/images/isleOfDogs.jpg" alt="movie still from isle of dogs">
-      <h2 class="plan-one__title divider-topAndBottom">Plan my night</h2>
+      <h2 class="plan-one__title divider--top-bottom">Plan my night</h2>
       <div class="plan-one__block">
         <span>I'm planning a movie night for</span>
         <select name="nightType" id="nightType" class="plan-one__drop-down">
@@ -34,11 +33,11 @@
             <option value="<?php echo $moveOption['value'];?>"><?php echo $moveOption['display'] ?></opton>
           <? endforeach; ?>
         </select>
-        <span>is something we can't</span> 
+        <span>is something we can't</span>
         <span>do without.</span>
       </div>
     </div>
-    <div class="plan-one__submit-wrapper divider-topAndBottom">
+    <div class="plan-one__submit-wrapper divider--top-bottom">
       <input class="plan-one__submit" type="submit" value="Start planning">
     </div>
   </form>

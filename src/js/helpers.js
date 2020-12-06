@@ -20,6 +20,7 @@ export const formDataToJson = $form =>
 
 export const postToPHP = async (formData, url) =>
 {
+  console.log(formData);
   const fetchResult = await fetch(url, {
     method: 'POST',
     headers: new Headers({

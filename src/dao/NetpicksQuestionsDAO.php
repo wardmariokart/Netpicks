@@ -1,7 +1,7 @@
 <?php
 require_once (__DIR__ . '/DAO.php');
 
-class NetpickQuestionsDAO extends DAO {
+class NetpicksQuestionsDAO extends DAO {
   function __construct()
   {
     parent::__construct('netpicks_questions');

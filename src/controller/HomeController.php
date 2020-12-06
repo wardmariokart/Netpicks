@@ -19,13 +19,19 @@ class HomeController extends Controller {
   private $movieNightsDAO;
   private $imdbMoviesDAO;
   private $filterCategoriesDAO;
+  private $movieNightAnswersDAO;
+  private $imdbMoviesGenresDAO;
+  private $netpicksQuestionsDAO;
 
   function __construct() {
-    $this->nightTypesDAO = new NightTypesDAO();
-    $this->stepOneMovieOptionsDAO = new StepOneMovieOptionsDAO();
-    $this->movieNightsDAO = new MovieNightsDAO();
     $this->imdbMoviesDAO = new ImdbMoviesDAO();
+    $this->imdbMoviesGenresDAO = new ImdbMoviesGenresDAO();
+    $this->movieNightsDAO = new MovieNightsDAO();
+    $this->movieNightAnswersDAO = new MovieNightAnswersDAO();
+    $this->nightTypesDAO = new NightTypesDAO();
+    $this->netpicksQuestionsDAO = new NetpicksQuestionsDAO();
     $this->filterCategoriesDAO = new FilterCategoriesDAO();
+    $this->stepOneMovieOptionsDAO = new StepOneMovieOptionsDAO();
   }
 
   public function home() {
@@ -105,7 +111,8 @@ class HomeController extends Controller {
         if (intval($data['nbQuestionsLeft']) === 0)
         {
           // Pick & propose a movie
-          $jsAnswer['proposeMovie'] = $this->proposeMovie();
+          $jsAnswer['proposeMovie'] = $this->proposeMovie($_SESSION['step2']['filteredMovieIds']);
+          $_SESSION['step2']['pickedMovieId'] = $jsAnswer['proposeMovie']['id']; // saved so user cannot mess with this value (if he wanted to)
         }
         echo json_encode($jsAnswer);
         exit();
@@ -117,7 +124,8 @@ class HomeController extends Controller {
 
         if ($data['answer'] === 'reject')
         {
-          $jsAnswer['proposeMovie'] = $this->proposeMovie();
+          $jsAnswer['proposeMovie'] = $this->proposeMovie($_SESSION['step2']['filteredMovieIds']);
+          $_SESSION['step2']['pickedMovieId'] = $jsAnswer['proposeMovie']['id']; // saved so user cannot mess with this value (if he wanted to)
         }
         else if ($data['answer'] === 'accept')
         {
@@ -128,7 +136,7 @@ class HomeController extends Controller {
           {
             if ($result['bOwnerless'])
             {
-              $_SESSION['ownerlessMovieNightId'] = $result['movieNight']['id'];
+              $_SESSION['detail']['ownerlessMovieNightId'] = $result['movieNight']['id'];
             }
           }
           // insert new post and go to that post
@@ -190,19 +198,17 @@ class HomeController extends Controller {
 
   private function setupFilteredMovieIds($stepOneInputs)
   {
-    $imdbMoviesGenresDAO = new ImdbMoviesGenresDAO();
     $genresIds = array();
     if(isset($stepOneInputs['movieOptionOne'])) array_push($genresIds, $stepOneInputs['movieOptionOne']['imdb_genre_id']);
     if(isset($stepOneInputs['movieOptionTwo'])) array_push($genresIds, $stepOneInputs['movieOptionTwo']['imdb_genre_id']);
-    $_SESSION['step2']['filteredMovieIds'] = array_column($imdbMoviesGenresDAO->selectMovieIdsWithGenresId($genresIds), 'movie_id');
+    $_SESSION['step2']['filteredMovieIds'] = $this->imdbMoviesGenresDAO->selectMovieIdsWithGenresId($genresIds);
   }
 
   private function setupQuestionCards($stepOneInputs)
   {
     // select cards for movie option one
-    $netpicksQuestionsDAO = new NetpickQuestionsDAO();
-    $optionOneQuestions = $netpicksQuestionsDAO->selectAllByMovieOption($stepOneInputs['movieOptionOne']['id']);
-    $optionTwoQuestions = $netpicksQuestionsDAO->selectAllByMovieOption($stepOneInputs['movieOptionTwo']['id']);
+    $optionOneQuestions = $this->netpicksQuestionsDAO->selectAllByMovieOption($stepOneInputs['movieOptionOne']['id']);
+    $optionTwoQuestions = $this->netpicksQuestionsDAO->selectAllByMovieOption($stepOneInputs['movieOptionTwo']['id']);
 
     $this->set('questions', array_merge($optionOneQuestions, $optionTwoQuestions));
   }
@@ -223,52 +229,17 @@ class HomeController extends Controller {
       {
         $_SESSION['step2']['filteredMovieIds'] = $this->filterMoviesByCategoryKeywords($_SESSION['step2']['filteredMovieIds'], $data['filterType'], $answer);
       }
-      return;
-
-      switch ($data['filterType'])
-      {
-
-
-        // Flow of this page
-        // first time entering => Create and display 4 questions. First movie selection based on step one answers. Movie options are linked with genres. Select multiple genres and their movie ids (give option if move must have both or either)
-        // Send off card  => Receive fetch request (action = filter, filterId = question.filterId, answer = include, exclude or skip, nbQuestionLeft: 2). 1. Do filtering using the existing function. 2. if 0 questions left. Respond with 'Present movie'  3. Respond with number of possible movies left
-        // send off another card
-        // Send off last card
-        // Show picked movie for you => in JS we receive respons['pickedMovie'] is set. Display the picked movie on top of screen. with little spinning animation behind it and black out background.
-        // Reject that movie (throw left) => In php we receive action = 'RejectPropsedMovie'. In JS we receive the same as above.
-        // Accept that movie (throw right) => From js we send fetch to 'acceptProposedMovie' and we create a new post with all the information needed (id, nightType, movieOption1 & 2, movieNightName, AND question and answer are stored in a new table (id, question_id, 'included','excluded','skipped'))
-
-          case 'supernatural':
-            if($data['filterSupernatural'] == 'true')
-            {
-
-              $_SESSION['step2']['filteredMovieIds'] = array_column($this->filterMoviesByCategoryKeywords($_SESSION['step2']['filteredMovieIds'], $data['filterType'], 'include'), 'movie_id');
-            }
-            else if ($data['filterSupernatural'] == 'false')
-            {
-              $result =  $this->filterMoviesByCategoryKeywords($_SESSION['step2']['filteredMovieIds'], $data['filterType'], 'exclude');
-              $_SESSION['step2']['filteredMovieIds'] = $result;
-            }
-            else if ($_POST['filterSupernatural'] == 'skip')
-            {
-              // do nothing
-            }
-          break;
-          default:
-          unset($_SESSION['step2']['filteredMovieIds']);
-          $_SESSION['error'] = $_POST['filterType'] . 'Is invalid filter type';
-          header('location: index.php');
-          exit();
-        break;
-      }
     }
   }
 
-  private function proposeMovie ()
+  private function proposeMovie($filteredMovieIds)
   {
-    $filteredId = $_SESSION['step2']['filteredMovieIds'][array_rand($_SESSION['step2']['filteredMovieIds'])];
-    $pickedMovie = $this->imdbMoviesDAO->selectById($filteredId);
-    $_SESSION['step2']['pickedMovieId'] = $filteredId; // saved so user cannot mess with this value (if he wanted to)
+    $pickedMovie = false;
+    if (count($filteredMovieIds) > 0)
+    {
+      $filteredId = $filteredMovieIds[array_rand($filteredMovieIds)];
+      $pickedMovie = $this->imdbMoviesDAO->selectById($filteredId);
+    }
     return $pickedMovie;
   }
 
@@ -277,12 +248,18 @@ class HomeController extends Controller {
     return isset($array[$key]) ? $array[$key] : $alternative;
   }
 
-  private function filterMoviesByCategoryKeywords($inMovieIds, $categoryFilterId, $includeOrExclude)
+  // answer should be 'include', 'exclude' or 'skip'
+  private function filterMoviesByCategoryKeywords($inMovieIds, $categoryFilterId, $answer)
   {
     if(!is_numeric($categoryFilterId))
     {
       $_SESSION['error'] = 'Your php code is still using a string for the filter category while it should be an id. (from HomeController::filterMoviesByCategoryKeywords)';
       exit();
+    }
+
+    if (empty($inMovieIds))
+    {
+      return $inMovieIds;
     }
 
     $filterKeywordsDAO = new FilterCategoryKeywordsDAO();
@@ -291,15 +268,18 @@ class HomeController extends Controller {
     $outMovies = array();
     $imdbMoviesKeywordsDOA = new ImdbMoviesKeywordsDAO();
 
-    if ($includeOrExclude == 'include')
+    if ($answer === 'include')
     {
       $outMovies = $imdbMoviesKeywordsDOA->filterMovieIdsByKeywordCategoryId($inMovieIds, $categoryFilterId);
     }
-    else if ($includeOrExclude == 'exclude')
+    else if ($answer === 'exclude')
     {
       $outMovies = $imdbMoviesKeywordsDOA->rejectMovieIdsByFilterCategoryId($inMovieIds, $categoryFilterId);
     }
-    // Implementation 2: Much faster. Takes around a second to process 4600 movies
+    else if ($answer === 'skip')
+    {
+      // nothing happens. But wanted to put this here for clarification
+    }
 
     return $outMovies;
   }
@@ -322,14 +302,13 @@ class HomeController extends Controller {
         $_SESSION['info'] = 'Movie night has been created';
         // Now add the given answers
 
-        $movieNightAnswersDAO = new MovieNightAnswersDAO();
         foreach($_SESSION['step2']['answers'] as $answer)
         {
           $insertData = array();  // length should be 0 at this point
           $insertData['questionId'] = $answer['questionId'];
           $insertData['answer'] = $answer['answer'];
           $insertData['movieNightId'] = $insertedMovieNight['id'];
-          $movieNightAnswersDAO->insert($insertData);
+          $this->movieNightAnswersDAO->insert($insertData);
         }
 
         $out = array('movieNight' => $insertedMovieNight, 'bOwnerless' => $userId === false);
@@ -338,21 +317,140 @@ class HomeController extends Controller {
       return false;
   }
 
-  public function detail() {
+  public function detail()
+  {
 
+    if (!isset($_SESSION['detail']))
+    {
+      $_SESSION['detail'] = array();
+    }
+
+    // Is id valid?
+    $movieNight = false;
+    if (isset($_GET['id']))
+    {
+      $movieNight = $this->movieNightsDAO->selectById($_GET['id']);
+    }
+
+    if ($movieNight === false)
+    {
+      $_SESSION['error'] = 'The movie night you wanted to access doesn\'t exist';
+      header('location: index.php');
+      exit();
+    }
+
+    // TODO
     $bOwnerless = isset($_SESSION['ownerlessMovieNightId']);
     // if ownerless, there should be a button to claim it by signing in or signing up.
     $this->set('bOwnerless', $bOwnerless);
 
-    $movieNightId = $this->safeKeySelector($_GET, 'id', '1');
-    $movieNightRow = $this->movieNightsDAO->selectById($movieNightId);
-    $this->set('title', $movieNightRow['name']);
-    $imdbMovieRow = $this->imdbMoviesDAO->selectById($movieNightRow['movie_id']);
-    $details = array('movie' => $imdbMovieRow);
+
+    $this->set('title', 'Your movie night');  // Hidden
+
+    $movieNight['settings'] = $this->movieNightAnswersDAO->selectAllByMovieNight($movieNight['id']);
+    $movie = $this->imdbMoviesDAO->selectById($movieNight['movie_id']);
+    $this->set('movieNight', $movieNight);
+    $details = array('movie' => $movie);
     $this->set('details', $details);
+
+    $bJavascriptCall = isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] === 'application/json';
+    if ($bJavascriptCall)
+    {
+      $content = trim(file_get_contents('php://input'));
+      $jsPost = json_decode($content, true);
+
+      $jsAnswer = array();
+      if (isset($jsPost['action']))
+      {
+        if ($jsPost['action'] === 'updateSettingsRequest')
+        {
+          $this->handleUpdateSettingRequestJs($jsPost, $jsAnswer);
+        }
+        else if ($jsPost['action'] === 'filter')
+        {
+          $this->handleUpdateSettingJs($jsPost, $movieNight, $jsAnswer);
+        }
+        else if ($jsPost['action'] === 'proposeResponse')
+        {
+          $this->handleProposeResponseJs($jsPost, $movieNight, $jsAnswer);
+        }
+      }
+      echo json_encode($jsAnswer);
+      exit();
+    }
+
   }
 
+  private function handleUpdateSettingRequestJs($jsPost, &$jsAnswerRef)
+  {
+    $question = $this->netpicksQuestionsDAO->selectById($jsPost['questionId']);
+    $jsAnswerRef['showQuestion'] = $question;
+    $jsAnswerRef['showQuestion']['answerId'] = $jsPost['answerId'];
+  }
+
+  private function handleUpdateSettingJs($jsPost, $movieNight, &$jsAnswerRef)
+  {
+    $answerId = $jsPost['answerId'];
+    $newAnswer = $jsPost['answer'];
+    $updateResult = $this->movieNightAnswersDAO->updateAnswer($answerId, $newAnswer);
+    if ($updateResult !== false)
+    {
+      $proposedMovie = $this->proposeMovieFromScratch($movieNight['id']);
+      $_SESSION['detail']['proposedMovieId'] = $proposedMovie['id'];
+      $jsAnswerRef['proposeMovie'] = $proposedMovie;
+    }
+  }
+
+  private function handleProposeResponseJs($jsPost, $movieNight, &$jsAnswerRef)
+  {
+    if ($jsPost['answer'] === 'accept')
+    {
+      $udpateData = array();
+      $updateData['movieNightId'] = $movieNight['id'];
+      $updateData['newMovieId'] = $_SESSION['detail']['proposedMovieId'];
+      $result = $this->movieNightsDAO->updateMovieId($updateData);
+      if($result === false)
+      {
+        $_SESSION['error'] = 'Failed to update movie night';
+        header('location:index.php');
+        exit();
+      }
+
+      $jsAnswerRef['movieUpdated'] = true;// reload page
+    }
+    else if ($jsPost['answer'] === 'reject')
+    {
+      $proposedMovie = $this->proposeMovie($_SESSION['detail']['filteredMovieIds']);
+      $_SESSION['detail']['proposedMovieId'] = $proposedMovie['id'];
+      $jsAnswerRef['proposeMovie'] = $proposedMovie;
+    }
+  }
+
+  private function proposeMovieFromScratch ($movieNightId)
+  {
+    // 1. Movies Id's by selected movie options (step one)
+    $movieNight = $this->movieNightsDAO->selectById($movieNightId);
+    $genreIds = array();
+    array_push($genreIds, $this->stepOneMovieOptionsDAO->selectById($movieNight['movie_option_one_id'])['imdb_genre_id']);
+    array_push($genreIds, $this->stepOneMovieOptionsDAO->selectById($movieNight['movie_option_two_id'])['imdb_genre_id']);
+    $filteredMovieIds = $this->imdbMoviesGenresDAO->selectMovieIdsWithGenresId($genreIds);
+
+    $answers = $this->movieNightAnswersDAO->selectAllByMovieNight($movieNight['id']);
+    foreach($answers as $answer)
+    {
+      // get filter id
+      $filterId = $this->filterCategoriesDAO->selectIdByName($answer['filter']);
+      $filteredMovieIds = $this->filterMoviesByCategoryKeywords($filteredMovieIds, $filterId, $answer['answer']);
+    }
+
+    // 2. Apply all filters
+    $_SESSION['detail']['filteredMovieIds'] = $filteredMovieIds;
+    $proposedMovie = $this->proposeMovie($filteredMovieIds);
+    return $proposedMovie;
+  }
 }
+
+
 
 // FIX: On answer, check if unanswered cards would have any results, if not the cards should be removed from the stack.
 // => Therefore there should me way more questions

@@ -8,6 +8,26 @@ class MovieNightsDAO extends DAO {
     parent::__construct('movie_nights');
   }
 
+  /** $data structure:
+   * data['movieNightId']
+   * data['newMovieId'] */
+  public function updateMovieId($data)
+  {
+    $errors = $this->validateUpdateData($data);
+    if (empty($errors))
+    {
+      $sql = "UPDATE " . $this->tableName . " SET movie_id = :newMovieId WHERE id = :movieNightId";
+      $stmt = $this->pdo->prepare($sql);
+      $stmt->bindValue(':newMovieId', $data['newMovieId']);
+      $stmt->bindValue(':movieNightId', $data['movieNightId']);
+      if ($stmt->execute())
+      {
+        return $this->selectById($data['movieNightId']);
+      }
+    }
+    return false;
+  }
+
   public function insert($data)
   {
     $errors = $this->validateInsertData($data);
@@ -51,13 +71,14 @@ class MovieNightsDAO extends DAO {
 
   public function validateInsertData($insertData)
   {
-    $errors = array();
     $toCheck = ['userId', 'movieId', 'name', 'movieOptionOneId', 'movieOptionTwoId', 'nightTypeId'];
-    foreach($toCheck as $key)
-    {
-      $this->checkhasKey($insertData, $key, $errors);
-    }
-    return $errors;
+    return $this->checkIfAllDataPresent($insertData, $toCheck);
+  }
+
+  public function validateUpdateData($updateData)
+  {
+    $toCheck = ['movieNightId', 'newMovieId'];
+    return $this->checkIfAllDataPresent($updateData, $toCheck);
   }
 
   public function deleteById($id)
