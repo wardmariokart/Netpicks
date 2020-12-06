@@ -30,8 +30,9 @@ class UsersController extends Controller
     $this->set('title', 'Sign In');
 
     if (!empty($_POST)) {
-      if (!empty($_POST['email']) && !empty($_POST['password'])) {
-        $existing = $this->UsersDAO->selectByEmail($_POST['email']);
+      $errors = array();
+      if (!empty($_POST['username']) && !empty($_POST['password'])) {
+        $existing = $this->UsersDAO->selectByUsername($_POST['username']);
         if (!empty($existing)) {
           if (password_verify($_POST['password'], $existing['password'])) {
             $_SESSION['user'] = $existing;
@@ -39,15 +40,20 @@ class UsersController extends Controller
             header('location:index.php');
             exit();
           } else {
+            $errors['username'] = 'Unknown username / password';
             $_SESSION['error'] = 'Unknown username / password';
           }
         } else {
+          $errors['username'] = 'Unknown username / password';
           $_SESSION['error'] = 'Unknown username / password';
         }
       } else {
+        $errors['username'] = 'Unknown username / password';
         $_SESSION['error'] = 'Unknown username / password';
       }
+      $this->set('errors', $errors);
     }
+
   }
 
   public function signOut()
@@ -67,12 +73,12 @@ class UsersController extends Controller
 
     if (!empty($_POST)) {
       $errors = array();
-      if (empty($_POST['email'])) {
-        $errors['email'] = 'Please enter your email';
+      if (empty($_POST['username'])) {
+        $errors['username'] = 'Please enter your username';
       } else {
-        $existing = $this->UsersDAO->selectByEmail($_POST['email']);
+        $existing = $this->UsersDAO->selectByUsername($_POST['username']);
         if (!empty($existing)) {
-          $errors['email'] = 'Email address is already in use';
+          $errors['username'] = 'Username address is already in use';
         }
       }
       if (empty($_POST['password'])) {
@@ -83,7 +89,7 @@ class UsersController extends Controller
       }
       if (empty($errors)) {
         $inserteduser = $this->UsersDAO->insert(array(
-          'email' => $_POST['email'],
+          'username' => $_POST['username'],
           'password' => password_hash($_POST['password'], PASSWORD_BCRYPT)
         ));
         if (!empty($inserteduser)) {

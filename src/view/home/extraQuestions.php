@@ -18,7 +18,7 @@
 
 
 
-<section class='test'>
+<section>
   <h2 class="hidden">Questions</h2>
 
   <div class="card-stack">

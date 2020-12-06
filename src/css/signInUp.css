@@ -1,0 +1,90 @@
+.sign-in-up {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sign-in-up__form {
+  margin-top: 5rem;
+  border: 1px solid var(--color-primary);
+  width: 32rem;
+
+  & h3 {
+    font-weight: bold;
+    padding: var(--padding-default);
+    text-transform: uppercase;
+    margin: 0;
+    font-size: var(--font-size-title);
+    margin-bottom: 8rem;
+  }
+
+  & label {
+    display: block;
+    padding: var(--padding-non-uniform);
+    text-transform: uppercase;
+    font-size: var(--font-size-title-smaller);
+  }
+
+  & input {
+    font-family: serif;
+    padding: var(--padding-non-uniform);
+    font-size: var(--font-size-medium);
+    color: var(--color-primary);
+    background-color: var(--color-secondary);
+    display: block;
+    width: 100%;
+    border: 1px solid var(--color-primary);
+    border-left: none;
+    border-right: none;
+  }
+
+  & input[type=submit] {
+    font-family: sans-serif;
+    margin-top: 3rem;
+    background-color: var(--color-primary);
+    color: var(--color-secondary);
+    text-align: center;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background-color .125s ease-out;
+
+    &:hover {
+      background-color: var(--color-primary-light);
+    }
+  }
+}
+
+.sign-in-up__referal {
+  font-size: var(--font-size-small);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  margin-top: 5rem;
+
+  & a {
+    margin-top: .2rem;
+    font-size: var(--font-size-medium);
+    font-weight: bold;
+
+    &:hover {
+      border-bottom: 1px solid var(--color-primary);
+    }
+  }
+}
+
+.validation, .validation--error {
+  display: block;
+  height: var(--font-size-smallest);
+  padding: .6rem 1rem;
+  font-size: var(--font-size-smallest);
+  font-family: sans-serif;
+  text-transform: uppercase;
+  margin-bottom: .3rem;
+}
+
+.validation--error {
+  color: var(--color-error);
+}

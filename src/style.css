@@ -8,6 +8,7 @@
 @import './css/detail.css';
 @import './css/cards.css';
 @import './css/dev.css';
+@import './css/signInUp.css';
 
 /* Documentation: https://preset-env.cssdb.org/features#media-query-ranges */
 
@@ -19,9 +20,8 @@
 
 html {
   box-sizing: inherit;
-  font-size: 62.5%;
   height: 100%;
-  overflow: hidden;
+  font-size: 62.5%;
 }
 
 body {

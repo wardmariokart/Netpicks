@@ -11,9 +11,9 @@ class UsersDAO extends DAO {
   public function insert($data) {
     $errors = $this->getValidationErrors($data);
     if (empty($errors)) {
-      $sql = "INSERT INTO `netpicks_users` (`email`, `password`) VALUES (:email, :password)";
+      $sql = "INSERT INTO `netpicks_users` (`username`, `password`) VALUES (:username, :password)";
       $stmt = $this->pdo->prepare($sql);
-      $stmt->bindValue(':email', $data['email']);
+      $stmt->bindValue(':username', $data['username']);
       $stmt->bindValue(':password', $data['password']);
       if($stmt->execute()) {
         $insertedId = $this->pdo->lastInsertId();
@@ -23,18 +23,18 @@ class UsersDAO extends DAO {
     return false;
   }
 
-  public function selectByEmail($email) {
-    $sql = "SELECT * FROM `netpicks_users` WHERE `email` = :email";
+  public function selectByUsername($username) {
+    $sql = "SELECT * FROM `netpicks_users` WHERE `username` = :username";
     $stmt = $this->pdo->prepare($sql);
-    $stmt->bindValue(':email', $email);
+    $stmt->bindValue(':username', $username);
     $stmt->execute();
     return $stmt->fetch(PDO::FETCH_ASSOC);
   }
 
   public function getValidationErrors($data) {
     $errors = array();
-    if (empty($data['email'])) {
-      $errors['email'] = 'please enter the email';
+    if (empty($data['username'])) {
+      $errors['username'] = 'please enter the username';
     }
     if (empty($data['password'])) {
       $errors['password'] = 'please enter the password';

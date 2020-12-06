@@ -3,10 +3,20 @@
   --white: white;
   --paleBlue: #479dff;
   --color-primary: #1e1e1e;
+  --color-primary-light: #505050;
   --color-primary-lighter: #818181;
   --color-secondary: #f7f6ef;
+  --color-error: rgb(230, 80, 80);
   --divider-padding: .9rem;
 
+  --padding-default: 1.2rem;
+  --padding-non-uniform: .6rem 1.2rem;
+  --font-size-title: 4.5rem;
+  --font-size-title-smaller: 2.5rem;
+
+  --font-size-medium: 1.5rem;
+  --font-size-small: 1.2rem;
+  --font-size-smallest: .8rem;
   /* step two */
   --step-icon-size: .7rem;
 
