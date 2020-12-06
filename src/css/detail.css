@@ -195,12 +195,22 @@
 
 .setting__value {
   font-size: 1.2rem;
+  color: rgb(243, 105, 105);
+  font-weight: bold;
 
   &::after {
     content: '🖊️';
     margin-left: .4rem;
     font-size: .8rem;
   }
+}
+
+.setting__value--yes {
+  color: rgb(37, 194, 37);
+}
+
+.setting__value--no {
+  color: rgb(219, 87, 87);
 }
 
 .update-overlay {

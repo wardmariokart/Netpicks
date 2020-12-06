@@ -40,7 +40,7 @@
           <span class="setting__title">
             <?php echo $setting['filter'];?>
           </span>
-          <span class="setting__value">
+          <span class="setting__value <?php echo 'setting__value--' . $setting['answer'] ?>">
             <?php echo $setting['answer'];?>
           </span>
         </form>
