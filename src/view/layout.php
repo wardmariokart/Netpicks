@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://use.typekit.net/sha2dsc.css">
 </head>
 
-<body>
+<body class="<?php echo 'page--' . $page ?>">
   <nav class="divider">
     <a class="nav__title" href="index.php"><img class="nav__title-logo" src="./assets/images/netpicksLogo-02.png" alt="netpicks"></a>
     <div class="nav__user">

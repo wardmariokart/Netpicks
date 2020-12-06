@@ -10,6 +10,7 @@ footer {
 
 .footer__netpicks-icon {
   object-fit: cover;
+  /* height: 4vmin ; */
   height: 1.7rem;
   width: 1.7rem;
   filter: invert(1);

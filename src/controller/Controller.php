@@ -64,11 +64,14 @@ class Controller {
     require __DIR__ . '/../view/' . strtolower($this->route['controller']) . '/' . $this->route['action'] . '.php';
     $content = ob_get_clean();
     $this->set('content', $content);
+    $this->set('page', $this->route['action']);
   }
 
   private function renderInLayout() {
     extract($this->viewVars, EXTR_OVERWRITE);
     include __DIR__ . '/../view/layout.php';
   }
+
+
 
 }

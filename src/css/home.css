@@ -1,8 +1,9 @@
 
 /* ________________________________________________________________________________________ PLAN ONE */
 
-.movie__still {
-  width: 100%;
+
+.movie__still{
+  width:100%;
 }
 
 .plan-one {
@@ -87,8 +88,9 @@
   text-decoration: none;
 }
 
+
 .movie-nights__title{
-  width: 90%;
+
   font-size: 6rem;
   font-family: aktiv-grotesk,sans-serif;
   font-weight: 700;
@@ -98,6 +100,8 @@
 .movie-night{
 display: flex;
 flex-flow: row;
+padding: 2rem;
+padding-bottom: 0;
 }
 
 .movie-night__info{
@@ -120,5 +124,52 @@ flex-flow: row;
 
 .movie-night__poster{
   width: 33%;
+}
+
+@media only screen and (min-width: 501px) {
+
+  .page--home .movie__picture{
+    width: 60%;
+  }
+
+  .page--home .movie__still{
+    width: 100%;
+  }
+
+  .page--home .movie-nights__item{
+    width: 33.3333%;
+  }
+
+  .page--home .movie-nights{
+  display: flex;
+  flex-flow: row;
+  flex-wrap: wrap;
+  }
+
+  .page--home .movie-night{
+    
+    /* width: 33.3333%; */
+    display: flex;
+  flex-flow: row;
+  }
+
+  .page--home .plan-one__questions{
+    display: flex;
+    flex-flow: row;
+  }
+
+  .page--home .plan-one__text{
+    width: 40%;
+    /* display: flex;
+    flex-flow: column; */
+  }
+
+  .page--home .plan-one__block{
+    margin-left: 2rem;
+  }
+
+  /* .movie-night__poster{
+    width: 33%;
+  } */
 }
 

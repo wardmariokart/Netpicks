@@ -24,8 +24,9 @@ html {
   font-size: 62.5%;
 }
 
+
 body {
-  max-width: 65rem;
+  /* max-width: 65rem; */
   min-height: 100%;
   margin: 0 auto;
 
@@ -33,10 +34,24 @@ body {
   grid-template: min-content auto min-content / 1fr;
 
   background-color: var(--color-secondary);
+  /* background-color: greenyellow; */
   font-family: aktiv-grotesk,sans-serif;
   font-weight: 400;
   color: var(--color-primary);
 }
+
+
+@media only screen and (min-width: 501px) {
+  .page--home {
+    width: 155rem;
+    height: 100%;
+    margin: 0 auto;
+  
+    display: grid;
+    grid-template: min-content auto min-content / 155rem;
+  }
+}
+
 
 .hidden {
   display: none;
@@ -69,3 +84,7 @@ body {
 .divider--no-padding {
   padding: 0;
 }
+
+
+
+
