@@ -532,6 +532,11 @@ class HomeController extends Controller {
     $proposedMovie = $this->proposeMovie($filteredMovieIds);
     return $proposedMovie;
   }
+
+  private function invite()
+  {
+    $this->set('invite', 'Your movie night');
+  }
 }
 
 
