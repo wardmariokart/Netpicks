@@ -23,4 +23,6 @@
   /* cards */
   --stack-offset-y: .5rem;
   --stack-offset-z: .5rem;
+
+  --detail-action-radius: 4rem;
 }

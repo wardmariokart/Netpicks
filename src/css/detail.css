@@ -234,3 +234,43 @@
 .update-overlay__background{
   background-color: black;
 }
+
+/* ____________________________________________________________________ Actions on detail page */
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.action--delete {
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.action--home {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &::after {
+    content: '\2905';
+    transform: rotate(180deg);
+    color: var(--color-secondary);
+    font-size: 2rem;
+  }
+}
+
+.action, .action--delete, .action--home {
+  background-color: var(--color-primary);
+  border-radius: 50%;
+  width: var(--detail-action-radius);
+  height: var(--detail-action-radius);
+  transition: background-color .15s ease-in-out;
+
+  &:hover {
+    background-color: var(--color-primary-light);
+  }
+}

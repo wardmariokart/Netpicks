@@ -19,19 +19,19 @@ class Controller {
     }
     call_user_func(array($this, $this->route['action']));
 
+    if(isset($_SESSION['detail']['ownerlessMovieNightId']) && $this->route['action'] !== 'detail')
+    {
+      $movieNightsDAO = new MovieNightsDAO();
+      $movieNightsDAO->deleteById($_SESSION['detail']['ownerlessMovieNightId']);
+      unset($_SESSION['detail']['ownerlessMovieNightId']);
+    }
+
     foreach($this->sessionLifespans as $lifespan)
     {
       if ($this->route['action'] !== $lifespan['allowedPage'] && isset($_SESSION[$lifespan['property']]))
       {
         unset($_SESSION[$lifespan['property']]);
       }
-    }
-
-    if(isset($_SESSION['ownerlessMovieNightId']) && $this->route['action'] !== 'detail')
-    {
-      $movieNightsDAO = new MovieNightsDAO();
-      $movieNightsDAO->deleteById($_SESSION['ownerlessMovieNightId']);
-      unset($_SESSION['ownerlessMovieNightId']);
     }
   }
 

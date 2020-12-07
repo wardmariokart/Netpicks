@@ -81,4 +81,22 @@
       <div class="book-this"><a href="index.php">Book movie night</a></div>
       <div class="book-other"><a href="index.php">Plan another night</a></div>
   </section>
+  <section>
+    <h3 class="hidden">Movie night actions</h3>
+    <?php if ($bOwnerless): ?>
+      <form action="index.php?page=detail&id="<?php echo $_GET['id'];?> method="POST">
+        <input type="hidden" name="action" value="claim">
+        <input type="submit" value="Save this movie night">
+      </form>
+    <?php endif; ?>
+    <div class="actions divider--top">
+      <a href="index.php" class="action--home"></a>
+      <?php if ($bIsOwner): ?>
+      <form class="" action="index.php?page=detail&id=<?php echo $_GET['id']?>" method="POST">
+        <input type="hidden" name="action" value="delete">
+        <input class="action--delete" type="submit" value="🗑">
+      </form>
+      <?php endif;?>
+    </div>
+  </section>
 </section>

@@ -287,38 +287,36 @@ class HomeController extends Controller {
   private function createMovieNight($stepOne, $userId, $pickedMovieId, $answers)
   {
 
-      // signed in
-      $insertData = array();
-      $insertData['userId'] = $userId === false ? -1 : $userId;
-      $insertData['movieId'] = $_SESSION['step2']['pickedMovieId'];
-      $insertData['movieOptionOneId'] = $stepOne['movieOptionOne']['id'];
-      $insertData['movieOptionTwoId'] = $stepOne['movieOptionTwo']['id'];
-      $insertData['nightTypeId'] = $stepOne['nightType']['id'];
-      $insertData['name'] = 'Temporary movie night name';
-
-      $insertedMovieNight = $this->movieNightsDAO->insert($insertData);
-      if($insertedMovieNight !== false)
+    // signed in
+    $insertData = array();
+    $insertData['userId'] = $userId === false ? -1 : $userId;
+    $insertData['movieId'] = $_SESSION['step2']['pickedMovieId'];
+    $insertData['movieOptionOneId'] = $stepOne['movieOptionOne']['id'];
+    $insertData['movieOptionTwoId'] = $stepOne['movieOptionTwo']['id'];
+    $insertData['nightTypeId'] = $stepOne['nightType']['id'];
+    $insertData['name'] = 'Temporary movie night name';
+    $insertedMovieNight = $this->movieNightsDAO->insert($insertData);
+    if($insertedMovieNight !== false)
+    {
+      $_SESSION['info'] = 'Movie night has been created';
+      // Now add the given answers
+      foreach($_SESSION['step2']['answers'] as $answer)
       {
-        $_SESSION['info'] = 'Movie night has been created';
-        // Now add the given answers
-
-        foreach($_SESSION['step2']['answers'] as $answer)
-        {
-          $insertData = array();  // length should be 0 at this point
-          $insertData['questionId'] = $answer['questionId'];
-          $insertData['answer'] = $answer['answer'];
-          $insertData['movieNightId'] = $insertedMovieNight['id'];
-          $this->movieNightAnswersDAO->insert($insertData);
-        }
-
-        $out = array('movieNight' => $insertedMovieNight, 'bOwnerless' => $userId === false);
-        return $out;
+        $insertData = array();  // length should be 0 at this point
+        $insertData['questionId'] = $answer['questionId'];
+        $insertData['answer'] = $answer['answer'];
+        $insertData['movieNightId'] = $insertedMovieNight['id'];
+        $this->movieNightAnswersDAO->insert($insertData);
       }
-      return false;
+      $out = array('movieNight' => $insertedMovieNight, 'bOwnerless' => $userId === false);
+      return $out;
+    }
+    return false;
   }
 
   public function detail()
   {
+      $this->set('title', 'Your movie night');  // Hidden
 
     if (!isset($_SESSION['detail']))
     {
@@ -339,11 +337,17 @@ class HomeController extends Controller {
       exit();
     }
 
-    // TODO
-    $bOwnerless = isset($_SESSION['ownerlessMovieNightId']);
-    // if ownerless, there should be a button to claim it by signing in or signing up.
+    // Can the visitor delete this post?
+    $bIsOwner = false;
+    if (isset($_SESSION['user']))
+    {
+      $bIsOwner = $_SESSION['user']['id'] === $movieNight['user_id'];
+    }
+    $this->set('bIsOwner', $bIsOwner);
+
+    // is it an ownerless movie night?
+    $bOwnerless = isset($_SESSION['detail']['ownerlessMovieNightId']);
     $this->set('bOwnerless', $bOwnerless);
-    $this->set('title', 'Your movie night');  // Hidden
 
 
     $settings = $this->movieNightAnswersDAO->selectAllByMovieNight($movieNight['id']);
@@ -380,6 +384,20 @@ class HomeController extends Controller {
       exit();
     }
 
+
+    if (!empty($_POST['action']))
+    {
+      if ($_POST['action'] === 'delete')
+      {
+        $deleteId = $_GET['id'];
+
+        // check if you should be able to delete -> must be either ownerless OR user must be owner of movienight
+        $this->movieNightsDAO->deleteById($_GET['id']);
+        $_SESSION['info'] = 'Movie night has been deleted';
+        header('location: index.php');
+        exit();
+      }
+    }
   }
 
   private function transformAnswerOfSettings($settings)
