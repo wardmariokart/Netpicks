@@ -4,55 +4,55 @@
 
   <form action="index.php" method="GET" class="plan-one__form">
     <input type="hidden" name="action" value="planMovieNight">
-    <div class="plan-one__questions">
 
-      <!-- <img class="movie__still" src="./assets/images/isleOfDogs.jpg" alt="movie still from isle of dogs"> -->
+    <div class="plan-one__questions">
       <picture class="movie__picture">
         <source media="(max-width: 500px)" srcset="./assets/images/isleOfDogs.jpg">
         <source media="(min-width: 501px)" srcset="./assets/images/moonriseKingdom.jpg">
         <img src="./assets/images/moonriseKingdom.jpg" alt="Wes Anderson Movie still" class="movie__still">
       </picture>
-      <div class="plan-one__text">
 
+      <div class="plan-one__text">
         <h2 class="plan-one__title divider--top-bottom">Plan my night</h2>
-        <div class="plan-one__block">
-          <span>I'm planning a movie night for</span>
-          <select name="nightType" id="nightType" class="plan-one__drop-down">
-            <?php foreach($nightTypes as $night): ?>
-              <option value="<?php echo $night['value'];?>"><?php echo $night['display'] ?></opton>
-            <? endforeach; ?>
-          </select>
-        </div>
-  
-        <div class="plan-one__block">
-          <span>During the movie we want to be</span>
-          <select name="movieOptionOne" id="movieOptionOne" class="plan-one__drop-down">
-            <?php foreach($stepOneOptions as $moveOption): ?>
-              <option value="<?php echo $moveOption['value'];?>"><?php echo $moveOption['display'] ?></opton>
-            <? endforeach; ?>
-          </select>
-        </div>
-        <!-- <img class="movie__still" src="./assets/images/isleOfDogs.jpg" alt="movie still from isle of dogs"> -->
-        
-  
-        <div class="plan-one__block">
-          <span>but </span>
-          <select name="movieOptionTwo" id="movieOptionTwo" class="plan-one__drop-down">
-            <?php foreach($stepOneOptions as $moveOption): ?>
-              <option value="<?php echo $moveOption['value'];?>"><?php echo $moveOption['display'] ?></opton>
-            <? endforeach; ?>
-          </select>
-          <span>is something we can't</span>
-          <span>do without.</span>
-        </div>
-        <div class="plan-one__submit-wrapper divider-topAndBottom">
-          <input class="plan-one__submit" type="submit" value="Start planning">
+        <div class="fill-in">
+          <div class="fill-in__dropdown">
+            <div class="plan-one__block">
+              <span>I'm planning a movie night for</span>
+              <select name="nightType" id="nightType" class="plan-one__drop-down">
+                <?php foreach($nightTypes as $night): ?>
+                  <option value="<?php echo $night['value'];?>"><?php echo $night['display'] ?></opton>
+                <? endforeach; ?>
+              </select>
+            </div>
+      
+            <div class="plan-one__block">
+              <span>During the movie we want to be</span>
+              <select name="movieOptionOne" id="movieOptionOne" class="plan-one__drop-down">
+                <?php foreach($stepOneOptions as $moveOption): ?>
+                  <option value="<?php echo $moveOption['value'];?>"><?php echo $moveOption['display'] ?></opton>
+                <? endforeach; ?>
+              </select>
+            </div>
+            <!-- <img class="movie__still" src="./assets/images/isleOfDogs.jpg" alt="movie still from isle of dogs"> -->
+            
+      
+            <div class="plan-one__block">
+              <span>but </span>
+              <select name="movieOptionTwo" id="movieOptionTwo" class="plan-one__drop-down">
+                <?php foreach($stepOneOptions as $moveOption): ?>
+                  <option value="<?php echo $moveOption['value'];?>"><?php echo $moveOption['display'] ?></opton>
+                <? endforeach; ?>
+              </select>
+              <span>is something we can't</span>
+              <span>do without.</span>
+            </div>
+          </div>
+          <div class="plan-one__submit-wrapper divider--top-bottom">
+            <input class="plan-one__submit" type="submit" value="Start planning">
+          </div>
         </div>
       </div>
     </div>
-    
-    
-    <!-- </div> -->
   </form>
 </section>
 

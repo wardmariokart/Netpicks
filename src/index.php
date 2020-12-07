@@ -25,6 +25,11 @@ $routes = array(
     'action' => 'detail'
   ),
 
+  'invite' => array(
+    'controller' => 'Home',
+    'action' => 'invite'
+  ),
+
   'signIn' => array(
     'controller' => 'Users',
     'action' => 'signIn'

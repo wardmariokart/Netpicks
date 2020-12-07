@@ -66,13 +66,17 @@
 
   &:active {
     color: var(--color-primary);
+    outline: none;
+    border: none;
   }
+
+  &:focus {outline:0;}
 }
 
 /* ________________________________________________________________________________________ MOVIE NIGHT OVERVIEW */
 
 .movie-nights{
-  margin-top: 15rem;
+  margin-top: 8rem;
 }
 
 .movie-nights__item {
@@ -164,12 +168,22 @@ padding-bottom: 0;
     flex-flow: column; */
   }
 
-  .page--home .plan-one__block{
-    margin-left: 2rem;
+  .page--home .fill-in{
+    display: flex;
+    height: 78.5%;
+    flex-flow: column;
+    display: flex;
+    justify-content: flex-end;
+
   }
 
-  /* .movie-night__poster{
-    width: 33%;
-  } */
+  .page--home .fill-in__dropdown{
+    padding-bottom: 2rem;
+  }
+
+  .page--home .plan-one__block{
+    margin-left: 2rem;
+    padding-bottom: 1rem;
+  }
 }
 

@@ -3,6 +3,7 @@ footer {
   background-color: var(--color-primary);
   color: var(--color-secondary);
   display: flex;
+  flex-flow: row;
   justify-content: space-between;
   align-items: center;
   padding: .5rem 1rem;
@@ -25,4 +26,20 @@ footer {
     content: '\00A9';
     padding-right: .2rem;
   }
+}
+
+@media only screen and (min-width: 501px) {
+  .page--home .footer__netpicks-icon {
+  object-fit: cover;
+  /* height: 4vmin ; */
+  height: 3rem;
+  width: 3rem;
+  filter: invert(1);
+  }
+
+  .page--home .footer__copyright{
+    font-size: 1.7rem;
+  }
+
+
 }
