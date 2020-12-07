@@ -18,4 +18,21 @@ class StepOneMovieOptionsDAO extends DAO {
     return $stmt->fetch(PDO::FETCH_ASSOC);
   }
 
+  public function selectAccesoireByOptionId($optionId)
+  {
+    $sql = "SELECT `netpicks_accessoires`.* FROM `movie_options` INNER JOIN `netpicks_accessoires` ON `movie_options`.`accessoire_id` = `netpicks_accessoires`.`id` WHERE `movie_options`.`id` = :optionId";
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->bindValue(':optionId', $optionId);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+  }
+
+  public function selectSnackByOptionId($optionId)
+  {
+    $sql = "SELECT `netpicks_snacks`.* FROM `movie_options` INNER JOIN `netpicks_snacks` ON `movie_options`.`snack_id` = `netpicks_snacks`.`id` WHERE `movie_options`.`id` = :optionId";
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->bindValue(':optionId', $optionId);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+  }
 }

@@ -24,24 +24,28 @@
                 <? endforeach; ?>
               </select>
             </div>
-      
+
             <div class="plan-one__block">
-              <span>During the movie we want to be</span>
+              <span>During the movie we want to </span>
               <select name="movieOptionOne" id="movieOptionOne" class="plan-one__drop-down">
-                <?php foreach($stepOneOptions as $moveOption): ?>
-                  <option value="<?php echo $moveOption['value'];?>"><?php echo $moveOption['display'] ?></opton>
+                <?php foreach($stepOneOptions as $movieOption): ?>
+                  <?php if ($movieOption['choise_index'] === 0): ?>
+                    <option value="<?php echo $movieOption['value'];?>"><?php echo $movieOption['display'] ?></opton>
+                  <?php endif; ?>
                 <? endforeach; ?>
               </select>
             </div>
             <!-- <img class="movie__still" src="./assets/images/isleOfDogs.jpg" alt="movie still from isle of dogs"> -->
-            
-      
+
+
             <div class="plan-one__block">
               <span>but </span>
               <select name="movieOptionTwo" id="movieOptionTwo" class="plan-one__drop-down">
-                <?php foreach($stepOneOptions as $moveOption): ?>
-                  <option value="<?php echo $moveOption['value'];?>"><?php echo $moveOption['display'] ?></opton>
-                <? endforeach; ?>
+                <?php foreach($stepOneOptions as $movieOption): ?>
+                  <?php if ($movieOption['choise_index'] === 1): ?>
+                    <option value="<?php echo $movieOption['value'];?>"><?php echo $movieOption['display'] ?></opton>
+                  <?php endif?>
+                  <? endforeach; ?>
               </select>
               <span>is something we can't</span>
               <span>do without.</span>
