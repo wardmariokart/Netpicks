@@ -4,10 +4,10 @@ export class NoMoviesFoundCard extends Card {
   constructor()
   {
     super();
-    this.answers.push({answer: 'tryAgain', evaluateFunc: () => this.location.x < - 300, throwTarget: {x: - 1000, y: 0}});
-    this.answers.push({answer: 'closestMovie', evaluateFunc: () => this.location.x > 300, throwTarget: {x: 1000, y: 0}});
-
     this.linkWithElement(null);
+
+    this.registerAnswer('tryAgain', () => this.location.x < - 250, {x: - 1000, y: 0}, 'left', 'Lets try that again');
+    this.registerAnswer('closestMovie', () => this.location.x > 250, {x: 1000, y: 0}, 'right', 'Closest recommendation');
   }
 
   createElement()

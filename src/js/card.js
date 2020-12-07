@@ -32,6 +32,7 @@ export class Card {
       this.createElement();
     }
   }
+
   evaluateAnswerTriggers()
   {
     let answerToTrigger = null;
@@ -45,6 +46,21 @@ export class Card {
 
     return answerToTrigger;
     //return Math.abs(this.location.x) > this.dropOffTreshold;
+  }
+
+  registerAnswer(answerValue, evaluateFunc, throwTarget, direction, display)
+  {
+    this.answers.push({direction, answer: answerValue, throwTarget, evaluateFunc});
+    let $answerWrapper = this.$element.querySelector('.card__answers');
+
+    if ($answerWrapper === null)
+    {
+      $answerWrapper = document.createElement('div');
+      $answerWrapper.classList.add('card__answers');
+      $answerWrapper.innerHTML = '<img class="answer__icon" src="./assets/images/icon-pan.svg" alt="pan-icon">';
+      this.$element.appendChild($answerWrapper);
+    }
+    $answerWrapper.innerHTML += `<div class="answer--${direction}">${display}</div>`;
   }
 
   get location()

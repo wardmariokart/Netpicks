@@ -62,7 +62,6 @@
           <?php foreach($accessoires as $accessoire):?>
             <li class="extra"><img class="extra__icon" src="./assets/images/<?php echo $accessoire['file_path'];?>" alt="<?php echo $accessoire['name']?>"></li>
           <?php endforeach?>
-
           </ul>
       </article>
   </section>

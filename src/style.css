@@ -25,7 +25,6 @@ html {
   font-size: 62.5%;
 }
 
-
 body {
   max-width: 65rem;
   min-height: 100%;
@@ -48,7 +47,7 @@ body {
     max-width: 155rem;
     height: 100%;
     margin: 0 auto;
-  
+
     display: grid;
     grid-template: min-content auto min-content / 155rem;
   }

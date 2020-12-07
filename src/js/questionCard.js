@@ -17,9 +17,10 @@ export class QuestionCard extends Card {
       }
       this.linkWithElement(null);
     }
-    this.answers.push({answer: 'exclude', evaluateFunc: () => this.location.x < - 300, throwTarget: {x: - 1000, y: 0}});
-    this.answers.push({answer: 'include', evaluateFunc: () => this.location.x > 300, throwTarget: {x: 1000, y: 0}});
-    this.answers.push({answer: 'skip', evaluateFunc: () => this.location.y < - 300, throwTarget: {x: 0, y: - 1000}});
+
+    this.registerAnswer('exclude', () => this.location.x < - 250, {x: - 1000, y: 0}, 'left', 'no, thank you');
+    this.registerAnswer('include', () => this.location.x > 250, {x: 1000, y: 0}, 'right', 'yes, please');
+    this.registerAnswer('skip', () => this.location.y < - 250, {x: 0, y: - 1000}, 'up', 'skip question');
   }
 
   createElement()

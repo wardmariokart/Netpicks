@@ -4,12 +4,11 @@ import anime from './lib/anime.es.js';
 export class ProposedMovieCard extends Card {
   constructor(movieInfo)
   {
-    super(); // always make a new element
+    super();
     this.movieInfo = movieInfo;
-    this.answers.push({answer: 'reject', evaluateFunc: () => this.location.x < - 300, throwTarget: {x: - 1000, y: 0}});
-    this.answers.push({answer: 'accept', evaluateFunc: () => this.location.x > 300, throwTarget: {x: 1000, y: 0}});
-
     this.linkWithElement(null);
+    this.registerAnswer('accept', () => this.location.x > 250, {x: 1000, y: 0}, 'right', 'Looks good');
+    this.registerAnswer('reject', () => this.location.x < - 250, {x: - 1000, y: 0}, 'left', 'Different movie, please');
   }
 
   createElement()
