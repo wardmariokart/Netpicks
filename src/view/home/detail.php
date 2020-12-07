@@ -50,18 +50,19 @@
       <article class="extras">
           <h3 class="extras__title">Suggested snacks:</h3>
           <ul class="extra__list">
-              <ol class="extra"><img class="extra__icon" src="./assets/temporary/noun_chips_3614132.png" alt="snack"></ol>
-              <ol class="extra"><img class="extra__icon" src="./assets/temporary/noun_Popcorn_3614154.png" alt="snack"></ol>
-              <ol class="extra"><img class="extra__icon" src="./assets/temporary/noun_Milkshake_3614128.png" alt="snack"></ol>
+          <?php foreach($snacks as $snack):?>
+            <li class="extra"><img class="extra__icon" src="./assets/images/<?php echo $snack['file_path'];?>" alt="<?php echo $snack['name']?>"></li>
+          <?php endforeach?>
           </ul>
       </article>
       <div class="divider-horizontal"></div>
       <article class="extras">
-          <h3 class="extras__title">Suggested asseccoires:</h3>
-          <ul class="extra__list">
-              <ol class="extra"><img class="extra__icon" src="./assets/temporary/noun_chips_3614132.png" alt="asseccoires"></ol>
-              <ol class="extra"><img class="extra__icon" src="./assets/temporary/noun_chips_3614132.png" alt="asseccoires"></ol>
-              <ol class="extra"><img class="extra__icon" src="./assets/temporary/noun_chips_3614132.png" alt="asseccoires"></ol>
+        <h3 class="extras__title">Suggested asseccoires:</h3>
+        <ul class="extra__list">
+          <?php foreach($accessoires as $accessoire):?>
+            <li class="extra"><img class="extra__icon" src="./assets/images/<?php echo $accessoire['file_path'];?>" alt="<?php echo $accessoire['name']?>"></li>
+          <?php endforeach?>
+
           </ul>
       </article>
   </section>

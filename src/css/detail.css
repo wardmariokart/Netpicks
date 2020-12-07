@@ -195,7 +195,6 @@
 
 .setting__value {
   font-size: 1.2rem;
-  color: rgb(243, 105, 105);
   font-weight: bold;
 
   &::after {
@@ -211,6 +210,10 @@
 
 .setting__value--no {
   color: rgb(219, 87, 87);
+}
+
+.setting__value--allowed {
+  color: var(--color-primary-lightest);
 }
 
 .update-overlay {

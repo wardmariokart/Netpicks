@@ -391,6 +391,10 @@ class HomeController extends Controller {
     $this->set('movieNight', $movieNight);
     $details = array('movie' => $movie);
     $this->set('details', $details);
+    $snacksAndAccessoires = $this->getAccessoiresAndSnacks($movieNight['id']);
+    $this->set('accessoires', $snacksAndAccessoires['accessoires']);
+    $this->set('snacks', $snacksAndAccessoires['snacks']);
+
 
     $bJavascriptCall = isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] === 'application/json';
     if ($bJavascriptCall)
@@ -570,7 +574,26 @@ class HomeController extends Controller {
   {
     $this->set('invite', 'Your movie night');
   }
+
+  private function getAccessoiresAndSnacks($movieNightId)
+  {
+    $movieNight = $this->movieNightsDAO->selectById($movieNightId);
+    $accessoires = array();
+    $snacks = array();
+
+    array_push($accessoires, $this->stepOneMovieOptionsDAO->selectAccessoireByOptionId($movieNight['movie_option_one_id']));
+    array_push($accessoires, $this->stepOneMovieOptionsDAO->selectAccessoireByOptionId($movieNight['movie_option_two_id']));
+    array_push($accessoires, $this->nightTypesDAO->selectAccessoireByNightTypeId($movieNight['night_type_id']));
+
+    array_push($snacks, $this->stepOneMovieOptionsDAO->selectSnackByOptionId($movieNight['movie_option_one_id']));
+    array_push($snacks, $this->stepOneMovieOptionsDAO->selectSnackByOptionId($movieNight['movie_option_two_id']));
+    array_push($snacks, $this->nightTypesDAO->selectSnackByNightTypeId($movieNight['night_type_id']));
+
+    return ['accessoires' => $accessoires, 'snacks' => $snacks];
+  }
 }
+
+
 
 
 
