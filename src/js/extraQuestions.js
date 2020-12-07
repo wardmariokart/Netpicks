@@ -1,6 +1,7 @@
 import CardsInteractionManager from './cardsInteractionManager.js';
 import {QuestionCard} from './questionCard.js';
 import {ProposedMovieCard} from './proposedMovieCard.js';
+import {NoMoviesFoundCard} from './noMoviesFoundCard.js';
 import {formDataToJson, postToPHP} from './helpers.js';
 
 let manager = null;
@@ -17,6 +18,12 @@ export const extraQuestionsInit = () =>
   manager = new CardsInteractionManager();
 
   createCardForExisitingElements();
+
+
+ /*  setTimeout(() => {
+    const card = manager.cards[0];
+    manager.cards[4].throwOut(card.answers[1], true, true);
+  }, 1000); */
 };
 
 const createCardForExisitingElements = () =>
@@ -42,24 +49,75 @@ const handleCardAnswer = async event =>
 
   if ('updateMoviesLeft' in phpResponse)
   {
-    const $moviesLeft = document.querySelector('.filtered__movies-left');
-    $moviesLeft.textContent = phpResponse['updateMoviesLeft'];
+    handlePhpUpdateMoviesLeft(phpResponse);
   }
 
   if ('proposeMovie' in phpResponse)
   {
-    const movieCard = new ProposedMovieCard(phpResponse['proposeMovie']);
-    manager.registerCard(movieCard);
-    movieCard.addSubmitListener(handleCardAnswer);
+    handlePhpProposeMovie(phpResponse);
+  }
+
+  if ('noMoviesFound' in phpResponse)
+  {
+    handlePhpNoMoviesFound(phpResponse);
   }
 
   if ('redirect' in phpResponse)
   {
-    const currentUrl = window.location.href;
-    const noQueryString = currentUrl.slice(0, currentUrl.indexOf('?'));
-    const url = `${noQueryString}${phpResponse['redirect']['url']}`;
-    window.location.replace(url);
+    handlePhpRedirect(phpResponse);
+    console.log('redirect');
   }
 };
 
+const handlePhpUpdateMoviesLeft = phpResponse =>
+{
+  const $moviesLeft = document.querySelector('.filtered__movies-left');
+  $moviesLeft.textContent = phpResponse['updateMoviesLeft']['count'];
+};
+
+const handlePhpProposeMovie = phpResponse =>
+{
+  const movieCard = new ProposedMovieCard(phpResponse['proposeMovie']);
+  manager.registerCard(movieCard);
+  movieCard.addSubmitListener(handleCardAnswer);
+};
+
+const handlePhpNoMoviesFound = phpResponse =>
+{
+  phpResponse;
+  const autoThrowDelay = 350;
+
+  const createNoMoviesFoundCard = () =>
+  {
+    const noMoviesFoundCard = new NoMoviesFoundCard();
+    manager.registerCard(noMoviesFoundCard);
+    noMoviesFoundCard.addSubmitListener(handleCardAnswer);
+  };
+
+  // Throw away all other cards => don't answer
+  manager.cards.forEach((card, index, array) =>
+  {
+    if (card.$element.classList.contains('card--question'))
+    {
+      const bLastCard = array.length - 1 === index;
+      setTimeout(() => {
+        card.throwOut(card.answers[2], false, true);
+        if (bLastCard)
+        {
+          setTimeout(() => {
+            createNoMoviesFoundCard();
+          }, autoThrowDelay * 2);
+        }
+      }, autoThrowDelay * (array.length - 1 - index));
+    }
+  });
+};
+
+const handlePhpRedirect = phpResponse =>
+{
+  const currentUrl = window.location.href;
+  const noQueryString = currentUrl.slice(0, currentUrl.indexOf('?'));
+  const url = `${noQueryString}${phpResponse['redirect']['url']}`;
+  window.location.replace(url);
+};
 

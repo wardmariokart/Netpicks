@@ -91,7 +91,7 @@ class HomeController extends Controller {
 
       $this->set('stepOne', $stepOne);
       $this->setupQuestionCards($stepOne);
-      $this->setupFilteredMovieIds($stepOne);
+      $_SESSION['step2']['filteredMovieIds'] = $this->selectMovieIdsByStepOneInputs($stepOne);
     }
 
     // Javascript action
@@ -99,28 +99,14 @@ class HomeController extends Controller {
     {
       $content = trim(file_get_contents('php://input'));
       $data = json_decode($content, true);
+      $jsAnswer = array();
 
       if ($data['action'] === 'filter')
       {
-        $jsAnswer = array();
-        $this->saveAnswer($data['questionId'], $data['answer']);
-        $this->handleFilterActionJs($data);
-        $jsAnswer['updateMoviesLeft'] = count($_SESSION['step2']['filteredMovieIds']);
-
-
-        if (intval($data['nbQuestionsLeft']) === 0)
-        {
-          // Pick & propose a movie
-          $jsAnswer['proposeMovie'] = $this->proposeMovie($_SESSION['step2']['filteredMovieIds']);
-          $_SESSION['step2']['pickedMovieId'] = $jsAnswer['proposeMovie']['id']; // saved so user cannot mess with this value (if he wanted to)
-        }
-        echo json_encode($jsAnswer);
-        exit();
+        $this->handleFilterActionJs($data, $jsAnswer);
       }
       else if ($data['action'] === 'proposeResponse')
       {
-
-        $jsAnswer = array();
 
         if ($data['answer'] === 'reject')
         {
@@ -141,11 +127,23 @@ class HomeController extends Controller {
           }
           // insert new post and go to that post
           $jsAnswer['redirect'] = array('url' => '?page=detail&id=' . $result['movieNight']['id']);
-
         }
-
-        echo json_encode($jsAnswer);
-        exit();
+      }
+      else if ($data['action'] === 'noMovieFoundResponse')
+      {
+          if ($data['answer'] === 'tryAgain')
+          {
+            $jsAnswer['redirect'] = array('url' => '?page=extraQuestions&nightType=' . $_GET['nightType'] . '&movieOptionOne=' . $_GET['movieOptionOne'] . '&movieOptionTwo=' . $_GET['movieOptionTwo']);
+          }
+          else if ($data['answer'] === 'closestMovie')
+          {
+            $proposedMovie = $this->proposeMovieFromScratch($stepOne, $_SESSION['step2']['answers']);
+            if($proposedMovie !== false)
+            {
+              $jsAnswer['proposeMovie'] = $proposedMovie;
+              $_SESSION['step2']['pickedMovieId'] = $jsAnswer['proposeMovie']['id']; // saved so user cannot mess with this value (if he wanted to)
+            }
+          }
       }
       else if ($data['action'] === 'confirmPick')
       {
@@ -163,6 +161,9 @@ class HomeController extends Controller {
           exit();
         }
       }
+
+      echo json_encode($jsAnswer);
+      exit();
     }
 
     // php action
@@ -196,12 +197,12 @@ class HomeController extends Controller {
     array_push($_SESSION['step2']['answers'], array('questionId' => $questionId, 'answer' => $answerStr));
   }
 
-  private function setupFilteredMovieIds($stepOneInputs)
+  private function selectMovieIdsByStepOneInputs($stepOneInputs)
   {
     $genresIds = array();
     if(isset($stepOneInputs['movieOptionOne'])) array_push($genresIds, $stepOneInputs['movieOptionOne']['imdb_genre_id']);
     if(isset($stepOneInputs['movieOptionTwo'])) array_push($genresIds, $stepOneInputs['movieOptionTwo']['imdb_genre_id']);
-    $_SESSION['step2']['filteredMovieIds'] = $this->imdbMoviesGenresDAO->selectMovieIdsWithGenresId($genresIds);
+    return $this->imdbMoviesGenresDAO->selectMovieIdsWithGenresId($genresIds);
   }
 
   private function setupQuestionCards($stepOneInputs)
@@ -218,16 +219,49 @@ class HomeController extends Controller {
     unset($_SESSION['step2']['filteredMovieIds']);
   }
 
-  private function handleFilterActionJs($data)
+  private function handleFilterActionJs($data, &$jsAnswer)
   {
     if (isset($data['filterType']))
     {
-
       // take current movieIds and apply a filter or reject to it.
       $answer = $data['answer'];
       if ($answer === 'include' || $answer === 'exclude')
       {
         $_SESSION['step2']['filteredMovieIds'] = $this->filterMoviesByCategoryKeywords($_SESSION['step2']['filteredMovieIds'], $data['filterType'], $answer);
+      }
+
+      $jsAnswer['updateMoviesLeft'] = array ();
+      $filteredCount = count($_SESSION['step2']['filteredMovieIds']);
+      $jsAnswer['updateMoviesLeft']['count'] = $filteredCount;
+
+      if ($filteredCount === 0)
+      {
+        $jsAnswer['noMoviesFound'] = true;
+        $questionsToAutoSkip = array();
+        $questionsLeft = explode(',',$data['questionsLeft']);
+        $questionsToAutoSkip = array_merge([$data['questionId']], $questionsLeft);
+        foreach($questionsToAutoSkip as $questionId)
+        {
+          $this->saveAnswer($questionId, 'skip');
+        }
+        $jsAnswer['noMoviesFound'] = true;
+        return;
+      }
+      else
+      {
+        $this->saveAnswer($data['questionId'], $data['answer']);
+
+        $bWasLastQuestion = intval($data['nbQuestionsLeft']) === 0;
+        if ($bWasLastQuestion)
+        {
+          // Pick & propose a movie
+          $proposedMovie = $this->proposeMovie($_SESSION['step2']['filteredMovieIds']);
+          if($proposedMovie !== false)
+          {
+            $jsAnswer['proposeMovie'] = $proposedMovie;
+            $_SESSION['step2']['pickedMovieId'] = $jsAnswer['proposeMovie']['id']; // saved so user cannot mess with this value (if he wanted to)
+          }
+        }
       }
     }
   }
@@ -278,7 +312,7 @@ class HomeController extends Controller {
     }
     else if ($answer === 'skip')
     {
-      // nothing happens. But wanted to put this here for clarification
+      $outMovies = $inMovieIds;
     }
 
     return $outMovies;
@@ -428,7 +462,7 @@ class HomeController extends Controller {
     $updateResult = $this->movieNightAnswersDAO->updateAnswer($answerId, $newAnswer);
     if ($updateResult !== false)
     {
-      $proposedMovie = $this->proposeMovieFromScratch($movieNight['id']);
+      $proposedMovie = $this->proposeMovieFromMovieNightId($movieNight['id']);
       $_SESSION['detail']['proposedMovieId'] = $proposedMovie['id'];
       $jsAnswerRef['proposeMovie'] = $proposedMovie;
     }
@@ -459,7 +493,25 @@ class HomeController extends Controller {
     }
   }
 
-  private function proposeMovieFromScratch ($movieNightId)
+  // Note: function is meant to be used when on page 'extraQuestions.php'
+  private function proposeMovieFromScratch($stepOneInputs, $savedAnswers)
+  {
+    $filteredMovieIds = $this->selectMovieIdsByStepOneInputs($stepOneInputs);
+
+    foreach($savedAnswers as $answer)
+    {
+      $filterId = $this->netpicksQuestionsDAO->selectById($answer['questionId'])['filter_category_id'];
+      $filteredMovieIds = $this->filterMoviesByCategoryKeywords($filteredMovieIds, $filterId, $answer['answer']);
+    }
+
+    $_SESSION['step2']['filteredMovieIds'] = $filteredMovieIds;
+    $proposedMovie = $this->proposeMovie($filteredMovieIds);
+    return $proposedMovie;
+  }
+
+
+  // Note: function is meant to be used when on page 'detail.php'
+  private function proposeMovieFromMovieNightId ($movieNightId)
   {
     // 1. Movies Id's by selected movie options (step one)
     $movieNight = $this->movieNightsDAO->selectById($movieNightId);
@@ -476,7 +528,6 @@ class HomeController extends Controller {
       $filteredMovieIds = $this->filterMoviesByCategoryKeywords($filteredMovieIds, $filterId, $answer['answer']);
     }
 
-    // 2. Apply all filters
     $_SESSION['detail']['filteredMovieIds'] = $filteredMovieIds;
     $proposedMovie = $this->proposeMovie($filteredMovieIds);
     return $proposedMovie;

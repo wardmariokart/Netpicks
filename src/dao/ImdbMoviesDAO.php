@@ -7,7 +7,13 @@ class ImdbMoviesDAO extends DAO {
     parent::__construct('imdb_movies');
   }
 
-
+  public function selectAllIdsWithoutPoster()
+  {
+    $sql = "SELECT `id` FROM " . $this->tableName . " WHERE `poster` = ''";
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_COLUMN,0);
+  }
 
   public function selectByGenreIds($genreIds, $bOnlyMovieIds = false, $limit = 50000)
   {

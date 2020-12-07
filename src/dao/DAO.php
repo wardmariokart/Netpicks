@@ -65,5 +65,14 @@ class DAO {
     $stmt->bindValue(':id', $id);
     $stmt->execute();
   }
+
+  public function deleteWhereColumn($columnToDelete, $whereValue)
+  {
+    $sql = "DELETE FROM " . $this->tablename . " WHERE :columnName = :whereValue";
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->bindValue(':columnName', $columnToDelete);
+    $stmt->bindValue(':whereValue', $whereValue);
+    $stmt->execute();
+  }
 }
  ?>

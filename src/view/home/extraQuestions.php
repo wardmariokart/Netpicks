@@ -37,7 +37,8 @@
           <input type="hidden" name="answer" value="you didnt update this in js...">
           <input type="hidden" name="questionNumber" value="<?php echo $index; ?>">
           <input type="hidden" name="questionId" value="<?php echo $question['id']?>">
-          <input type="hidden" name="nbQuestionsLeft" value="you didnt update this in js...">
+          <input type="hidden" name="nbQuestionsLeft" value="you didnt update this in js..."> <!-- TODO replace "nbQuestionsLeft" with count(...) in controller.php -->
+          <input type="hidden" name="questionsLeft" value="you didnt update this in js...">
         </form>
       </article>
     <?php endforeach; ?>

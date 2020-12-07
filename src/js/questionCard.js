@@ -1,4 +1,5 @@
 import {Card} from './card.js';
+import {setInputValueByName} from './helpers.js';
 
 export class QuestionCard extends Card {
   constructor(constructObj)
@@ -40,6 +41,29 @@ export class QuestionCard extends Card {
     this.setupElement($element, $futureParent);
   }
 
+  throwOut(triggeredAnswer, bSubmit = true, bByComputer = false)
+  {
+    this.updateQuestionsLeftInput();
+    super.throwOut(triggeredAnswer, bSubmit, bByComputer);
+  }
+
+  updateQuestionsLeftInput()
+  {
+    const $cardForm = this.$element.querySelector('form');
+    if ($cardForm)
+    {
+      setInputValueByName($cardForm, 'nbQuestionsLeft', this.$element.parentElement.querySelectorAll('.card').length - 1); // -1 because don't count yourself
+
+
+      // get all other cards under same parent
+      let otherQuestions = this.$element.parentElement.querySelectorAll('.card--question');
+      otherQuestions = Array.from(otherQuestions).filter($question => $question !== this.$element);
+      const otherQuestionIds = [];
+      otherQuestions.forEach($question => $question.querySelectorAll('input').forEach($input => {if ($input.getAttribute('name') === 'questionId') otherQuestionIds.push($input.getAttribute('value'));}));
+      setInputValueByName($cardForm, 'questionsLeft', otherQuestionIds.join(','));
+    }
+  }
+
   buildElementWithInfo($element, questionInfo)
   {
     const queryString = window.location.search;
@@ -51,6 +75,7 @@ export class QuestionCard extends Card {
       <input type="hidden" name="answerId" value="${questionInfo.answerId}">
       <input type="hidden" name="answer" value="you didnt update this in js...">
       <input type="hidden" name="questionId" value="${questionInfo.questionId}">
+      <input type="hidden" name="questionsLeft" value"you didn't update this in js...">
     </form>`;
   }
 

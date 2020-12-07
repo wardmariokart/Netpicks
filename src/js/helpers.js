@@ -20,7 +20,6 @@ export const formDataToJson = $form =>
 
 export const postToPHP = async (formData, url) =>
 {
-  console.log(formData);
   const fetchResult = await fetch(url, {
     method: 'POST',
     headers: new Headers({
@@ -31,4 +30,9 @@ export const postToPHP = async (formData, url) =>
 
   const jsonResult = await fetchResult.json();
   return jsonResult;
+};
+
+export const setInputValueByName = ($form, $name, $value) =>
+{
+  $form.querySelectorAll('input').forEach($input => {if ($input.getAttribute('name') === $name) $input.setAttribute('value', $value);});
 };

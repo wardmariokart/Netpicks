@@ -1,5 +1,5 @@
 import anime from './lib/anime.es.js';
-import {map} from './helpers.js';
+import {map, setInputValueByName} from './helpers.js';
 
 const overDropOffClass = 'card--over-drop-off';
 const markForDestroyClass = 'marked-for-destroy';
@@ -13,6 +13,7 @@ export class Card {
     this.stackOffsetPx = {y: 30, z: - 5};
     this.dropOffTreshold = 200;
     this.bDestroyed = false;
+    this.bThrownOut = false;
     this.onDestroyedCallbacks = [];
     this.onThrowOutCallbacks = [];
     this.answers = [];
@@ -124,8 +125,6 @@ export class Card {
 
   drag(offset)
   {
-
-
     offset = {x: - offset.x, y: - offset.y};
     this.translate(offset);
 
@@ -141,40 +140,28 @@ export class Card {
   }
 
   // internal use only
-  throwOut(triggeredAnswer)
+  throwOut(triggeredAnswer, bSubmit = true, bByComputer = false)
   {
     this.bGrabbable = false;
+    this.bThrownOut = true;
 
-
-    /*
-    // 1. Which side?
-    const side = this.location.x > 0 ? 'right' : 'left';
-
-    // 2. Submit form with answer (as <input>)
-    const answers = [];
-    answers['right'] = 'include';
-    answers['up'] = 'skip';
-    answers['left'] = 'exclude'; */
     const $cardForm = this.$element.querySelector('form');
     if ($cardForm)
     {
-      const setValueByName = ($form, $name, $value) =>
+      setInputValueByName($cardForm, 'answer', triggeredAnswer.answer);
+      if (bSubmit)
       {
-        $form.querySelectorAll('input').forEach($input => {if ($input.getAttribute('name') === $name) $input.setAttribute('value', $value);});
-      };
-
-      setValueByName($cardForm, 'answer', triggeredAnswer.answer);
-      setValueByName($cardForm, 'nbQuestionsLeft', this.$element.parentElement.querySelectorAll('.card').length - 1); // -1 because don't count yourself
-      $cardForm.requestSubmit();
+        $cardForm.requestSubmit();
+      }
     }
 
     const thisCard = this;
     anime({
       targets: this.$element,
-      duration: 150,
+      duration: bByComputer ? 400 : 150,
       translateX: triggeredAnswer.throwTarget.x,
       translateY: triggeredAnswer.throwTarget.y,
-      easing: 'linear',
+      easing: bByComputer ? 'easeInExpo' : 'linear',
       complete: function(anim) {
         thisCard.destroy(); // "this" is contextual to from what it is called. The passed function is called inside some anime.js class, so i have to store "this" in "thisCard"
       }
@@ -269,7 +256,7 @@ export class Card {
 
   updateOrigin()
   {
-    if (this.bDestroyed)
+    if (this.bDestroyed || this.bThrownOut)
     {
       return;
     }
@@ -282,6 +269,7 @@ export class Card {
     this.origin.z = i * this.stackOffsetPx.z;
 
     const delayPerCard = 150;
+
 
     anime({
       targets: this.$element,

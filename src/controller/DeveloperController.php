@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/Controller.php';
+require_once __DIR__ . '/../dao/DAO.php';
 require_once __DIR__ . '/../dao/FilterCategoriesDAO.php';
 require_once __DIR__ . '/../dao/ImdbKeywordsDAO.php';
 require_once __DIR__ . '/../dao/FilterCategoryKeywordsDAO.php';
@@ -13,15 +14,20 @@ class DeveloperController extends Controller {
   private $filterCategoriesDAO;
   private $imdbKeywordsDAO;
   private $filterCategoryKeywordsDAO;
+  private $imdbMoviesDAO;
   private $apiKey = 'da5442d98535330c1b4e09193cbcd4a9';
 
   function __construct() {
     $this->filterCategoriesDAO = new FilterCategoriesDAO();
     $this->imdbKeywordsDAO = new ImdbKeywordsDAO();
+    $this->imdbMoviesDAO = new ImdbMoviesDAO();
     $this->filterCategoryKeywordsDAO = new FilterCategoryKeywordsDAO();
   }
 
   public function devTools() {
+
+    $this->fixEmptyPosters();
+
     $this->set('title', 'Developer Tools');
 
     if(isset($_SESSION['updatedMoviePaths']))
@@ -110,8 +116,7 @@ class DeveloperController extends Controller {
   private function updateMoviePaths($from, $to, $bAbortOnTitleDifference = false)
   {
     // 1. Get all movieIds
-    $imdbMoviesDAO = new ImdbMoviesDAO();
-    $outdatedMovieInfos = $imdbMoviesDAO->selectAllIdsTitlesPosters($from, $to);
+    $outdatedMovieInfos = $this->imdbMoviesDAO->selectAllIdsTitlesPosters($from, $to);
     //$this->set('updateTemp', $outdatedMovieInfos);
     $requiredUpdates = array();
     foreach($outdatedMovieInfos as $outdatedMovieInfo)
@@ -139,7 +144,7 @@ class DeveloperController extends Controller {
 
     foreach($requiredUpdates as $requiredUpdate)
     {
-      $result = $imdbMoviesDAO->updatePosterById($requiredUpdate['movieId'], $requiredUpdate['updatedPoster']);
+      $result = $this->imdbMoviesDAO->updatePosterById($requiredUpdate['movieId'], $requiredUpdate['updatedPoster']);
       if ($result === false)
       {
         echo 'failed to update a movie';
@@ -186,6 +191,27 @@ class DeveloperController extends Controller {
     if(!$result){die("Connection Failure");}
     curl_close($curl);
     return $result;
+ }
+
+ private function fixEmptyPosters()
+ {
+   return;
+   // 1. get all movie ids without poster
+    $result = $this->imdbMoviesDAO->selectAllIdsWithoutPoster();
+
+    // 2. optional: remove all references to these movies (movies_genres, movies_keywords, movies_ratings, movies_characters)
+    $keywordsDAO = new ImdbKeywordsDAO();
+    $moviesGenresDAO = new ImdbMoviesGenresDAO();
+    $ratingsDAO = new DAO('imdb_ratings');
+    $charactersDAO = new DAO('imdb_characters');
+    $removeDAOs = array($keywordsDAO, $moviesGenresDAO, $movieRatingsDAO, $charactersDAO);
+
+    foreach($removeDAOs as $removeFromDAO)
+    {
+      $removeFromDAO->deleteWhereColumn('movie_id', '');
+    }
+   // 3. remove these from movies
+   // make sure the above works before removing those movies
  }
 
 }
