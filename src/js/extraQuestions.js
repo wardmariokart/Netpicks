@@ -65,7 +65,6 @@ const handleCardAnswer = async event =>
   if ('redirect' in phpResponse)
   {
     handlePhpRedirect(phpResponse);
-    console.log('redirect');
   }
 };
 

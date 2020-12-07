@@ -37,7 +37,7 @@ class ImdbMoviesKeywordsDAO extends DAO {
   {
     if(count($startMovieIds) > 0)
     {
-      $startTabelQuery = '(SELECT ' . $startMovieIds[0] . ' AS movie_id UNION SELECT ';
+      $startTabelQuery = '(SELECT ' . $startMovieIds[0] . ' AS movie_id ' . (count($startMovieIds) > 1 ? 'UNION SELECT ' : '');
       $startMovieIdsCopy = $startMovieIds;
       array_shift($startMovieIdsCopy);
       $startTabelQuery .= implode(' UNION SELECT ', $startMovieIdsCopy);
@@ -54,6 +54,6 @@ class ImdbMoviesKeywordsDAO extends DAO {
 
       return $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
     }
-
+    return $startMovieIds;
   }
 }

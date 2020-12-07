@@ -15,18 +15,7 @@
           </div>
       </div>
       <p class="movie__summary"><?php echo $details['movie']['description'] ?></p>
-      <!-- <div class="movie__path">
-          <p class="movie__path-item">Gore</p>
-          <p>></p>
-          <p class="movie__path-item">Supernatural</p>
-          <p>></p>
-          <p class="movie__path-item">80% guns & explosions</p>
-          <p>></p>
-          <p class="movie__path-item">Superhero's</p>
-      </div> -->
   </section>
-
-
 
   <section class="movie-night__settings divider--no-padding divider--top">
     <h3>This movie was pick based your answers: </h3>

@@ -2,6 +2,7 @@
 import CardsInteractionManager from './cardsInteractionManager.js';
 import {QuestionCard} from './questionCard.js';
 import {ProposedMovieCard} from './proposedMovieCard.js';
+import {NoMoviesFoundCard} from './noMoviesFoundCard.js';
 import {formDataToJson, postToPHP} from './helpers.js';
 import anime from './lib/anime.es.js';
 
@@ -24,7 +25,7 @@ export const setupDetailPage = () =>
   settings.forEach($settingForm =>
   {
     $settingForm.addEventListener('click', e => e.currentTarget.requestSubmit());
-    $settingForm.addEventListener('submit', handleSettingSubmit);
+    $settingForm.addEventListener('submit', handleCardSubmit);
   });
 };
 
@@ -56,7 +57,7 @@ const setOverlayHidden = (bHidden, bInstant = false) =>
   anime(animateObj);
 };
 
-const handleSettingSubmit = async event =>
+const handleCardSubmit = async event =>
 {
   event.preventDefault();
   const $form = event.currentTarget;
@@ -79,31 +80,33 @@ const handleSettingSubmit = async event =>
     };
     const card = new QuestionCard(constructObj);
     manager.registerCard(card);
-    card.addSubmitListener(handleSubmitCard);
+    card.addSubmitListener(handleCardSubmit);
   }
-};
 
-const handleSubmitCard = async event =>
-{
-  event.preventDefault();
-  const $form = event.currentTarget;
-  const url = $form.getAttribute('action');
-  const formData = formDataToJson($form);
-  const phpResponse = await postToPHP(formData, url);
-
+  if ('noMoviesFound' in phpResponse)
+  {
+    const noMoviesFoundCard = new NoMoviesFoundCard();
+    manager.registerCard(noMoviesFoundCard);
+    noMoviesFoundCard.addSubmitListener(handleCardSubmit);
+  }
 
   if ('proposeMovie' in phpResponse)
   {
     const proposeCard = new ProposedMovieCard(phpResponse.proposeMovie);
-    proposeCard.addSubmitListener(handleSubmitCard);
+    proposeCard.addSubmitListener(handleCardSubmit);
     manager.registerCard(proposeCard);
+  }
+
+  if ('redirect' in phpResponse)
+  {
+    const currentUrl = window.location.href;
+    const noQueryString = currentUrl.slice(0, currentUrl.indexOf('?'));
+    const url = `${noQueryString}${phpResponse['redirect']['url']}`;
+    window.location.replace(url);
   }
 
   if ('movieUpdated' in phpResponse)
   {
     window.location.reload();
-    console.log('movie Updated');
   }
-
 };
-

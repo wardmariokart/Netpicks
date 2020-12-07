@@ -413,6 +413,11 @@ class HomeController extends Controller {
         {
           $this->handleProposeResponseJs($jsPost, $movieNight, $jsAnswer);
         }
+        else if ($jsPost['action'] === 'noMovieFoundResponse')
+        {
+          $this->handleNoMoviesFoundResponseDetail($jsPost, $jsAnswer);
+        }
+        //else if ($jsPost['action'] === '')
       }
       echo json_encode($jsAnswer);
       exit();
@@ -459,12 +464,22 @@ class HomeController extends Controller {
   {
     $answerId = $jsPost['answerId'];
     $newAnswer = $jsPost['answer'];
+    $oldAnswer = $this->movieNightAnswersDAO->selectById($answerId);
     $updateResult = $this->movieNightAnswersDAO->updateAnswer($answerId, $newAnswer);
+    $_SESSION['detail']['previousAnswerChanged'] = array('id' => $answerId, 'oldAnswer' => $oldAnswer['answer'], 'newAnswer' => $newAnswer);
+
     if ($updateResult !== false)
     {
       $proposedMovie = $this->proposeMovieFromMovieNightId($movieNight['id']);
-      $_SESSION['detail']['proposedMovieId'] = $proposedMovie['id'];
-      $jsAnswerRef['proposeMovie'] = $proposedMovie;
+      if ($proposedMovie !== false)
+      {
+        $_SESSION['detail']['proposedMovieId'] = $proposedMovie['id'];
+        $jsAnswerRef['proposeMovie'] = $proposedMovie;
+      }
+      else
+      {
+        $jsAnswerRef['noMoviesFound'] = true;
+      }
     }
   }
 
@@ -488,6 +503,24 @@ class HomeController extends Controller {
     else if ($jsPost['answer'] === 'reject')
     {
       $proposedMovie = $this->proposeMovie($_SESSION['detail']['filteredMovieIds']);
+      $_SESSION['detail']['proposedMovieId'] = $proposedMovie['id'];
+      $jsAnswerRef['proposeMovie'] = $proposedMovie;
+    }
+  }
+
+  private function handleNoMoviesFoundResponseDetail($jsPost, &$jsAnswerRef)
+  {
+    $previousChangedAnswer = $_SESSION['detail']['previousAnswerChanged'];
+    if ($jsPost['answer'] === 'tryAgain')
+    {
+      $this->movieNightAnswersDAO->updateAnswer($previousChangedAnswer['id'], $previousChangedAnswer['oldAnswer']);
+      $jsAnswerRef['redirect'] = array('url' => '?page=detail&id=' . $_GET['id']);
+    }
+    else if ($jsPost['answer'] === 'closestMovie')
+    {
+      // update this the changed answer to skip and try again.
+      $this->movieNightAnswersDAO->updateAnswer($previousChangedAnswer['id'], 'skip');
+      $proposedMovie = $this->proposeMovieFromMovieNightId($_GET['id']);
       $_SESSION['detail']['proposedMovieId'] = $proposedMovie['id'];
       $jsAnswerRef['proposeMovie'] = $proposedMovie;
     }
