@@ -35,11 +35,11 @@ class MovieNightsDAO extends DAO {
     if (empty($errors))
     {
 
-      $sql = "INSERT INTO `movie_nights` (`user_id`,`movie_id`,`name`, `movie_option_one_id`, `movie_option_two_id`, `night_type_id`) VALUES(:userId, :movieId, :name, :movieOptionOneId, :movieOptionTwoId, :nightTypeId)";
+      $sql = "INSERT INTO `movie_nights` (`user_id`,`movie_id`,`title`, `movie_option_one_id`, `movie_option_two_id`, `night_type_id`) VALUES(:userId, :movieId, :title, :movieOptionOneId, :movieOptionTwoId, :nightTypeId)";
       $stmt = $this->pdo->prepare($sql);
       $stmt->bindValue(':userId', $data['userId']);
       $stmt->bindValue(':movieId', $data['movieId']);
-      $stmt->bindValue(':name', $data['name']);
+      $stmt->bindValue(':title', $data['title']);
       $stmt->bindValue(':movieOptionOneId', $data['movieOptionOneId']);
       $stmt->bindValue(':movieOptionTwoId', $data['movieOptionTwoId']);
       $stmt->bindValue(':nightTypeId', $data['nightTypeId']);
@@ -53,7 +53,7 @@ class MovieNightsDAO extends DAO {
 
   public function selectByUserId($userId)
   {
-    $sql = "SELECT movie_nights.id as id, movie_nights.name as name, movie_nights.user_id as userId, imdb_movies.poster as poster FROM movie_nights LEFT JOIN imdb_movies ON movie_nights.movie_id=imdb_movies.id WHERE user_id = :userId";
+    $sql = "SELECT movie_nights.id as id, movie_nights.title as title, movie_nights.user_id as userId, imdb_movies.poster as poster FROM movie_nights LEFT JOIN imdb_movies ON movie_nights.movie_id=imdb_movies.id WHERE user_id = :userId";
     $stmt = $this->pdo->prepare($sql);
     $stmt->bindValue(':userId', $userId);
     $stmt->execute();
@@ -71,7 +71,7 @@ class MovieNightsDAO extends DAO {
 
   public function validateInsertData($insertData)
   {
-    $toCheck = ['userId', 'movieId', 'name', 'movieOptionOneId', 'movieOptionTwoId', 'nightTypeId'];
+    $toCheck = ['userId', 'movieId', 'title', 'movieOptionOneId', 'movieOptionTwoId', 'nightTypeId'];
     return $this->checkIfAllDataPresent($insertData, $toCheck);
   }
 
