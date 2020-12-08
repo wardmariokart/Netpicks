@@ -330,7 +330,6 @@ class HomeController extends Controller {
 
   private function createMovieNight($stepOne, $userId, $pickedMovieId, $answers)
   {
-
     // signed in
     $insertData = array();
     $insertData['userId'] = $userId === false ? -1 : $userId;
