@@ -8,7 +8,8 @@ class MovieNightsDAO extends DAO {
     parent::__construct('movie_nights');
   }
 
-  /** $data structure:
+  /*
+  * $data structure:
    * data['movieNightId']
    * data['newMovieId'] */
   public function updateMovieId($data)
