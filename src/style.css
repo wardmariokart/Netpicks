@@ -53,9 +53,47 @@ body {
   }
 }
 
-
 .hidden {
   display: none;
+}
+
+.button {
+  font-family: sans-serif;
+  background-color: var(--color-primary);
+  cursor: pointer;
+  text-transform: uppercase;
+  color: var(--color-secondary);
+  border: none;
+  transition: background-color .12s ease-out;
+
+  &:hover {
+    background-color: var(--color-primary-light);
+  }
+
+  &:active {
+    background-color: var(--color-primary-lightest);
+  }
+}
+
+.title, .sub-title, .title--smaller {
+  text-transform: uppercase;
+  font-family: aktiv-grotesk,sans-serif;
+}
+
+.title, .title--smaller {
+  font-weight: bold;
+  font-size: var(--font-size-title);
+}
+
+.title--smaller {
+  font-size: var(--font-size-title-smaller);
+}
+
+.sub-title {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  font-weight: 400;
+  font-size: var(--font-size-sub-title);
 }
 
 .center-align-margin {
@@ -85,7 +123,3 @@ body {
 .divider--no-padding {
   padding: 0;
 }
-
-
-
-

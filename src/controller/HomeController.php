@@ -14,6 +14,8 @@ require_once __DIR__ . '/../dao/ImdbMoviesGenresDAO.php';
 require_once __DIR__ . '/../dao/ImdbActorsDAO.php';
 require_once __DIR__ . '/../dao/MovieNightTitlesDAO.php';
 require_once __DIR__ . '/../dao/NightTypeTitlesDAO.php';
+require_once __DIR__ . '/../dao/UsersDAO.php';
+
 
 
 class HomeController extends Controller {
@@ -27,6 +29,7 @@ class HomeController extends Controller {
   private $imdbMoviesGenresDAO;
   private $imdbActorsDAO;
   private $netpicksQuestionsDAO;
+  private $usersDAO;
 
   function __construct() {
     $this->imdbMoviesDAO = new ImdbMoviesDAO();
@@ -38,6 +41,7 @@ class HomeController extends Controller {
     $this->filterCategoriesDAO = new FilterCategoriesDAO();
     $this->stepOneMovieOptionsDAO = new StepOneMovieOptionsDAO();
     $this->imdbActorsDAO = new ImdbActorsDAO();
+    $this->usersDAO = new UsersDAO();
   }
 
   public function home() {
@@ -393,7 +397,6 @@ class HomeController extends Controller {
     $movieNight['settings'] = $this->transformAnswerOfSettings($settings);
     $this->set('movieNight', $movieNight);
 
-    $movie = array();
     $movie['movie'] = $this->imdbMoviesDAO->selectById($movieNight['movie_id']);
     $movie['actors'] = $this->imdbActorsDAO->selectActorsByMovieId($movie['movie']['id']);
     $this->set('movie', $movie);
@@ -401,7 +404,6 @@ class HomeController extends Controller {
     $snacksAndAccessoires = $this->getAccessoiresAndSnacks($movieNight['id']);
     $this->set('accessoires', $snacksAndAccessoires['accessoires']);
     $this->set('snacks', $snacksAndAccessoires['snacks']);
-
 
     $bJavascriptCall = isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] === 'application/json';
     if ($bJavascriptCall)
@@ -579,7 +581,28 @@ class HomeController extends Controller {
 
   public function invite()
   {
-    $this->set('invite', 'Your movie night');
+
+    $movieNight = [];
+    if(isset($_GET['id']))
+    {
+      $movieNight = $this->movieNightsDAO->selectById($_GET['id']);
+    }
+
+    if(empty($movieNight))
+    {
+      $_SESSION['error'] = 'This invite has been expired!';
+      header('location:index.php');
+      exit();
+    }
+
+    $invitedBy = $this->usersDAO->selectById($movieNight['user_id'])['username'];
+    $movie['movie'] = $this->imdbMoviesDAO->selectById($movieNight['movie_id']);
+    $movie['actors'] = $this->imdbActorsDAO->selectActorsByMovieId($movie['movie']['id']);
+    $this->set('movie', $movie);
+    $this->set('invitedBy', $invitedBy);
+    $this->set('movieNight', $movieNight);
+    $this->set('movie', $movie);
+    $this->set('title', ($invitedBy . ' has invited you!'));
   }
 
   private function getAccessoiresAndSnacks($movieNightId)

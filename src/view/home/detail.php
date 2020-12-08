@@ -45,9 +45,9 @@
   </div>
 
 
-  <section class="movie__extras">
+  <section class="movie__extras divider--no-padding">
       <article class="extras">
-          <h3 class="extras__title">Suggested snacks:</h3>
+          <h3 class="extras__title sub-title">Suggested snacks:</h3>
           <ul class="extra__list">
           <?php foreach($snacks as $snack):?>
             <li class="extra"><img class="extra__icon" src="./assets/icons/<?php echo $snack['file_path'];?>" alt="<?php echo $snack['name']?>"></li>
@@ -56,7 +56,7 @@
       </article>
       <div class="divider-horizontal"></div>
       <article class="extras">
-        <h3 class="extras__title">Suggested asseccoires:</h3>
+        <h3 class="extras__title sub-title">Suggested asseccoires:</h3>
         <ul class="extra__list">
           <?php foreach($accessoires as $accessoire):?>
             <li class="extra"><img class="extra__icon" src="./assets/icons/<?php echo $accessoire['file_path'];?>" alt="<?php echo $accessoire['name']?>"></li>
@@ -64,11 +64,15 @@
           </ul>
       </article>
   </section>
-  <div class="divider"></div>
-  <section class="book__movie">
-      <div class="book-this"><a href="index.php">Book movie night</a></div>
-      <div class="book-other"><a href="index.php">Plan another night</a></div>
-  </section>
+
+  <?php if ($movieNight['night_type_id'] !== 1):?>
+  <div class="divider">
+  <div class="invite-link">
+    <span class="invite-link__title sub-title">Invite your friends:</span>
+    <input class="invite-link__url" type="text" value="?page=invite&id=<?php echo $movieNight['id']?>" readonly><button class="invite-link__button button">copy</button>
+  </div>
+  </div>
+  <?php endif;?>
   <section>
     <h3 class="hidden">Movie night actions</h3>
     <?php if ($bOwnerless): ?>
@@ -80,11 +84,12 @@
     <div class="actions divider--top">
       <a href="index.php" class="action--home"></a>
       <?php if ($bIsOwner): ?>
-      <form class="" action="index.php?page=detail&id=<?php echo $_GET['id']?>" method="POST">
-        <input type="hidden" name="action" value="delete">
-        <input class="action--delete" type="submit" value="🗑">
-      </form>
+        <form class="" action="index.php?page=detail&id=<?php echo $_GET['id']?>" method="POST">
+          <input type="hidden" name="action" value="delete">
+          <input class="action--delete" type="submit" value="🗑">
+        </form>
       <?php endif;?>
+
     </div>
   </section>
 </section>

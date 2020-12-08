@@ -9,7 +9,7 @@
     <label class="sign-in-up__label" for="sign-in__password">Password</label>
     <input class="sign-in-up__field" type="password" id="sign-in__password" name="password" placeholder="password">
     <span class="validation--error"><?php if (!empty($errors['password'])) echo $errors['password']?></span>
-    <input type="submit" value="sign in">
+    <input class="button" type="submit" value="sign in">
   </form>
 
   <div class="sign-in-up__referal">

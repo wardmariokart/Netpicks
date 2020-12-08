@@ -66,31 +66,15 @@
 
 .extras {
   width: 100%;
-  height: 25rem;
-  text-align: center;
-  position: relative;
-
+  display: grid;
+  grid-template: min-content auto / 1fr;
+  padding: 1rem;
 }
 
 .extra__list {
-  width: 25rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  margin-top: 2rem;
   display: flex;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  position: absolute;
-  bottom: 0;
-}
-
-.extras__title {
-  width: 100%;
-  text-transform: uppercase;
-  font-family: aktiv-grotesk,sans-serif;
-  font-weight: 400;
-  font-size: 2.5rem;
-  text-align: left;
-  padding-left: 1rem;
+  align-items: flex-end;
 }
 
 .extra {
@@ -98,10 +82,9 @@
   width: 6rem;
   height: 6rem;
   border-radius: 50%;
-  padding: 0.5rem;
+  padding: .5rem;
   margin-right: 1rem;
   border: 1px solid var(--color-primary-lighter);
-  float: left;
 }
 
 .extra__icon {
@@ -241,6 +224,7 @@
 /* ____________________________________________________________________ Actions on detail page */
 
 .actions {
+  margin: 2rem 0;
   display: flex;
   justify-content: center;
   gap: 1rem;
@@ -248,7 +232,6 @@
 
 .action--delete {
   border: none;
-  cursor: pointer;
   font-size: 1.5rem;
   text-align: center;
 }
@@ -271,9 +254,43 @@
   border-radius: 50%;
   width: var(--detail-action-radius);
   height: var(--detail-action-radius);
+  cursor: pointer;
   transition: background-color .15s ease-in-out;
 
   &:hover {
     background-color: var(--color-primary-light);
+  }
+}
+
+.invite-link {
+  margin: 2rem 0;
+  display: flex;
+  align-items: flex-end;
+
+  & .invite-link__title {
+    grid-area: title;
+    font-size: var(--font-size-sub-title);
+    margin: 0;
+    margin-right: 2rem;
+  }
+
+  & .invite-link__url {
+    display: flex;
+    align-items: center;
+
+    flex-grow: 1;
+    height: 3rem;
+    grid-area: link;
+    border: 1px solid var(--color-primary);
+    background-color: transparent;
+    padding-left: 2rem;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  & button {
+    grid-area: button;
+    height: 3rem;
+    width: 7rem;
   }
 }
