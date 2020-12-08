@@ -11,6 +11,7 @@ require_once __DIR__ . '/../dao/FilterCategoriesDAO.php';
 require_once __DIR__ . '/../dao/NetpicksQuestionsDAO.php';
 require_once __DIR__ . '/../dao/MovieNightAnswersDAO.php';
 require_once __DIR__ . '/../dao/ImdbMoviesGenresDAO.php';
+require_once __DIR__ . '/../dao/ImdbActorsDAO.php';
 
 class HomeController extends Controller {
 
@@ -21,6 +22,7 @@ class HomeController extends Controller {
   private $filterCategoriesDAO;
   private $movieNightAnswersDAO;
   private $imdbMoviesGenresDAO;
+  private $imdbActorsDAO;
   private $netpicksQuestionsDAO;
 
   function __construct() {
@@ -32,6 +34,7 @@ class HomeController extends Controller {
     $this->netpicksQuestionsDAO = new NetpicksQuestionsDAO();
     $this->filterCategoriesDAO = new FilterCategoriesDAO();
     $this->stepOneMovieOptionsDAO = new StepOneMovieOptionsDAO();
+    $this->imdbActorsDAO = new ImdbActorsDAO();
   }
 
   public function home() {
@@ -350,7 +353,7 @@ class HomeController extends Controller {
 
   public function detail()
   {
-      $this->set('title', 'Your movie night');  // Hidden
+    $this->set('title', 'Your movie night');  // Hidden
 
     if (!isset($_SESSION['detail']))
     {
@@ -386,11 +389,15 @@ class HomeController extends Controller {
 
     $settings = $this->movieNightAnswersDAO->selectAllByMovieNight($movieNight['id']);
     $movieNight['settings'] = $this->transformAnswerOfSettings($settings);
-
-    $movie = $this->imdbMoviesDAO->selectById($movieNight['movie_id']);
     $this->set('movieNight', $movieNight);
-    $details = array('movie' => $movie);
-    $this->set('details', $details);
+
+    $movie = array();
+    $movie['movie'] = $this->imdbMoviesDAO->selectById($movieNight['movie_id']);
+    $movie['actors'] = $this->imdbActorsDAO->selectActorsByMovieId($movie['movie']['id']);
+    $this->set('movie', $movie);
+
+
+
     $snacksAndAccessoires = $this->getAccessoiresAndSnacks($movieNight['id']);
     $this->set('accessoires', $snacksAndAccessoires['accessoires']);
     $this->set('snacks', $snacksAndAccessoires['snacks']);

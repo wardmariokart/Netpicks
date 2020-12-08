@@ -1,20 +1,19 @@
 <section class="page--detail"> <!-- TODO REMOVE -->
   <header>
-
     <h2><?php echo $movieNight['name']?></h2>
   </header>
   <section class="chosen__movie">
       <div class="col3">
-          <img class="movie__poster" src="http://image.tmdb.org/t/p/w342/<?php echo $details['movie']['poster'] ?>" alt="<?php echo $details['movie']['title'] . ' poster.' ?>">
+          <img class="movie__poster" src="http://image.tmdb.org/t/p/w342/<?php echo $movie['movie']['poster'] ?>" alt="<?php echo $movie['movie']['title'] . ' poster.' ?>">
           <div class="movie__details">
-              <h2 class="detail__movie-title"><?php echo $details['movie']['title'] ?></h2>
+              <h2 class="detail__movie-title"><?php echo $movie['movie']['title'] ?></h2>
               <div class="movie__crew">
-                  <p><span class="bold">Director: </span><?php echo $details['movie']['title'] ?></p>
-                  <p><span class="bold">Cast:</span> Dane DeHaan, Alex Russell, Michael B. Jordan </p>
+                  <!-- <p><span class="bold">Director: </span><?php echo $movie['movie']['title'] ?></p> -->
+                  <p><span class="bold">Cast:</span> <?php echo implode(', ', array_column($movie['actors'], 'name'));?></p>
               </div>
           </div>
       </div>
-      <p class="movie__summary"><?php echo $details['movie']['description'] ?></p>
+      <p class="movie__summary"><?php echo $movie['movie']['description'] ?></p>
   </section>
 
   <section class="movie-night__settings divider--no-padding divider--top">
