@@ -67,7 +67,7 @@
         <a class="movie-nights__item" href="index.php?page=detail&id=<?php echo $movieNight['id'];?>">
           <article class="movie-night">
             <div class="movie-night__info">
-              <h3 class="movie-night__title"><?php echo $movieNight['name']?></h3>
+              <h3 class="movie-night__title"><?php echo $movieNight['title']?></h3>
               <p class="movie-night__adress">@ Wardje Bever’s  Houz</p>
               <p>14.12.20</p>
             </div>

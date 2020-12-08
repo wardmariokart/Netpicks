@@ -1,6 +1,6 @@
 <section class="page--detail"> <!-- TODO REMOVE -->
   <header>
-    <h2><?php echo $movieNight['name']?></h2>
+    <h2><?php echo $movieNight['title']?></h2>
   </header>
   <section class="chosen__movie">
       <div class="col3">
@@ -50,7 +50,7 @@
           <h3 class="extras__title">Suggested snacks:</h3>
           <ul class="extra__list">
           <?php foreach($snacks as $snack):?>
-            <li class="extra"><img class="extra__icon" src="./assets/images/<?php echo $snack['file_path'];?>" alt="<?php echo $snack['name']?>"></li>
+            <li class="extra"><img class="extra__icon" src="./assets/icons/<?php echo $snack['file_path'];?>" alt="<?php echo $snack['name']?>"></li>
           <?php endforeach?>
           </ul>
       </article>
@@ -59,7 +59,7 @@
         <h3 class="extras__title">Suggested asseccoires:</h3>
         <ul class="extra__list">
           <?php foreach($accessoires as $accessoire):?>
-            <li class="extra"><img class="extra__icon" src="./assets/images/<?php echo $accessoire['file_path'];?>" alt="<?php echo $accessoire['name']?>"></li>
+            <li class="extra"><img class="extra__icon" src="./assets/icons/<?php echo $accessoire['file_path'];?>" alt="<?php echo $accessoire['name']?>"></li>
           <?php endforeach?>
           </ul>
       </article>
