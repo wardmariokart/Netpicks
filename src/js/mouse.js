@@ -29,12 +29,12 @@ export default class Mouse {
       return;
     }
 
+    this.location = this.getLocationFromEvent(event, type);
     const $target = event.target;
     const victim = this.victims.find(victim => victim.$element === $target);
     if (victim !== undefined && victim.grab(this))
     {
       this.grabbedCard = victim;
-      console.log(`grab by ${type}`);
     }
   }
 
@@ -45,19 +45,22 @@ export default class Mouse {
       return;
     }
 
+    if (this.bTouchMode && type === 'touch')
+    {
+      this.bTouchMode = false;
+    }
+
     if (this.grabbedCard !== null)
     {
       this.grabbedCard.drop();
       this.grabbedCard = null;
     }
-
-    console.log(`drop by ${type}`);
   }
 
 
   handleMoveInput (event, type)
   {
-    const newLocation = {x: event.clientX, y: event.clientY};
+    const newLocation = type === 'touch' ? {x: event.touches[0].clientX, y: event.touches[0].clientY} : {x: event.clientX, y: event.clientY};
     const offset = {x: this.location.x - newLocation.x, y: this.location.y - newLocation.y};
     this.location = newLocation;
 
@@ -70,5 +73,10 @@ export default class Mouse {
     {
       this.grabbedCard.drag(offset);
     }
+  }
+
+  getLocationFromEvent (event, type)
+  {
+    return type === 'touch' ? {x: event.touches[0].clientX, y: event.touches[0].clientY} : {x: event.clientX, y: event.clientY};
   }
 }
