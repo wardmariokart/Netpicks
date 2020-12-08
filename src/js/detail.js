@@ -22,7 +22,7 @@ export const setupDetailPage = () =>
   manager = new CardsInteractionManager();
 
 
-  const settings = document.querySelectorAll('.setting');
+  const settings = document.querySelectorAll('.setting--owner');
   settings.forEach($settingForm =>
   {
     $settingForm.addEventListener('click', e => e.currentTarget.requestSubmit());

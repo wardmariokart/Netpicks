@@ -21,7 +21,8 @@
     <ul class="settings">
       <?php foreach($movieNight['settings'] as $setting): ?>
       <li>
-        <form class="setting" action="index.php?page=detail&id=<?php echo $_GET['id']?>" method="POST">
+        <?php if ($bIsOwner): ?>
+        <form class="setting--owner" action="index.php?page=detail&id=<?php echo $_GET['id']?>" method="POST">
           <input type="hidden" name="action" value="updateSettingsRequest">
           <input type="hidden" name="questionId" value="<?php echo $setting['question_id']?>">
           <input type="hidden" name="answerId" value="<?php echo $setting['answer_id']?>">
@@ -32,6 +33,16 @@
             <?php echo $setting['answer'];?>
           </span>
         </form>
+        <?php else: ?>
+          <div class="setting">
+            <span class="setting__title">
+              <?php echo $setting['filter'];?>
+            </span>
+            <span class="setting__value <?php echo 'setting__value--' . $setting['answer'] ?>">
+              <?php echo $setting['answer'];?>
+            </span>
+          </div>
+        <?php endif;?>
       </li>
       <?php endforeach; ?>
     </ul>
@@ -65,7 +76,7 @@
       </article>
   </section>
 
-  <?php if ($movieNight['night_type_id'] !== 1):?>
+  <?php if ($bIsOwner && $movieNight['night_type_id'] !== 1):?>
   <div class="divider">
   <div class="invite-link">
     <span class="invite-link__title sub-title">Invite your friends:</span>
