@@ -52,6 +52,7 @@
 
   & .card__subtitle {
     display: block;
+    margin-bottom: 1.2rem;
   }
 
   &:active {
@@ -67,7 +68,7 @@
 
   margin-top: 3rem;
   width: 30rem;
-  height: 20rem;
+  height: 24rem;
   padding: 1.5rem;
 }
 
