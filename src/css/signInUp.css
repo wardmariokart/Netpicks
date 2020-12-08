@@ -23,7 +23,7 @@
     display: block;
     padding: var(--padding-non-uniform);
     text-transform: uppercase;
-    font-size: var(--font-size-title-smaller);
+    font-size: var(--font-size-sub-title);
   }
 
   & input {
@@ -40,20 +40,12 @@
   }
 
   & input[type=submit] {
-    font-family: sans-serif;
     margin-top: 3rem;
-    background-color: var(--color-primary);
-    color: var(--color-secondary);
     text-align: center;
-    cursor: pointer;
-    text-transform: uppercase;
-    transition: background-color .125s ease-out;
-
-    &:hover {
-      background-color: var(--color-primary-light);
-    }
   }
 }
+
+
 
 .sign-in-up__referal {
   font-size: var(--font-size-small);

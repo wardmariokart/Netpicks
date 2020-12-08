@@ -1,63 +1,55 @@
-.ticket{
-    position: relative;
-    width: 80%;
-    margin: auto;
-    margin-bottom: 7rem;
+.ticket {
+  position: relative;
+  width: 80%;
+  margin: auto;
+  margin-bottom: 7rem;
 }
 
-/* .ticket__title{
-    background-image: url("./assets/images/ticketTop.png");
-
-} */
-
-.ticket__tear{
-    width: 100%;
+.ticket__tear {
+  width: 100%;
 }
 
-.upsidedown{
-    transform: rotate(180deg) scaleX(-1);
-    margin-top: 3rem;
-}
-
-.ticket__title--hidden{
-    display: none;
+.upsidedown {
+  transform: rotate(180deg) scaleX(-1);
+  margin-top: 3rem;
 }
 
 .ticket__info {
-    /* width: 95%; */
-    margin: auto;
+  /* width: 95%; */
+  margin: auto;
 }
 
-.ticket-night__title{
-    width: 66.666666666%;
+.ticket-night__title {
+  width: 70%;
 }
 
-.ticket__movie-title{
-    text-transform: uppercase;
+.ticket__movie-title {
+  text-transform: uppercase;
+  font-size: var(--font-size-title);
 }
 
-.ticket-margin{
-    margin-left: 1.5rem;
-    margin-right: 1.5rem;
+.ticket-margin {
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
 }
 
-.ticket__summary{
-    margin-top: 3rem;
-    margin-bottom: 3rem;
+.ticket__summary {
+  margin-top: 3rem;
+  margin-bottom: 3rem;
 }
 
-.ticket-margin__top{
-    margin-top: 3rem;
+.ticket-margin__top {
+  margin-top: 3rem;
 }
 
-.movie-ticket__adress{
-    text-align: center;
-    font-size: 1.7rem;
-    font-family: nimbus-roman,serif;
-    font-weight: 400;
+.movie-ticket__adress {
+  text-align: center;
+  font-size: 1.7rem;
+  font-family: nimbus-roman,serif;
+  font-weight: 400;
 }
 
-.horizontal__divider{
+.horizontal__divider {
   position: absolute;
   height: 100%;
   width: 100%;

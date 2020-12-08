@@ -1,6 +1,6 @@
 <section class="page--detail"> <!-- TODO REMOVE -->
   <header>
-    <h2><?php echo $movieNight['name']?></h2>
+    <h2><?php echo $movieNight['title']?></h2>
   </header>
   <section class="chosen__movie">
       <div class="col3">
@@ -21,7 +21,8 @@
     <ul class="settings">
       <?php foreach($movieNight['settings'] as $setting): ?>
       <li>
-        <form class="setting" action="index.php?page=detail&id=<?php echo $_GET['id']?>" method="POST">
+        <?php if ($bIsOwner): ?>
+        <form class="setting--owner" action="index.php?page=detail&id=<?php echo $_GET['id']?>" method="POST">
           <input type="hidden" name="action" value="updateSettingsRequest">
           <input type="hidden" name="questionId" value="<?php echo $setting['question_id']?>">
           <input type="hidden" name="answerId" value="<?php echo $setting['answer_id']?>">
@@ -32,6 +33,16 @@
             <?php echo $setting['answer'];?>
           </span>
         </form>
+        <?php else: ?>
+          <div class="setting">
+            <span class="setting__title">
+              <?php echo $setting['filter'];?>
+            </span>
+            <span class="setting__value <?php echo 'setting__value--' . $setting['answer'] ?>">
+              <?php echo $setting['answer'];?>
+            </span>
+          </div>
+        <?php endif;?>
       </li>
       <?php endforeach; ?>
     </ul>
@@ -45,30 +56,34 @@
   </div>
 
 
-  <section class="movie__extras">
+  <section class="movie__extras divider--no-padding">
       <article class="extras">
-          <h3 class="extras__title">Suggested snacks:</h3>
+          <h3 class="extras__title sub-title">Suggested snacks:</h3>
           <ul class="extra__list">
           <?php foreach($snacks as $snack):?>
-            <li class="extra"><img class="extra__icon" src="./assets/images/<?php echo $snack['file_path'];?>" alt="<?php echo $snack['name']?>"></li>
+            <li class="extra"><img class="extra__icon" src="./assets/icons/<?php echo $snack['file_path'];?>" alt="<?php echo $snack['name']?>"></li>
           <?php endforeach?>
           </ul>
       </article>
       <div class="divider-horizontal"></div>
       <article class="extras">
-        <h3 class="extras__title">Suggested asseccoires:</h3>
+        <h3 class="extras__title sub-title">Suggested asseccoires:</h3>
         <ul class="extra__list">
           <?php foreach($accessoires as $accessoire):?>
-            <li class="extra"><img class="extra__icon" src="./assets/images/<?php echo $accessoire['file_path'];?>" alt="<?php echo $accessoire['name']?>"></li>
+            <li class="extra"><img class="extra__icon" src="./assets/icons/<?php echo $accessoire['file_path'];?>" alt="<?php echo $accessoire['name']?>"></li>
           <?php endforeach?>
           </ul>
       </article>
   </section>
-  <div class="divider"></div>
-  <section class="book__movie">
-      <div class="book-this"><a href="index.php">Book movie night</a></div>
-      <div class="book-other"><a href="index.php">Plan another night</a></div>
-  </section>
+
+  <?php if ($bIsOwner && $movieNight['night_type_id'] !== 1):?>
+  <div class="divider">
+  <div class="invite-link">
+    <span class="invite-link__title sub-title">Invite your friends:</span>
+    <input class="invite-link__url" type="text" value="?page=invite&id=<?php echo $movieNight['id']?>" readonly><button class="invite-link__button button">copy</button>
+  </div>
+  </div>
+  <?php endif;?>
   <section>
     <h3 class="hidden">Movie night actions</h3>
     <?php if ($bOwnerless): ?>
@@ -80,11 +95,12 @@
     <div class="actions divider--top">
       <a href="index.php" class="action--home"></a>
       <?php if ($bIsOwner): ?>
-      <form class="" action="index.php?page=detail&id=<?php echo $_GET['id']?>" method="POST">
-        <input type="hidden" name="action" value="delete">
-        <input class="action--delete" type="submit" value="🗑">
-      </form>
+        <form class="" action="index.php?page=detail&id=<?php echo $_GET['id']?>" method="POST">
+          <input type="hidden" name="action" value="delete">
+          <input class="action--delete" type="submit" value="🗑">
+        </form>
       <?php endif;?>
+
     </div>
   </section>
 </section>

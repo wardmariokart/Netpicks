@@ -12,7 +12,7 @@
     <label for="sign-in__password-confirm">Confirm password</label>
     <input type="password" name="confirm_password" id="sign-up__password-confirm" placeholder="confirm password">
     <span class="validation--error"><?php if (!empty($errors['confirm_password'])) echo $errors['confirm_password']?></span>
-    <input type="submit" value="Sign me up">
+    <input class="button" type="submit" value="Sign me up">
   </form>
 
   <div class="sign-in-up__referal">

@@ -16,17 +16,45 @@ export const setupDetailPage = () =>
   {
     return;
   }
+  setupCopyInvite();
+  setOverlayHidden(true, true);
 
   manager = new CardsInteractionManager();
 
-  setOverlayHidden(true, true);
 
-  const settings = document.querySelectorAll('.setting');
+  const settings = document.querySelectorAll('.setting--owner');
   settings.forEach($settingForm =>
   {
     $settingForm.addEventListener('click', e => e.currentTarget.requestSubmit());
     $settingForm.addEventListener('submit', handleCardSubmit);
   });
+};
+
+
+const setupCopyInvite = () =>
+{
+  const $copyButton = document.querySelector('.invite-link__button');
+  if (!$copyButton)
+  {
+    return;
+  }
+
+  $copyButton.addEventListener('click', copyInviteLink);
+
+  const $urlField = document.querySelector('.invite-link__url');
+  const url = window.location.href.split('?')[0];
+  $urlField.value = `${url}${$urlField.value}`;
+};
+
+const copyInviteLink = event =>
+{
+  const $url = document.querySelector('.invite-link__url');
+  $url.select();
+  console.log($url);
+  document.execCommand('copy');
+  console.log('copy attempt');
+  alert(`Invite link copied! 😁\n→ ${$url.value} `);
+
 };
 
 const setOverlayHidden = (bHidden, bInstant = false) =>
