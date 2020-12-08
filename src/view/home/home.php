@@ -35,8 +35,6 @@
                 <? endforeach; ?>
               </select>
             </div>
-            <!-- <img class="movie__still" src="./assets/images/isleOfDogs.jpg" alt="movie still from isle of dogs"> -->
-
 
             <div class="plan-one__block">
               <span>but </span>
