@@ -76,7 +76,7 @@
       </article>
   </section>
 
-  <?php if ($bIsOwner && $movieNight['night_type_id'] !== 1):?>
+  <?php if ($bIsOwner):?>
   <div class="divider">
   <div class="invite-link">
     <span class="invite-link__title sub-title">Invite your friends:</span>

@@ -93,23 +93,28 @@ const handlePhpNoMoviesFound = phpResponse =>
     noMoviesFoundCard.addSubmitListener(handleCardAnswer);
   };
 
+
   // Throw away all other cards => don't answer
-  manager.cards.forEach((card, index, array) =>
+  const cardsToThrowOut = manager.cards;
+
+
+  setTimeout(() => {
+    createNoMoviesFoundCard();
+  }, autoThrowDelay * (cardsToThrowOut.length + 1));
+
+
+  cardsToThrowOut.forEach((card, index, array) =>
   {
+    console.log('throw');
     if (card.$element.classList.contains('card--question'))
     {
-      const bLastCard = array.length - 1 === index;
       setTimeout(() => {
         card.throwOut(card.answers[2], false, true);
-        if (bLastCard)
-        {
-          setTimeout(() => {
-            createNoMoviesFoundCard();
-          }, autoThrowDelay * 2);
-        }
       }, autoThrowDelay * (array.length - 1 - index));
     }
   });
+
+
 };
 
 const handlePhpRedirect = phpResponse =>

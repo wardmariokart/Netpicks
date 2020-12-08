@@ -248,13 +248,20 @@ class HomeController extends Controller {
       {
         $jsAnswer['noMoviesFound'] = true;
         $questionsToAutoSkip = array();
-        $questionsLeft = explode(',',$data['questionsLeft']);
-        $questionsToAutoSkip = array_merge([$data['questionId']], $questionsLeft);
+        if (!empty($data['questionsLeft']))
+        {
+          $questionsLeft = explode(',',$data['questionsLeft']);
+          $questionsToAutoSkip = array_merge([$data['questionId']], $questionsLeft);
+        }
+        else
+        {
+          $questionsToAutoSkip = [$data['questionId']];
+        }
+
         foreach($questionsToAutoSkip as $questionId)
         {
           $this->saveAnswer($questionId, 'skip');
         }
-        $jsAnswer['noMoviesFound'] = true;
         return;
       }
       else
