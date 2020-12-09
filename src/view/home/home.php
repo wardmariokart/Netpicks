@@ -1,13 +1,14 @@
 <section class="plan-one">
   <picture class="plan-one__picture">
-    <source media="(min-width: 800px)" src="./assets/images/moonriseKingdom-XL.jpg" srcset="./assets/images/moonriseKingdom-XL.jpg 1582w,
+    <source media="(min-width: 800px)" srcset="./assets/images/moonriseKingdom-XL.jpg 1582w,
             ./assets/images/moonriseKingdom-L.jpg 1216w,
             ./assets/images/moonriseKingdom-M.jpg 946w,
             ./assets/images/moonriseKingdom-S.jpg 718w,
             ./assets/images/moonriseKingdom-XS.jpg 526w" 
-            sizes="(max-width: 1099px) 35vw,
-            (min-width: 1100px) 50vw,
-            (min-width: 1300px) 60vw"/>
+            sizes="(max-width: 924px) 40vw,
+            (min-width: 925px) 55vw,
+            (min-width: 1000px) 75vw,
+            (min-width: 1100px) 85vw"/>
     <source srcset="./assets/images/isleOfDogs.jpg">
     <img src="./assets/images/moonriseKingdom.jpg" alt="Wes Anderson Movie still">
   </picture>
