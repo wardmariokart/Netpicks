@@ -74,8 +74,9 @@
 
 .card--movie {
   & .movie-card__poster {
+    margin-top: 1rem;
     width: 100%;
-    height: 30rem;
+    /* height: 30rem; */
     object-fit: cover;
     pointer-events: none;
     user-select: none;
