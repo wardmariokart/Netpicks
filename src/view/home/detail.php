@@ -53,6 +53,7 @@
     </div>
   </div>
 
+
   <section class="movie__extras divider--no-padding">
     <h2 class="hidden">Movie extras</h2>
     <article class="extras">
