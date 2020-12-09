@@ -5,10 +5,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><?php echo $title; ?></title>
+  <link rel="icon" type="image/png" href="./assets/images/kijkwijzerGeweld.png">
+  <link rel="stylesheet" href="https://use.typekit.net/sha2dsc.css">
+  <link rel="stylesheet" href="https://use.typekit.net/sha2dsc.css">
+  <link rel="stylesheet" href="https://use.typekit.net/sha2dsc.css">
   <?php echo $css; ?>
-  <link rel="stylesheet" href="https://use.typekit.net/sha2dsc.css">
-  <link rel="stylesheet" href="https://use.typekit.net/sha2dsc.css">
-  <link rel="stylesheet" href="https://use.typekit.net/sha2dsc.css">
 </head>
 
 <body class="<?php echo 'page--' . $page ?>">
