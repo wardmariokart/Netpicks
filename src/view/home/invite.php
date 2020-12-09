@@ -25,7 +25,7 @@
                     </div>
                 </div>
             </div>
-            <p class="movie__summary ticket-margin ticket__summary">Three high school friends gain superpowers after making an incredible discovery underground. Soon they find their lives spinning out of control and their bond tested as they embrace their darker sides.</p>
+            <p class="movie__summary ticket-margin ticket__summary"><?php echo $movie['description'];?></p>
             <p class="movie-ticket__adress divider--top-bottom">Be there or be square!</p>
         </div>
         <img class="ticket__tear upsidedown" src="./assets/images/ticketTop-01.png" alt="ticket">
