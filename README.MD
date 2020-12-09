@@ -19,7 +19,7 @@ Vul de zin aan en definieer je movie night.
 
 ### Stap 2
 Afhankelijk van de gekozen moods worden films gefilterd uit de database.
-Voor iedere Mood hebben we op voorhand een aantal dingen vastgesteld. Iedere mood definieert genre(s) en keyword(s). Voor ieder mood hebben we ook een aantal *follow up questions* die gebruikt worden om specifieker jouw film te verkiezen.
+Voor iedere Mood hebben we op voorhand een aantal dingen vastgesteld. Iedere mood definieert genre(s) en keyword(s). Voor ieder mood hebben we ook een aantal *follow up questions* die gebruikt worden om specifieker jouw film te verkiezen. Voorbeeld:
 
 Mood name | Display | Genres | Keywords | Snacks | Accessoires | Follow up questions
 -------- | ---- | ---- | ---- | ---- | ---- | ----
@@ -28,4 +28,4 @@ Mood 2 | Vol adrenaline zitten | Action | Superhero, superman, explosion, guns, 
 
 ### Stap 3
 Je krijgt een overview van de film die wij voor jou uitkozen met snack en accessoires.
-De gebruiker kan hier aangeven of de film al gezien is en een nieuwe wilt, nog aanpassingen doen, een datum & locatie toevoegen en sharen met vrienden.
+De gebruiker kan hier aangeven of de film al gezien is en een nieuwe wilt of nog aanpassingen doen.
