@@ -1,5 +1,5 @@
 <section>
-    <h2 class="title--smaller">You’ve been invited by <?php echo $invitedBy?></h2>
+    <h2 class="title--smaller">You’ve been invited by <?php echo $invitedBy ?></h2>
 
     <article class="ticket">
         <h3 class="hidden">Movie ticket</h3>
@@ -8,19 +8,20 @@
 
         <div class="ticket__info">
             <div class="movie-night__info ticket-margin__top">
-                <h3 class="movie-night__title ticket-margin ticket-night__title sub-title"><?php echo $movieNight['title']?></h3>
+                <h3 class="movie-night__title ticket-margin ticket-night__title sub-title"><?php echo $movieNight['title'] ?></h3>
                 <!-- <p class="movie-ticket__adress  divider--top-bottom">14.12.20 <span>@ Wardje Bever’s Houz</span></p> -->
             </div>
+            <p class="movie-ticket__adress divider--top-bottom"><span class="bold">Location:</span> @<?php echo $invitedBy ?>'s Houz</p>
 
             <div class="col3 ticket-margin">
                 <img class="movie__poster" src="http://image.tmdb.org/t/p/w342/<?php echo $movie['movie']['poster'] ?>" alt="<?php echo $movie['movie']['title'] . ' poster.' ?>">
                 <div class="movie__details">
-                    <h2 class="detail__movie-title ticket__movie-title">Chronicle</h2>
+                    <h2 class="detail__movie-title ticket__movie-title"><?php echo $movie['movie']['title'] ?></h2>
                     <div class="movie__crew">
-                        <?php if (!empty($movie['movie']['tagline'])): ?>
-                          <p><b><?php echo $movie['movie']['tagline'];?></b></p>
+                        <?php if (!empty($movie['movie']['tagline'])) : ?>
+                            <p><b><?php echo $movie['movie']['tagline']; ?></b></p>
                         <?php endif; ?>
-                        <p><span class="bold">Cast:</span> Dane DeHaan, Alex Russell, Michael B. Jordan </p>
+                        <p><span class="bold">Cast:</span><?php echo implode(', ', array_column($movie['actors'], 'name')); ?></p>
                     </div>
                 </div>
             </div>
