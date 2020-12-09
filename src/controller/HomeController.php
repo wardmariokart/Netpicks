@@ -444,7 +444,6 @@ class HomeController extends Controller {
       exit();
     }
 
-
     if (!empty($_POST['action']))
     {
       if ($_POST['action'] === 'delete')
