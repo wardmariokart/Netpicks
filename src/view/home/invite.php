@@ -12,6 +12,7 @@
             </div>
             <p class="movie-ticket__adress divider--top-bottom"><span class="bold">Location:</span> @<?php echo $invitedBy ?>'s Houz</p>
             </div>
+
             <div class="col3 ticket-margin">
                 <img class="movie__poster" src="http://image.tmdb.org/t/p/w342/<?php echo $movie['movie']['poster'] ?>" alt="<?php echo $movie['movie']['title'] . ' poster.' ?>">
                 <div class="movie__details">
