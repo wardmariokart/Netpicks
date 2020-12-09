@@ -1,4 +1,15 @@
+.extra-questions__first-inputs {
+  text-align: center;
+  margin: 0 auto;
+  padding: 1rem 2rem 2rem;
+
+  & span {
+    font-size: var(--font-size-larger);
+  }
+}
+
 .filtered {
+
   & span {
     display: block;
     margin: 1rem 0;
@@ -8,8 +19,12 @@
 }
 
 .filtered__overview {
-  display: grid;
-  grid-template: repeat(4, 1fr) / repeat(14, 1fr);
+ /*  display: grid;
+  grid-template: repeat(4, 1fr) / repeat(14, 1fr); */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
   gap: .45rem;
 }
 

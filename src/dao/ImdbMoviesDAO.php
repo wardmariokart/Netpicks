@@ -105,14 +105,14 @@ class ImdbMoviesDAO extends DAO {
     return false;
   }
 
-  public function selectPostersByIds($movieIds)
+  public function selectPostersByIds($movieIds, $limit = 999999999)
   {
     if(count($movieIds) > 0)
     {
       $idQuery = implode(', ', array_fill(0, count($movieIds), '?'));
-      $sql = "SELECT `id`, `poster` from `imdb_movies` where `id` in (" . $idQuery .")";
+      $sql = "SELECT `id`, `poster` from `imdb_movies` where `id` in (" . $idQuery .") LIMIT ?";
       $stmt = $this->pdo->prepare($sql);
-      $stmt->execute($movieIds);
+      $stmt->execute(array_merge($movieIds, [$limit]));
       return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     return array();

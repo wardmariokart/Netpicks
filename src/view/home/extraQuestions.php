@@ -1,16 +1,19 @@
-<section class="divider page--extra-questions">
-  <h2 class="hidden">First Step</h2>
-  <span>I'm planning a movie night for <b><?php echo $stepOne['nightType']['display']?></b>.</span>
-  <span>During that night we want to <b><?php echo $stepOne['movieOptionOne']['display']?></b></span>
-  <span>but <b><?php echo $stepOne['movieOptionTwo']['display']?></b> is also something we want to do.</span>
+<section class="divider">
+  <div class="extra-questions__first-inputs">
+
+    <h2 class="hidden">First Step</h2>
+    <span>I'm planning a movie night for <b><?php echo $stepOne['nightType']['display']?></b>.</span>
+    <span>During that night we want to <b><?php echo $stepOne['movieOptionOne']['display']?></b></span>
+    <span>but <b><?php echo $stepOne['movieOptionTwo']['display']?></b> is also something we want to do.</span>
+  </div>
 </section>
 
 <section class="filtered center-align-margin divider">
   <h2 class="hidden">Filtered movies</h2>
   <div class="filtered__overview">
-    <?php for($i = 0; $i < 56; $i++):?>
-    <div class="filtered__movie"></div>
-    <?php endfor;?>
+  <?php foreach($filteredMovies as $filteredMovie): ?>
+    <img class="filtered__movie filtered__movie--flipped" src="http://image.tmdb.org/t/p/h30<?php echo $filteredMovie['poster']?>" alt="poster">
+  <?php endforeach; ?>
   </div>
   <span><b class="filtered__movies-left"><?php echo isset($nbMoviesFound) ? $nbMoviesFound : '0'; ?></b> Possible movies left!</span>
   <span>Answer below to specify your pick</span>

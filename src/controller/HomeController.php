@@ -102,6 +102,7 @@ class HomeController extends Controller {
       $this->set('stepOne', $stepOne);
       $this->setupQuestionCards($stepOne);
       $_SESSION['step2']['filteredMovieIds'] = $this->selectMovieIdsByStepOneInputs($stepOne);
+      $this->set('filteredMovies', $this->imdbMoviesDAO->selectPostersByIds($_SESSION['step2']['filteredMovieIds'], 72));
     }
 
     // Javascript action
@@ -243,7 +244,7 @@ class HomeController extends Controller {
       $jsAnswer['updateMoviesLeft'] = array ();
       $filteredCount = count($_SESSION['step2']['filteredMovieIds']);
       $jsAnswer['updateMoviesLeft']['count'] = $filteredCount;
-      $jsAnswer['updateMoviesLeft']['posters'] = $this->imdbMoviesDAO->selectPostersByIds($_SESSION['step2']['filteredMovieIds']);
+      $jsAnswer['updateMoviesLeft']['posters'] = $this->imdbMoviesDAO->selectPostersByIds($_SESSION['step2']['filteredMovieIds'],72);
 
       if ($filteredCount === 0)
       {

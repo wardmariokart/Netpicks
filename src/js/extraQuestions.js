@@ -10,7 +10,7 @@ let manager = null;
 export const extraQuestionsInit = () =>
 {
   // Abort if not on extra questions page
-  const bCorrectPage = document.querySelector('.page--extra-questions') !== null;
+  const bCorrectPage = document.querySelector('.page--extraQuestions') !== null;
   if (!bCorrectPage)
   {
     return;
@@ -19,12 +19,29 @@ export const extraQuestionsInit = () =>
   manager = new CardsInteractionManager();
 
   createCardForExisitingElements();
+  setupCurrentFilteredMovies();
+};
+
+const setupCurrentFilteredMovies = () =>
+{
+  const filteredMovies = document.querySelectorAll('.filtered__movie');
 
 
- /*  setTimeout(() => {
-    const card = manager.cards[0];
-    manager.cards[4].throwOut(card.answers[1], true, true);
-  }, 1000); */
+  //console.log(filteredMovies);
+  Array.from(filteredMovies).forEach($element => {
+    $element.addEventListener('error', event => handleOnImageLoaded(event, true));
+    $element.addEventListener('load', event => handleOnImageLoaded(event, false));
+
+/*
+    anime({
+      targets: '.filtered-movie--flipped',
+      rotateY: 0,
+      duration: 500,
+      delay: anime.stagger(200),
+      easing: 'easeInExpo'
+    }); */
+  });
+
 };
 
 const createCardForExisitingElements = () =>
@@ -79,35 +96,22 @@ const handlePhpUpdateMoviesLeft = phpResponse =>
 
   const showNewMovies = newPosters =>
   {
-    const max = 56;
-    const height = 50;
-    const method = 1;
+    const max = 72;
+    const height = 30;
 
-    if (method === 0)
+    for (let i = 0;i < max;i ++)
     {
-
-      $moviesOverview.innerHTML = newPosters.map((poster, index) =>
-      {
-        if (index > max) return '';
-
-        return `<img class="filtered__movie filtered__movie--flipped" src="http://image.tmdb.org/t/p/h${height}${poster['poster']}" alt="movie poster">`;
-      }).join('');
+      const poster = newPosters[i];
+      if (!poster) return;
+      const $img = document.createElement('img');
+      $img.classList.add('filtered__movie', 'filtered__movie--flipped');
+      $img.setAttribute('src', `http://image.tmdb.org/t/p/h${height}${poster['poster']}`);
+      $img.setAttribute('alt', 'movie poster');
+      $moviesOverview.appendChild($img);
+      $img.addEventListener('load', e => handleOnImageLoaded(e, false));
+      $img.addEventListener('error', e => handleOnImageLoaded(e, true));
     }
-    else if (method === 1)
-    {
-      for (let i = 0;i < max;i ++)
-      {
-        const poster = newPosters[i];
-        if (!poster) return;
-        const $img = document.createElement('img');
-        $img.classList.add('filtered__movie', 'filtered__movie--flipped');
-        $img.setAttribute('src', `http://image.tmdb.org/t/p/h${height}${poster['poster']}`);
-        $img.setAttribute('alt', 'movie poster');
-        $img.addEventListener('load', e => handleOnImageLoaded(e, false));
-        $img.addEventListener('error', e => handleOnImageLoaded(e, true));
-        $moviesOverview.appendChild($img);
-      }
-    }
+
   };
 
   anime({
@@ -126,6 +130,7 @@ const handlePhpUpdateMoviesLeft = phpResponse =>
 
 const handleOnImageLoaded = (event, bError) =>
 {
+  console.log('hit');
   const $img = event.currentTarget;
   if (bError)
   {
@@ -133,7 +138,6 @@ const handleOnImageLoaded = (event, bError) =>
   }
   else
   {
-
     anime({
       targets: $img,
       rotateY: 90,
