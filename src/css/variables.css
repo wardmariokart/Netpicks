@@ -26,6 +26,8 @@
   --stack-offset-y: .5rem;
   --stack-offset-z: .5rem;
   --detail-action-radius: 4rem;
+  --font-family-sans-serif: aktiv-grotesk, sans-serif;
+  --font-family-serif: nimbus-roman, serif;
 }
 
 @custom-media --only-larger-screens (width >= 800px);

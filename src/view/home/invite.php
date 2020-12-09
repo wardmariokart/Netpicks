@@ -9,10 +9,9 @@
         <div class="ticket__info">
             <div class="movie-night__info ticket-margin__top">
                 <h3 class="movie-night__title ticket-margin ticket-night__title sub-title"><?php echo $movieNight['title'] ?></h3>
-                <!-- <p class="movie-ticket__adress  divider--top-bottom">14.12.20 <span>@ Wardje Bever’s Houz</span></p> -->
             </div>
             <p class="movie-ticket__adress divider--top-bottom"><span class="bold">Location:</span> @<?php echo $invitedBy ?>'s Houz</p>
-
+            </div>
             <div class="col3 ticket-margin">
                 <img class="movie__poster" src="http://image.tmdb.org/t/p/w342/<?php echo $movie['movie']['poster'] ?>" alt="<?php echo $movie['movie']['title'] . ' poster.' ?>">
                 <div class="movie__details">

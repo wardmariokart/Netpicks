@@ -21,7 +21,7 @@
       <span>I'm planning a movie night for</span>
       <select name="nightType" id="nightType" class="plan-one__drop-down">
         <?php foreach($nightTypes as $night): ?>
-          <option value="<?php echo $night['value'];?>"><?php echo $night['display'] ?></opton>
+          <option value="<?php echo $night['value'];?>"><?php echo $night['display'] ?></option>
         <? endforeach; ?>
       </select>
     </div>
@@ -31,7 +31,7 @@
       <select name="movieOptionOne" id="movieOptionOne" class="plan-one__drop-down">
         <?php foreach($stepOneOptions as $movieOption): ?>
           <?php if ($movieOption['choise_index'] === 0): ?>
-            <option value="<?php echo $movieOption['value'];?>"><?php echo $movieOption['display'] ?></opton>
+            <option value="<?php echo $movieOption['value'];?>"><?php echo $movieOption['display'] ?></option>
           <?php endif; ?>
         <? endforeach; ?>
       </select>
@@ -42,7 +42,7 @@
       <select name="movieOptionTwo" id="movieOptionTwo" class="plan-one__drop-down">
         <?php foreach($stepOneOptions as $movieOption): ?>
           <?php if ($movieOption['choise_index'] === 1): ?>
-            <option value="<?php echo $movieOption['value'];?>"><?php echo $movieOption['display'] ?></opton>
+            <option value="<?php echo $movieOption['value'];?>"><?php echo $movieOption['display'] ?></option>
           <?php endif?>
           <? endforeach; ?>
       </select>
@@ -55,7 +55,6 @@
   </form>
 </section>
 
-
 <?php if (!empty($_SESSION['user'])): ?>
   <section class="movie-nights">
     <h2 class="movie-nights__title divider">Planned<br>Movie Nights</h2>
@@ -65,10 +64,9 @@
           <article class="movie-night">
             <div class="movie-night__info">
               <h3 class="movie-night__title"><?php echo $movieNight['title']?></h3>
-              <p class="movie-night__adress">@ Wardje Bever’s  Houz</p>
-              <p>14.12.20</p>
+              <p class="movie-night__adress">@ <?php echo $_SESSION['user']['username']?>’s  Houz</p>
             </div>
-            <img class="movie-night__poster" src="http://image.tmdb.org/t/p/w342/<?php echo $movieNight['poster'] ?>">
+            <img class="movie-night__poster" src="http://image.tmdb.org/t/p/w342/<?php echo $movieNight['poster'] ?>" alt="Movie night poster">
           </article>
           <div class="divider"></div>
         </a>

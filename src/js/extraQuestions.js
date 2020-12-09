@@ -31,15 +31,6 @@ const setupCurrentFilteredMovies = () =>
   Array.from(filteredMovies).forEach($element => {
     $element.addEventListener('error', event => handleOnImageLoaded(event, true));
     $element.addEventListener('load', event => handleOnImageLoaded(event, false));
-
-/*
-    anime({
-      targets: '.filtered-movie--flipped',
-      rotateY: 0,
-      duration: 500,
-      delay: anime.stagger(200),
-      easing: 'easeInExpo'
-    }); */
   });
 
 };
@@ -120,7 +111,9 @@ const handlePhpUpdateMoviesLeft = phpResponse =>
     rotateY: 90,
     easing: 'easeInCubic',
     delay: anime.stagger(10),
+    /* eslint-disable */
     complete: function(anim) {
+    /* eslint-enable */
       $moviesOverview.innerHTML = '';
       showNewMovies(phpResponse['updateMoviesLeft']['posters']);
     }

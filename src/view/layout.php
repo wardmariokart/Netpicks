@@ -50,7 +50,7 @@
     <img class="footer__netpicks-icon" src="./assets/images/kijkwijzerGeweld.png" alt="geweld icoon van kijkwijzer">
     <span class="footer__copyright">netpicks</span>
   </footer>
+  <?php echo $js; ?>
 </body>
-<?php echo $js; ?>
 
 </html>

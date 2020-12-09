@@ -1,13 +1,12 @@
-<section class="page--detail"> <!-- TODO REMOVE -->
-  <header>
-    <h2><?php echo $movieNight['title']?></h2>
-  </header>
+<section class="page--detail">
+  <h2 class="sub-title"><?php echo $movieNight['title']?></h2>
   <section class="chosen__movie">
       <div class="col3">
           <img class="movie__poster" src="http://image.tmdb.org/t/p/w342/<?php echo $movie['movie']['poster'] ?>" alt="<?php echo $movie['movie']['title'] . ' poster.' ?>">
           <div class="movie__details">
               <h2 class="detail__movie-title"><?php echo $movie['movie']['title'] ?></h2>
               <div class="movie__crew">
+                  <span><b><?php echo $movie['movie']['tagline']?></b></span>
                   <p><b>Cast: </b><?php echo implode(', ', array_column($movie['actors'], 'name'));?></p>
               </div>
           </div>
@@ -56,6 +55,7 @@
 
 
   <section class="movie__extras divider--no-padding">
+    <h2 class="hidden">Movie extras</h2>
       <article class="extras">
           <h3 class="extras__title sub-title">Suggested snacks:</h3>
           <ul class="extra__list">

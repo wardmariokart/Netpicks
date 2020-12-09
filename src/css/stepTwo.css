@@ -19,8 +19,6 @@
 }
 
 .filtered__overview {
- /*  display: grid;
-  grid-template: repeat(4, 1fr) / repeat(14, 1fr); */
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -170,4 +168,3 @@
 .picked__button--next {
   font-size: 1.5rem;
 }
-

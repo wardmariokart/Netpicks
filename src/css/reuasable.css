@@ -1,0 +1,70 @@
+.hidden {
+  display: none;
+}
+
+.button {
+  font-family: var(--font-family-sans-serif);
+  background-color: var(--color-primary);
+  cursor: pointer;
+  text-transform: uppercase;
+  color: var(--color-secondary);
+  border: none;
+  transition: background-color .12s ease-out;
+
+  &:hover {
+    background-color: var(--color-primary-light);
+  }
+
+  &:active {
+    background-color: var(--color-primary-lightest);
+  }
+}
+
+.title, .sub-title, .title--smaller {
+  text-transform: uppercase;
+  font-family: var(--font-family-sans-serif);
+}
+
+.title, .title--smaller {
+  font-weight: bold;
+  font-size: var(--font-size-title);
+}
+
+.title--smaller {
+  font-size: var(--font-size-title-smaller);
+}
+
+.sub-title {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  font-weight: 400;
+  font-size: var(--font-size-sub-title);
+}
+
+.center-align-margin {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.divider, .divider--top-bottom, .divider--no-padding {
+  width: 100%;
+  content: '';
+  border-bottom: 1px solid var(--color-primary-lighter);
+  padding-bottom: var(--divider-padding);
+  padding-top: var(--divider-padding);
+
+  /* TODO: THIS SHOULD WORK: https://sass-lang.com/documentation/at-rules/extend */
+  /*  &--no-padding {
+    @extend .divider;
+    padding-bottom: 0;
+    padding-top: 0;
+  } */
+}
+
+.divider--top-bottom {
+  border-top: 1px solid var(--color-primary-lighter);
+}
+
+.divider--no-padding {
+  padding: 0;
+}

@@ -17,7 +17,7 @@ footer {
 }
 
 .footer__copyright {
-  font-family: serif;
+  font-family: var(--font-family-serif);
   font-size: 1.2rem;
   text-transform: capitalize;
 
@@ -27,15 +27,17 @@ footer {
   }
 }
 
-@media only screen and (min-width: 501px) {
-  .page--home .footer__netpicks-icon {
-    height: 3rem;
-    width: 3rem;
+@media (--only-larger-screens) {
+
+  .page--home {
+
+    & .footer__netpicks-icon {
+      height: 3rem;
+      width: 3rem;
+    }
+
+    & .footer__copyright {
+      font-size: var(--font-size-medium);
+    }
   }
-
-  .page--home .footer__copyright{
-    font-size: 1.7rem;
-  }
-
-
 }

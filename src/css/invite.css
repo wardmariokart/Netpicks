@@ -45,7 +45,7 @@
 .movie-ticket__adress {
   text-align: center;
   font-size: 1.7rem;
-  font-family: nimbus-roman,serif;
+  font-family: var(--font-family-serif);
   font-weight: 400;
 }
 
