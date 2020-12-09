@@ -1,5 +1,5 @@
 nav {
-  margin-top: 1rem;
+  padding: 0 2rem;
   width: 100%;
   display: flex;
   align-items: flex-end;
@@ -7,33 +7,25 @@ nav {
 }
 
 .nav__title {
-  font-size: 2.5rem;
-  text-transform: uppercase;
-  text-decoration: none;
-  font-weight: bold;
-  color: var(--color-primary);
-}
-
-.nav__title-logo{
-  object-fit: cover;
-  /* height: 6vmin ; */
-  width: 27.5rem;
-}
-
-
-
-@media only screen and (min-width: 501px) {
-  .page--home .nav__title-logo{
-  object-fit: cover;
-  height: 5vmin ;
-  width: auto;
+  & img {
+    object-fit: cover;
+    object-position: center center;
+    width: 27.5rem;
   }
-
-  .page--home .nav__user{
-    font-size: 1.7rem;
-  }
-
-
 }
 
+@media (--only-larger-screens) {
 
+  .page--home {
+
+    & .nav__title-logo {
+      object-fit: cover;
+      height: 5vmin;
+      width: auto;
+    }
+
+    & .nav__user {
+      font-size: var(--font-size-medium);
+    }
+  }
+}

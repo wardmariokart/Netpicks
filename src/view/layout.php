@@ -12,8 +12,9 @@
 </head>
 
 <body class="<?php echo 'page--' . $page ?>">
+<?php if(true): ?>
   <nav class="divider">
-    <a class="nav__title" href="index.php"><img class="nav__title-logo" src="./assets/images/netpicksLogo-02.png" alt="netpicks"></a>
+    <a class="nav__title" href="index.php"><img src="./assets/images/netpicksLogo-02.png" alt="netpicks"></a>
     <div class="nav__user">
       <?php if (!isset($_SESSION['user'])) : ?>
         <span>
@@ -27,6 +28,8 @@
       <?php endif; ?>
     </div>
   </nav>
+  <? endif?>
+  <?php if(true): ?>
   <main>
     <?php
     if (!empty($_SESSION['error'])) {
@@ -41,6 +44,7 @@
     </header>
     <?php echo $content; ?>
   </main>
+  <?php endif ?>
 
   <footer>
     <img class="footer__netpicks-icon" src="./assets/images/kijkwijzerGeweld.png" alt="geweld icoon van kijkwijzer">

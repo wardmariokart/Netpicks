@@ -9,7 +9,7 @@
               <h2 class="detail__movie-title"><?php echo $movie['movie']['title'] ?></h2>
               <div class="movie__crew">
                   <!-- <p><span class="bold">Director: </span><?php echo $movie['movie']['title'] ?></p> -->
-                  <p><span class="bold">Cast:</span> <?php echo implode(', ', array_column($movie['actors'], 'name'));?></p>
+                  <p><b>Cast:</b><?php echo implode(', ', array_column($movie['actors'], 'name'));?></p>
               </div>
           </div>
       </div>

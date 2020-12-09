@@ -1,25 +1,32 @@
-
-/* ________________________________________________________________________________________ PLAN ONE */
-
-
-.movie__still{
-  width:100%;
+.page--home {
+  max-width: 100%;
+  width: 100%;
 }
 
 .plan-one {
   margin: 0 auto;
-
 }
 
-.plan-one span {
-  display: inline-block;
-  margin-bottom: .9rem;
-  font-size: 1.9rem;
+.plan-one__picture {
+  display: block;
+  height: 20rem;
+
+  & img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 }
 
 .plan-one__block {
+  padding: 0 var(--padding-default);
   display: block;
-  margin-bottom: .2rem;
+
+  & span {
+    display: inline-block;
+    margin-bottom: .9rem;
+    font-size: var(--font-size-larger);
+  }
 }
 
 .plan-one__questions {
@@ -27,24 +34,25 @@
 }
 
 .plan-one__title {
-
   text-align: center;
-  margin-top: 0rem;
-  font-size: 6rem;
-  font-family: aktiv-grotesk,sans-serif;
-  font-weight: 700;
+  margin-top: 0;
+  font-size: 11vw;
+  font-family: aktiv-grotesk ,sans-serif;
+  font-weight: bold;
   text-transform: uppercase;
-  text-align: center;
 }
 
 .plan-one__drop-down {
   background: none;
   border: none;
-  border: 1px solid var(--color-primary);
+  border: 1px solid var(--color-primary-lighter);
+  padding: var(--padding-non-uniform);
   font-family: serif;
-  font-size: 1.9rem;
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
+  font-size: var(--font-size-larger);
+  margin-left: .5rem;
+  margin-right: .5rem;
+  margin-bottom: 1.5rem;
+
 }
 
 .plan-one__submit {
@@ -69,121 +77,156 @@
     outline: none;
     border: none;
   }
-
-  &:focus {outline:0;}
 }
 
 /* ________________________________________________________________________________________ MOVIE NIGHT OVERVIEW */
 
-.movie-nights{
+.movie-nights {
   margin-top: 8rem;
 }
 
 .movie-nights__item {
   display: block;
   background-color: var(--color-secondary);
-  font-family: aktiv-grotesk,sans-serif;
+  font-family: aktiv-grotesk, sans-serif;
   font-weight: 400;
   color: var(--color-primary);
   border-radius: .5rem;
-  /* padding: 1.5rem;
-  padding-top: .5rem; */
   width: 100%;
   text-decoration: none;
 }
 
-
-.movie-nights__title{
-
+.movie-nights__title {
+  padding-left: var(--padding-default);
   font-size: 6rem;
-  font-family: aktiv-grotesk,sans-serif;
+  font-family: aktiv-grotesk, sans-serif;
   font-weight: 700;
   text-transform: uppercase;
 }
 
-.movie-night{
-display: flex;
-flex-flow: row;
-padding: 2rem;
-padding-bottom: 0;
+.movie-night {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--padding-default);
+  padding-bottom: 0;
 }
 
-.movie-night__info{
+.movie-night__info {
   margin-top: 1rem;
   margin-bottom: 1rem;
+  max-width: 35rem;
 }
 
-.movie-night__adress{
+.movie-night__adress {
   font-family: nimbus-roman,serif;
   font-weight: 400;
 }
 
-
-.movie-night__title{
-  font-size: 3.5rem;
+.movie-night__title {
+  font-size: var(--font-size-sub-title);
   font-weight: 400;
   text-transform: uppercase;
   margin: 0;
 }
 
-.movie-night__poster{
-  width: 33%;
+.movie-night__poster {
+  height: 25rem;
 }
 
-@media only screen and (min-width: 501px) {
+@media (--only-larger-screens) {
 
-  .page--home .movie__picture{
-    width: 60%;
+  .plan-one {
+    display: grid;
+    grid-template: min-content auto / auto min-content;
+    grid-template-areas:
+      'picture title'
+      'picture form';
+    height: 60rem;
+
+    & .plan-one__title {
+      grid-area: title;
+      width: 55rem;
+      padding: .5rem 0;
+      line-height: calc(var(--font-size-title-large) * .9);
+      text-align: right;
+      font-size: var(--font-size-title-large);
+      border-top: none;
+    }
+
+    & .plan-one__picture {
+      grid-area: picture;
+
+      & img {
+        object-fit: cover;
+        height: 60rem;
+      }
+    }
+
+    & .plan-one__form {
+      margin-top: auto;
+      grid-area: form;
+    }
   }
 
-  .page--home .movie__still{
-    width: 100%;
-  }
+  .page--home {
 
-  .page--home .movie-nights__item{
-    width: 33.3333%;
-  }
+    max-width: 135rem;
+    margin: 0 auto;
 
-  .page--home .movie-nights{
-  display: flex;
-  flex-flow: row;
-  flex-wrap: wrap;
-  }
+    & .movie-nights {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+    }
 
-  .page--home .movie-night{
-    
-    /* width: 33.3333%; */
-    display: flex;
-  flex-flow: row;
-  }
+    & .movie-nights__title {
+      grid-row: 1;
+      grid-column: 1 / span 2;
+      margin-bottom: 0;
+    }
 
-  .page--home .plan-one__questions{
-    display: flex;
-    flex-flow: row;
-  }
+    & .movie-night {
+      height: 25rem;
+    }
 
-  .page--home .plan-one__text{
-    width: 40%;
-    /* display: flex;
-    flex-flow: column; */
-  }
+    & .movie-night__title {
+      font-size: var(--font-size-sub-title);
+    }
 
-  .page--home .fill-in{
-    display: flex;
-    height: 78.5%;
-    flex-flow: column;
-    display: flex;
-    justify-content: flex-end;
-
-  }
-
-  .page--home .fill-in__dropdown{
-    padding-bottom: 2rem;
-  }
-
-  .page--home .plan-one__block{
-    margin-left: 2rem;
-    padding-bottom: 1rem;
+    & .movie-night__poster {
+      object-fit: cover;
+      height: 100%;
+      width: auto;
+    }
   }
 }
 
+@media (--only-largest-screens) {
+
+  .page--home {
+
+    & .movie-nights {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    & .movie-nights__title {
+      grid-row: 1;
+      grid-column: 1 / span 3;
+      margin-bottom: 0;
+    }
+
+    & .movie-night {
+      height: 25rem;
+    }
+
+    & .movie-night__title {
+      font-size: var(--font-size-sub-title);
+    }
+
+    & .movie-night__poster {
+      object-fit: cover;
+      height: 100%;
+      width: auto;
+    }
+  }
+}

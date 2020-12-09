@@ -27,13 +27,17 @@
   }
 
   & input {
-    font-family: serif;
     padding: var(--padding-non-uniform);
     font-size: var(--font-size-medium);
-    color: var(--color-primary);
-    background-color: var(--color-secondary);
     display: block;
     width: 100%;
+  }
+
+  & .sign-in-up__field {
+    font-family: serif;
+
+    background-color: var(--color-secondary);
+    color: var(--color-primary);
     border: 1px solid var(--color-primary);
     border-left: none;
     border-right: none;
@@ -44,8 +48,6 @@
     text-align: center;
   }
 }
-
-
 
 .sign-in-up__referal {
   font-size: var(--font-size-small);

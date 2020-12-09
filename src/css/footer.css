@@ -11,7 +11,6 @@ footer {
 
 .footer__netpicks-icon {
   object-fit: cover;
-  /* height: 4vmin ; */
   height: 1.7rem;
   width: 1.7rem;
   filter: invert(1);
@@ -30,11 +29,8 @@ footer {
 
 @media only screen and (min-width: 501px) {
   .page--home .footer__netpicks-icon {
-  object-fit: cover;
-  /* height: 4vmin ; */
-  height: 3rem;
-  width: 3rem;
-  filter: invert(1);
+    height: 3rem;
+    width: 3rem;
   }
 
   .page--home .footer__copyright{
