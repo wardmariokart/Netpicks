@@ -243,6 +243,7 @@ class HomeController extends Controller {
       $jsAnswer['updateMoviesLeft'] = array ();
       $filteredCount = count($_SESSION['step2']['filteredMovieIds']);
       $jsAnswer['updateMoviesLeft']['count'] = $filteredCount;
+      $jsAnswer['updateMoviesLeft']['posters'] = $this->imdbMoviesDAO->selectPostersByIds($_SESSION['step2']['filteredMovieIds']);
 
       if ($filteredCount === 0)
       {

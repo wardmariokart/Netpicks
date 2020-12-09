@@ -179,6 +179,7 @@ export class Card {
       translateY: triggeredAnswer.throwTarget.y,
       easing: bByComputer ? 'easeInExpo' : 'linear',
       complete: function(anim) {
+        anim;
         thisCard.destroy(); // "this" is contextual to from what it is called. The passed function is called inside some anime.js class, so i have to store "this" in "thisCard"
       }
     });

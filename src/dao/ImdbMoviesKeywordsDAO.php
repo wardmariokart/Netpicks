@@ -26,7 +26,7 @@ class ImdbMoviesKeywordsDAO extends DAO {
 
     $movieIdQuery = implode(',', array_fill(0, count($startMovieIds), '?'));
     $subQuery = "SELECT `imdb_movies_keywords`.`movie_id` FROM `imdb_movies_keywords` INNER JOIN `filter_category_keywords` ON `imdb_movies_keywords`.`keyword_id` = `filter_category_keywords`.`keyword_id` WHERE `filter_category_keywords`.`category_id` = ?";
-    $sql = "SELECT `subTable`.* FROM (" . $subQuery . ") AS subTable WHERE `subTable`.`movie_id` IN (" . $movieIdQuery . ")";
+    $sql = "SELECT DISTINCT `subTable`.* FROM (" . $subQuery . ") AS subTable WHERE `subTable`.`movie_id` IN (" . $movieIdQuery . ")";
     $stmt = $this->pdo->prepare($sql);
     $executeArray =array_merge([$filterCategoryId], $startMovieIds);
     $stmt->execute($executeArray);
@@ -47,7 +47,7 @@ class ImdbMoviesKeywordsDAO extends DAO {
       $subQuery = "SELECT `imdb_movies_keywords`.`movie_id` FROM `imdb_movies_keywords` INNER JOIN `filter_category_keywords` ON `imdb_movies_keywords`.`keyword_id` = `filter_category_keywords`.`keyword_id` WHERE `filter_category_keywords`.`category_id` = ?";
       $moviesInCategoryQuery = "SELECT `subTable`.* FROM (" . $subQuery . ") AS subTable WHERE `subTable`.`movie_id` IN (" . $movieIdQuery . ")";
 
-      $sql = "SELECT * FROM " . $startTabelQuery . " AS subTable WHERE `subTable`.`movie_id` NOT IN (" . $moviesInCategoryQuery . ")";
+      $sql = "SELECT DISTINCT * FROM " . $startTabelQuery . " AS subTable WHERE `subTable`.`movie_id` NOT IN (" . $moviesInCategoryQuery . ")";
       $stmt = $this->pdo->prepare($sql);
       $executeArray =array_merge([$filterCategoryId], $startMovieIds);
       $stmt->execute($executeArray);

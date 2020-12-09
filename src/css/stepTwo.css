@@ -23,6 +23,10 @@
   align-items: center;
 }
 
+.filtered__movie--flipped {
+  transform: rotateY(90deg);
+}
+
 .question__form {
   display: flex;
   flex-direction: column;

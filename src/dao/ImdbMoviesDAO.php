@@ -104,4 +104,17 @@ class ImdbMoviesDAO extends DAO {
     }
     return false;
   }
+
+  public function selectPostersByIds($movieIds)
+  {
+    if(count($movieIds) > 0)
+    {
+      $idQuery = implode(', ', array_fill(0, count($movieIds), '?'));
+      $sql = "SELECT `id`, `poster` from `imdb_movies` where `id` in (" . $idQuery .")";
+      $stmt = $this->pdo->prepare($sql);
+      $stmt->execute($movieIds);
+      return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    return array();
+  }
 }
