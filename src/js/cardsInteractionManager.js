@@ -10,8 +10,6 @@ export default class CardsInteractionManager {
 
   registerCard(card)
   {
-
-    //card.addSubmitListener(event => handleCardAnswer(event, card));
     if ('addOnDetroyedCallback' in card)
     {
       card.addOnDetroyedCallback(card => this.onCardDestroyed(card)); // bind "onCardDestroyed" to this

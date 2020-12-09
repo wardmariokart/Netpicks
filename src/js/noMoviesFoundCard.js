@@ -28,5 +28,4 @@ export class NoMoviesFoundCard extends Card {
     $futureParent.append($element);
     this.setupElement($element, $futureParent);
   }
-
 }

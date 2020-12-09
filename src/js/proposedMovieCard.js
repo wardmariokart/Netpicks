@@ -1,5 +1,4 @@
 import {Card} from './card.js';
-import anime from './lib/anime.es.js';
 
 export class ProposedMovieCard extends Card {
   constructor(movieInfo)
