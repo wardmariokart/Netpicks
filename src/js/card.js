@@ -45,7 +45,6 @@ export class Card {
     });
 
     return answerToTrigger;
-    //return Math.abs(this.location.x) > this.dropOffTreshold;
   }
 
   registerAnswer(answerValue, evaluateFunc, throwTarget, direction, display)
@@ -85,7 +84,6 @@ export class Card {
       return i === siblings.length - 1;
     }
   }
-
 
   // returns false if failed to grab or this if successful grab
   // grabber must be of type Mouse
@@ -199,7 +197,6 @@ export class Card {
     }
   }
 
-  // signature: func(card, answerString)
   addOnThrowOutCallback (func)
   {
     this.onThrowOutCallbacks.push(func);
@@ -223,27 +220,24 @@ export class Card {
   {
     const $element = document.createElement('article');
     const $futureParent = document.querySelector('.card-stack');
-    // TODO add form element to this.$element
-    //this.$element.innerHTML = `<form action="index`
 
     $element.classList.add('card', 'question-card');
     $futureParent.appendChild($element);
     this.setupElement($element, $futureParent);
-
   }
 
   setupElement($element, $futureParent = null)
   {
     this.$element = $element;
     const $parent = $futureParent === null ? $element.parentElement : $futureParent;
-    $parent.addEventListener('DOMNodeInserted', e => this.onSiblingsUpdate());
-    $parent.addEventListener('DOMNodeRemoved', e => this.onSiblingsUpdate());
+    $parent.addEventListener('DOMNodeInserted', e => this.onSiblingsUpdate(e));
+    $parent.addEventListener('DOMNodeRemoved', e => this.onSiblingsUpdate(e));
 
 
     const $form = this.$element.querySelector('form');
     if ($form)
     {
-      $form.addEventListener('submit', (e) =>
+      $form.addEventListener('submit', e =>
       {
         e.preventDefault();
         return false;
@@ -253,7 +247,7 @@ export class Card {
     this.$element.style.transform = 'translateX(0px) translateY(0px) translateZ(0px) scale(1) rotate(0deg)'; // making sure this.setTransformProperty will always work
 
     // start position
-    this.translate({x: -1200, y: 200});
+    this.translate({x: - 1200, y: 200});
     this.updateOrigin();
   }
 
@@ -333,7 +327,7 @@ export class Card {
     let style = this.$element.style.transform;
     const toReplaceStart = style.indexOf(`${propertyName}(`);
 
-    if (toReplaceStart === -1)
+    if (toReplaceStart === - 1)
     {
       style += toInsert;
     }
@@ -356,7 +350,4 @@ export class Card {
     const value = this.$element.style.transform.slice(from, to);
     return value;
   }
-
-
-
 }

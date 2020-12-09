@@ -26,9 +26,8 @@
 }
 
 .movie__crew {
-  grid-column: 4/ span 3;
-  grid-row: 1;
-  font-size: 1.5rem;
+  font-size: var(--font-size-medium);
+  width: 25rem;
 }
 
 .bold {
