@@ -45,4 +45,3 @@
     <?php endforeach; ?>
   </div>
 </section>
-<script src="./js/lib/anime.min.js"></script>

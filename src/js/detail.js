@@ -74,6 +74,7 @@ const setOverlayHidden = (bHidden, bInstant = false) =>
   {
     const completeHide = anim =>
     {
+      anim;
       $overlay.parentElement.classList.add('hidden');
     };
     animateObj.complete = completeHide;

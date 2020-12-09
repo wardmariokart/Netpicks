@@ -1,5 +1,3 @@
-import {Card} from './card.js';
-
 export default class Mouse {
   constructor(victims)
   {

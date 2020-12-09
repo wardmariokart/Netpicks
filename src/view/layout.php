@@ -51,6 +51,6 @@
     <span class="footer__copyright">netpicks</span>
   </footer>
   <?php echo $js; ?>
+  <script src="./js/lib/anime.min.js"></script>
 </body>
-
 </html>
