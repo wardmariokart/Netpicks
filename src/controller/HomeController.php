@@ -642,10 +642,3 @@ class HomeController extends Controller {
     return $title;
   }
 }
-
-
-
-
-
-// FIX: On answer, check if unanswered cards would have any results, if not the cards should be removed from the stack.
-// => Therefore there should me way more questions
