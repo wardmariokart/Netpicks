@@ -14,7 +14,7 @@
 <body class="<?php echo 'page--' . $page ?>">
 <?php if(true): ?>
   <nav class="divider">
-    <a class="nav__title" href="index.php"><img src="./assets/images/netpicksLogo-02.png" alt="netpicks"></a>
+    <a class="nav__title" href="index.php"><img src="./assets/images/netpicksLogo-smal.png" alt="netpicks"></a>
     <div class="nav__user">
       <?php if (!isset($_SESSION['user'])) : ?>
         <span>
