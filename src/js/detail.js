@@ -46,7 +46,7 @@ const setupCopyInvite = () =>
   $urlField.value = `${url}${$urlField.value}`;
 };
 
-const copyInviteLink = event =>
+const copyInviteLink = () =>
 {
   const $url = document.querySelector('.invite-link__url');
   $url.select();

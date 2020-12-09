@@ -25,7 +25,7 @@
                     </div>
                 </div>
             </div>
-            <p class="movie__summary ticket-margin ticket__summary"><?php echo $movie['description'];?></p>
+            <p class="movie__summary ticket-margin ticket__summary"><?php echo $movie['movie']['description'];?></p>
             <p class="movie-ticket__adress divider--top-bottom">Be there or be square!</p>
         </div>
         <img class="ticket__tear upsidedown" src="./assets/images/ticketTop-01.png" alt="ticket">
