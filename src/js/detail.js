@@ -97,7 +97,6 @@ const handleCardSubmit = async event =>
   {
     setOverlayHidden(false);
     const info = phpResponse['showQuestion'];
-    console.log({phpResponse});
     const constructObj = {
       questionInfo: {
         displayQuestion: info['display_question'],

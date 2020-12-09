@@ -123,7 +123,6 @@ const handlePhpUpdateMoviesLeft = phpResponse =>
 
 const handleOnImageLoaded = (event, bError) =>
 {
-  console.log('hit');
   const $img = event.currentTarget;
   if (bError)
   {
