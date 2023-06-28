@@ -1,3 +1,5 @@
+# Netpicks
+
 [Heroku link (Broken)](https://netpicks.herokuapp.com/ "Netpicks")
 
 Hoe vaak komen jij en jouw besluiteloze vriendengroep of date er niet aan uit welke film het die avond wordt? Elke keer, laten we eerlijk zijn.
@@ -34,5 +36,3 @@ Voor iedere Mood hebben we op voorhand een aantal dingen vastgesteld. Iedere moo
 
 Je krijgt een overview van de film die wij voor jou uitkozen met snack en accessoires.
 De gebruiker kan hier aangeven of de film al gezien is en een nieuwe wilt of nog aanpassingen doen.
-
-# Netpicks
